@@ -364,22 +364,9 @@ Este proyecto contempla los criterios solicitados en la actividad:
 
 ---
 
-## Recomendaciones de mejora
+## Autores
 
-Como mejoras futuras del proyecto, se podrían incorporar:
-
-- script explícito de carga para `FactOrders`
-- documentación de métricas con ejemplos de consultas analíticas
-- evidencias de compilación del `.dacpac`
-- capturas del modelo ER dentro del README
-- sección de consultas ejemplo para OLTP y DW
-- automatización del despliegue mediante pipeline
-
----
-
-## Autor
-
-Proyecto desarrollado por **Valvillavel** como parte de la actividad académica de diseño de base de datos **OLTP y Data Warehouse en SQL Server** usando **Northwind** como caso de estudio.
+Proyecto desarrollado por **Garcia Andrade Alex Rafael**, **Verastegui Orozco Raisa** y **Villarroel Veliz Valeria** como parte de la actividad académica de diseño de base de datos **OLTP y Data Warehouse en SQL Server** usando **Northwind** como caso de estudio.
 
 ## Repositorio
 
