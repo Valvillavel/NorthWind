@@ -1,5 +1,9 @@
 <Solution>
-  <Project Path="NorthWind/NorthWind.sqlproj">
+  <Project Path="NorthWindDW/NorthWindDW.sqlproj" Id="d2721115-d2f6-4ca7-8317-7b9687822b54">
+    <Build />
+    <Deploy />
+  </Project>
+  <Project Path="NorthWindOLTP/NorthWind.sqlproj" Id="5ccd64a3-6588-4e68-92b8-d6c0b3236c06">
     <Build />
     <Deploy />
   </Project>
