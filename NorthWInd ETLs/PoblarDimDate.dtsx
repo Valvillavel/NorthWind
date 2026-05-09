@@ -1,0 +1,1983 @@
+﻿<?xml version="1.0"?>
+<DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts"
+  DTS:refId="Package"
+  DTS:CreationDate="5/8/2026 10:35:12 PM"
+  DTS:CreationName="Microsoft.Package"
+  DTS:CreatorComputerName="LAPTOP-MA75E46U"
+  DTS:CreatorName="LAPTOP-MA75E46U\Rafael"
+  DTS:DTSID="{E39E12C9-A296-437B-8287-38A0D555A509}"
+  DTS:ExecutableType="Microsoft.Package"
+  DTS:LastModifiedProductVersion="17.0.1016.0"
+  DTS:LocaleID="3082"
+  DTS:ObjectName="Package"
+  DTS:PackageType="5"
+  DTS:VersionBuild="20"
+  DTS:VersionGUID="{AD05EEE5-3BCF-4F6D-B5FB-736E0459D6B9}">
+  <DTS:Property
+    DTS:Name="PackageFormatVersion">8</DTS:Property>
+  <DTS:Variables />
+  <DTS:Executables>
+    <DTS:Executable
+      DTS:refId="Package\PoblarDimDate"
+      DTS:CreationName="Microsoft.Pipeline"
+      DTS:Description="Tarea Flujo de datos"
+      DTS:DTSID="{7A8E34F7-654C-4B03-B800-B6B6D3774DEA}"
+      DTS:ExecutableType="Microsoft.Pipeline"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="PoblarDimDate"
+      DTS:TaskContact="Performs high-performance data extraction, transformation and loading;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <pipeline
+          version="1">
+          <components>
+            <component
+              refId="Package\PoblarDimDate\Columna derivada"
+              componentClassID="Microsoft.DerivedColumn"
+              contactInfo="Columna derivada;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; Todos los derechos reservados; http://www.microsoft.com/sql/support;0"
+              description="Crea nuevos valores de columna aplicando expresiones a las columnas de entrada de la transformación. Crea nuevas columnas o sobrescribe las columnas existentes. Por ejemplo, se concatenan los valores de las columnas 'nombre' y 'apellidos' para crear una columna 'nombre completo'."
+              name="Columna derivada"
+              usesDispositions="true">
+              <inputs>
+                <input
+                  refId="Package\PoblarDimDate\Columna derivada.Inputs[Entrada de columna derivada]"
+                  description="Entrada en la transformación Columna derivada"
+                  name="Entrada de columna derivada">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\PoblarDimDate\Columna derivada.Inputs[Entrada de columna derivada].Columns[FullDate]"
+                      cachedDataType="dbDate"
+                      cachedName="FullDate"
+                      cachedSortKeyPosition="1"
+                      lineageId="Package\PoblarDimDate\Combinación de mezcla.Outputs[Salida de combinación de mezcla].Columns[FullDate]" />
+                  </inputColumns>
+                  <externalMetadataColumns />
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\PoblarDimDate\Columna derivada.Outputs[Salida de columna derivada]"
+                  description="Salida predeterminada de la transformación Columna derivada"
+                  exclusionGroup="1"
+                  name="Salida de columna derivada"
+                  synchronousInputId="Package\PoblarDimDate\Columna derivada.Inputs[Entrada de columna derivada]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\PoblarDimDate\Columna derivada.Outputs[Salida de columna derivada].Columns[Year]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Cálculo"
+                      errorRowDisposition="FailComponent"
+                      lineageId="Package\PoblarDimDate\Columna derivada.Outputs[Salida de columna derivada].Columns[Year]"
+                      name="Year"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.String"
+                          description="Expresión de columna derivada"
+                          name="Expression">[YEAR](#{Package\PoblarDimDate\Combinación de mezcla.Outputs[Salida de combinación de mezcla].Columns[FullDate]})</property>
+                        <property
+                          containsID="true"
+                          dataType="System.String"
+                          description="Expresión descriptiva de columna derivada"
+                          expressionType="Notify"
+                          name="FriendlyExpression">YEAR(FullDate)</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\PoblarDimDate\Columna derivada.Outputs[Salida de columna derivada].Columns[Quarter]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Cálculo"
+                      errorRowDisposition="FailComponent"
+                      lineageId="Package\PoblarDimDate\Columna derivada.Outputs[Salida de columna derivada].Columns[Quarter]"
+                      name="Quarter"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.String"
+                          description="Expresión de columna derivada"
+                          name="Expression">[DATEPART]("quarter",#{Package\PoblarDimDate\Combinación de mezcla.Outputs[Salida de combinación de mezcla].Columns[FullDate]})</property>
+                        <property
+                          containsID="true"
+                          dataType="System.String"
+                          description="Expresión descriptiva de columna derivada"
+                          expressionType="Notify"
+                          name="FriendlyExpression">DATEPART("quarter",FullDate)</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\PoblarDimDate\Columna derivada.Outputs[Salida de columna derivada].Columns[Month]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Cálculo"
+                      errorRowDisposition="FailComponent"
+                      lineageId="Package\PoblarDimDate\Columna derivada.Outputs[Salida de columna derivada].Columns[Month]"
+                      name="Month"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.String"
+                          description="Expresión de columna derivada"
+                          name="Expression">[MONTH](#{Package\PoblarDimDate\Combinación de mezcla.Outputs[Salida de combinación de mezcla].Columns[FullDate]})</property>
+                        <property
+                          containsID="true"
+                          dataType="System.String"
+                          description="Expresión descriptiva de columna derivada"
+                          expressionType="Notify"
+                          name="FriendlyExpression">MONTH(FullDate)</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\PoblarDimDate\Columna derivada.Outputs[Salida de columna derivada].Columns[Day]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Cálculo"
+                      errorRowDisposition="FailComponent"
+                      lineageId="Package\PoblarDimDate\Columna derivada.Outputs[Salida de columna derivada].Columns[Day]"
+                      name="Day"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.String"
+                          description="Expresión de columna derivada"
+                          name="Expression">[DAY](#{Package\PoblarDimDate\Combinación de mezcla.Outputs[Salida de combinación de mezcla].Columns[FullDate]})</property>
+                        <property
+                          containsID="true"
+                          dataType="System.String"
+                          description="Expresión descriptiva de columna derivada"
+                          expressionType="Notify"
+                          name="FriendlyExpression">DAY(FullDate)</property>
+                      </properties>
+                    </outputColumn>
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\PoblarDimDate\Columna derivada.Outputs[Salida de error de columna derivada]"
+                  description="Salida de error de la transformación Columna derivada"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="Salida de error de columna derivada"
+                  synchronousInputId="Package\PoblarDimDate\Columna derivada.Inputs[Entrada de columna derivada]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\PoblarDimDate\Columna derivada.Outputs[Salida de error de columna derivada].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\PoblarDimDate\Columna derivada.Outputs[Salida de error de columna derivada].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\PoblarDimDate\Columna derivada.Outputs[Salida de error de columna derivada].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\PoblarDimDate\Columna derivada.Outputs[Salida de error de columna derivada].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\PoblarDimDate\Combinación de mezcla"
+              componentClassID="Microsoft.MergeJoin"
+              contactInfo="Combinación de mezcla;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; Todos los derechos reservados; http://www.microsoft.com/sql/support;1"
+              description="Combina dos flujos de datos ordenados en uno solo mediante la combinación FULL, LEFT o INNER. Se recomienda esta transformación cuando se pueden ordenar los flujos de datos en sus orígenes."
+              name="Combinación de mezcla"
+              version="1">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="Especifica el tipo de combinación que se debe realizar."
+                  name="JoinType"
+                  typeConverter="JoinType">1</property>
+                <property
+                  dataType="System.Int32"
+                  description="Especifica el número de columnas de la clave de ordenación."
+                  name="NumKeyColumns">1</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indica si los valores NULL se tratan como valores iguales."
+                  name="TreatNullsAsEqual">true</property>
+                <property
+                  dataType="System.Int32"
+                  description="Indica la cantidad máxima solicitada de búferes por entrada antes del bloqueo."
+                  name="MaxBuffersPerInput">5</property>
+              </properties>
+              <inputs>
+                <input
+                  refId="Package\PoblarDimDate\Combinación de mezcla.Inputs[Entrada izquierda de combinación de mezcla]"
+                  hasSideEffects="true"
+                  name="Entrada izquierda de combinación de mezcla">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\PoblarDimDate\Combinación de mezcla.Inputs[Entrada izquierda de combinación de mezcla].Columns[FullDate]"
+                      cachedDataType="dbDate"
+                      cachedName="FullDate"
+                      cachedSortKeyPosition="1"
+                      lineageId="Package\PoblarDimDate\Ordenar 1.Outputs[Salida de ordenación].Columns[FullDate]" />
+                    <inputColumn
+                      refId="Package\PoblarDimDate\Combinación de mezcla.Inputs[Entrada izquierda de combinación de mezcla].Columns[MonthName]"
+                      cachedDataType="wstr"
+                      cachedLength="30"
+                      cachedName="MonthName"
+                      cachedSortKeyPosition="2"
+                      lineageId="Package\PoblarDimDate\Ordenar 1.Outputs[Salida de ordenación].Columns[MonthName]" />
+                    <inputColumn
+                      refId="Package\PoblarDimDate\Combinación de mezcla.Inputs[Entrada izquierda de combinación de mezcla].Columns[QuarterName]"
+                      cachedDataType="wstr"
+                      cachedLength="30"
+                      cachedName="QuarterName"
+                      cachedSortKeyPosition="3"
+                      lineageId="Package\PoblarDimDate\Ordenar 1.Outputs[Salida de ordenación].Columns[QuarterName]" />
+                    <inputColumn
+                      refId="Package\PoblarDimDate\Combinación de mezcla.Inputs[Entrada izquierda de combinación de mezcla].Columns[DayOfWeek]"
+                      cachedDataType="i4"
+                      cachedName="DayOfWeek"
+                      cachedSortKeyPosition="4"
+                      lineageId="Package\PoblarDimDate\Ordenar 1.Outputs[Salida de ordenación].Columns[DayOfWeek]" />
+                    <inputColumn
+                      refId="Package\PoblarDimDate\Combinación de mezcla.Inputs[Entrada izquierda de combinación de mezcla].Columns[DayName]"
+                      cachedDataType="wstr"
+                      cachedLength="30"
+                      cachedName="DayName"
+                      cachedSortKeyPosition="5"
+                      lineageId="Package\PoblarDimDate\Ordenar 1.Outputs[Salida de ordenación].Columns[DayName]" />
+                    <inputColumn
+                      refId="Package\PoblarDimDate\Combinación de mezcla.Inputs[Entrada izquierda de combinación de mezcla].Columns[IsWeekend]"
+                      cachedDataType="i4"
+                      cachedName="IsWeekend"
+                      cachedSortKeyPosition="6"
+                      lineageId="Package\PoblarDimDate\Ordenar 1.Outputs[Salida de ordenación].Columns[IsWeekend]" />
+                    <inputColumn
+                      refId="Package\PoblarDimDate\Combinación de mezcla.Inputs[Entrada izquierda de combinación de mezcla].Columns[WeekOfYear]"
+                      cachedDataType="i4"
+                      cachedName="WeekOfYear"
+                      cachedSortKeyPosition="7"
+                      lineageId="Package\PoblarDimDate\Ordenar 1.Outputs[Salida de ordenación].Columns[WeekOfYear]" />
+                    <inputColumn
+                      refId="Package\PoblarDimDate\Combinación de mezcla.Inputs[Entrada izquierda de combinación de mezcla].Columns[Semester]"
+                      cachedDataType="i4"
+                      cachedName="Semester"
+                      cachedSortKeyPosition="8"
+                      lineageId="Package\PoblarDimDate\Ordenar 1.Outputs[Salida de ordenación].Columns[Semester]" />
+                    <inputColumn
+                      refId="Package\PoblarDimDate\Combinación de mezcla.Inputs[Entrada izquierda de combinación de mezcla].Columns[SemesterName]"
+                      cachedDataType="wstr"
+                      cachedLength="6"
+                      cachedName="SemesterName"
+                      cachedSortKeyPosition="9"
+                      lineageId="Package\PoblarDimDate\Ordenar 1.Outputs[Salida de ordenación].Columns[SemesterName]" />
+                    <inputColumn
+                      refId="Package\PoblarDimDate\Combinación de mezcla.Inputs[Entrada izquierda de combinación de mezcla].Columns[IsHoliday]"
+                      cachedDataType="i4"
+                      cachedName="IsHoliday"
+                      cachedSortKeyPosition="10"
+                      lineageId="Package\PoblarDimDate\Ordenar 1.Outputs[Salida de ordenación].Columns[IsHoliday]" />
+                    <inputColumn
+                      refId="Package\PoblarDimDate\Combinación de mezcla.Inputs[Entrada izquierda de combinación de mezcla].Columns[HolidayName]"
+                      cachedDataType="i4"
+                      cachedName="HolidayName"
+                      cachedSortKeyPosition="11"
+                      lineageId="Package\PoblarDimDate\Ordenar 1.Outputs[Salida de ordenación].Columns[HolidayName]" />
+                  </inputColumns>
+                  <externalMetadataColumns />
+                </input>
+                <input
+                  refId="Package\PoblarDimDate\Combinación de mezcla.Inputs[Entrada derecha de combinación de mezcla]"
+                  hasSideEffects="true"
+                  name="Entrada derecha de combinación de mezcla">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\PoblarDimDate\Combinación de mezcla.Inputs[Entrada derecha de combinación de mezcla].Columns[FullDate]"
+                      cachedDataType="dbDate"
+                      cachedName="FullDate"
+                      cachedSortKeyPosition="1"
+                      lineageId="Package\PoblarDimDate\Ordenar 2.Outputs[Salida de ordenación].Columns[FullDate]" />
+                  </inputColumns>
+                  <externalMetadataColumns />
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\PoblarDimDate\Combinación de mezcla.Outputs[Salida de combinación de mezcla]"
+                  isSorted="true"
+                  name="Salida de combinación de mezcla">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\PoblarDimDate\Combinación de mezcla.Outputs[Salida de combinación de mezcla].Columns[FullDate]"
+                      dataType="dbDate"
+                      lineageId="Package\PoblarDimDate\Combinación de mezcla.Outputs[Salida de combinación de mezcla].Columns[FullDate]"
+                      name="FullDate"
+                      sortKeyPosition="1">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="La columna de entrada asociada a esta columna de salida"
+                          name="InputColumnID">#{Package\PoblarDimDate\Combinación de mezcla.Inputs[Entrada izquierda de combinación de mezcla].Columns[FullDate]}</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\PoblarDimDate\Combinación de mezcla.Outputs[Salida de combinación de mezcla].Columns[FullDate DM]"
+                      dataType="dbDate"
+                      lineageId="Package\PoblarDimDate\Combinación de mezcla.Outputs[Salida de combinación de mezcla].Columns[FullDate DM]"
+                      name="FullDate DM">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="La columna de entrada asociada a esta columna de salida"
+                          name="InputColumnID">#{Package\PoblarDimDate\Combinación de mezcla.Inputs[Entrada derecha de combinación de mezcla].Columns[FullDate]}</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\PoblarDimDate\Combinación de mezcla.Outputs[Salida de combinación de mezcla].Columns[MonthName]"
+                      dataType="wstr"
+                      length="30"
+                      lineageId="Package\PoblarDimDate\Combinación de mezcla.Outputs[Salida de combinación de mezcla].Columns[MonthName]"
+                      name="MonthName">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="La columna de entrada asociada a esta columna de salida"
+                          name="InputColumnID">#{Package\PoblarDimDate\Combinación de mezcla.Inputs[Entrada izquierda de combinación de mezcla].Columns[MonthName]}</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\PoblarDimDate\Combinación de mezcla.Outputs[Salida de combinación de mezcla].Columns[QuarterName]"
+                      dataType="wstr"
+                      length="30"
+                      lineageId="Package\PoblarDimDate\Combinación de mezcla.Outputs[Salida de combinación de mezcla].Columns[QuarterName]"
+                      name="QuarterName">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="La columna de entrada asociada a esta columna de salida"
+                          name="InputColumnID">#{Package\PoblarDimDate\Combinación de mezcla.Inputs[Entrada izquierda de combinación de mezcla].Columns[QuarterName]}</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\PoblarDimDate\Combinación de mezcla.Outputs[Salida de combinación de mezcla].Columns[DayOfWeek]"
+                      dataType="i4"
+                      lineageId="Package\PoblarDimDate\Combinación de mezcla.Outputs[Salida de combinación de mezcla].Columns[DayOfWeek]"
+                      name="DayOfWeek">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="La columna de entrada asociada a esta columna de salida"
+                          name="InputColumnID">#{Package\PoblarDimDate\Combinación de mezcla.Inputs[Entrada izquierda de combinación de mezcla].Columns[DayOfWeek]}</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\PoblarDimDate\Combinación de mezcla.Outputs[Salida de combinación de mezcla].Columns[DayName]"
+                      dataType="wstr"
+                      length="30"
+                      lineageId="Package\PoblarDimDate\Combinación de mezcla.Outputs[Salida de combinación de mezcla].Columns[DayName]"
+                      name="DayName">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="La columna de entrada asociada a esta columna de salida"
+                          name="InputColumnID">#{Package\PoblarDimDate\Combinación de mezcla.Inputs[Entrada izquierda de combinación de mezcla].Columns[DayName]}</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\PoblarDimDate\Combinación de mezcla.Outputs[Salida de combinación de mezcla].Columns[IsWeekend]"
+                      dataType="i4"
+                      lineageId="Package\PoblarDimDate\Combinación de mezcla.Outputs[Salida de combinación de mezcla].Columns[IsWeekend]"
+                      name="IsWeekend">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="La columna de entrada asociada a esta columna de salida"
+                          name="InputColumnID">#{Package\PoblarDimDate\Combinación de mezcla.Inputs[Entrada izquierda de combinación de mezcla].Columns[IsWeekend]}</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\PoblarDimDate\Combinación de mezcla.Outputs[Salida de combinación de mezcla].Columns[WeekOfYear]"
+                      dataType="i4"
+                      lineageId="Package\PoblarDimDate\Combinación de mezcla.Outputs[Salida de combinación de mezcla].Columns[WeekOfYear]"
+                      name="WeekOfYear">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="La columna de entrada asociada a esta columna de salida"
+                          name="InputColumnID">#{Package\PoblarDimDate\Combinación de mezcla.Inputs[Entrada izquierda de combinación de mezcla].Columns[WeekOfYear]}</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\PoblarDimDate\Combinación de mezcla.Outputs[Salida de combinación de mezcla].Columns[Semester]"
+                      dataType="i4"
+                      lineageId="Package\PoblarDimDate\Combinación de mezcla.Outputs[Salida de combinación de mezcla].Columns[Semester]"
+                      name="Semester">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="La columna de entrada asociada a esta columna de salida"
+                          name="InputColumnID">#{Package\PoblarDimDate\Combinación de mezcla.Inputs[Entrada izquierda de combinación de mezcla].Columns[Semester]}</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\PoblarDimDate\Combinación de mezcla.Outputs[Salida de combinación de mezcla].Columns[SemesterName]"
+                      dataType="wstr"
+                      length="16"
+                      lineageId="Package\PoblarDimDate\Combinación de mezcla.Outputs[Salida de combinación de mezcla].Columns[SemesterName]"
+                      name="SemesterName">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="La columna de entrada asociada a esta columna de salida"
+                          name="InputColumnID">#{Package\PoblarDimDate\Combinación de mezcla.Inputs[Entrada izquierda de combinación de mezcla].Columns[SemesterName]}</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\PoblarDimDate\Combinación de mezcla.Outputs[Salida de combinación de mezcla].Columns[IsHoliday]"
+                      dataType="i4"
+                      lineageId="Package\PoblarDimDate\Combinación de mezcla.Outputs[Salida de combinación de mezcla].Columns[IsHoliday]"
+                      name="IsHoliday">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="La columna de entrada asociada a esta columna de salida"
+                          name="InputColumnID">#{Package\PoblarDimDate\Combinación de mezcla.Inputs[Entrada izquierda de combinación de mezcla].Columns[IsHoliday]}</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\PoblarDimDate\Combinación de mezcla.Outputs[Salida de combinación de mezcla].Columns[HolidayName]"
+                      dataType="i4"
+                      lineageId="Package\PoblarDimDate\Combinación de mezcla.Outputs[Salida de combinación de mezcla].Columns[HolidayName]"
+                      name="HolidayName">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="La columna de entrada asociada a esta columna de salida"
+                          name="InputColumnID">#{Package\PoblarDimDate\Combinación de mezcla.Inputs[Entrada izquierda de combinación de mezcla].Columns[HolidayName]}</property>
+                      </properties>
+                    </outputColumn>
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\PoblarDimDate\División condicional"
+              componentClassID="Microsoft.ConditionalSplit"
+              contactInfo="División condicional;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; Todos los derechos reservados; http://www.microsoft.com/sql/support;0"
+              description="Enruta filas de datos a diferentes salidas según el contenido de los datos. Se usan condiciones (expresiones de SSIS) para especificar las filas que se van a enrutar. Por ejemplo, se usa para separar los registros que deben limpiarse de los registros listos para ser cargados o para enrutar solamente un subconjunto de registros."
+              name="División condicional"
+              usesDispositions="true">
+              <inputs>
+                <input
+                  refId="Package\PoblarDimDate\División condicional.Inputs[Entrada de división condicional]"
+                  description="Entrada en la transformación División condicional"
+                  name="Entrada de división condicional">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\PoblarDimDate\División condicional.Inputs[Entrada de división condicional].Columns[FullDate DM]"
+                      cachedDataType="dbDate"
+                      cachedName="FullDate DM"
+                      lineageId="Package\PoblarDimDate\Combinación de mezcla.Outputs[Salida de combinación de mezcla].Columns[FullDate DM]" />
+                  </inputColumns>
+                  <externalMetadataColumns />
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\PoblarDimDate\División condicional.Outputs[Nuevo Registro]"
+                  description="Salida 1 de la transformación División condicional"
+                  errorOrTruncationOperation="Cálculo"
+                  errorRowDisposition="FailComponent"
+                  exclusionGroup="1"
+                  name="Nuevo Registro"
+                  synchronousInputId="Package\PoblarDimDate\División condicional.Inputs[Entrada de división condicional]"
+                  truncationRowDisposition="FailComponent">
+                  <properties>
+                    <property
+                      containsID="true"
+                      dataType="System.String"
+                      description="Especifica la expresión. Esta versión de expresión usa identificadores de linaje en lugar de nombres de columna."
+                      name="Expression">[ISNULL](#{Package\PoblarDimDate\Combinación de mezcla.Outputs[Salida de combinación de mezcla].Columns[FullDate DM]})</property>
+                    <property
+                      containsID="true"
+                      dataType="System.String"
+                      description="Especifica la versión descriptiva de la expresión. Esta versión de expresión usa nombres de columna."
+                      expressionType="Notify"
+                      name="FriendlyExpression">ISNULL([FullDate DM])</property>
+                    <property
+                      dataType="System.Int32"
+                      description="Especifica la posición de la condición en la lista de condiciones que evalúa la transformación. El orden de evaluación es del menor al mayor valor."
+                      name="EvaluationOrder">0</property>
+                  </properties>
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\PoblarDimDate\División condicional.Outputs[Salida predeterminada de división condicional]"
+                  description="Salida predeterminada de la transformación División condicional"
+                  exclusionGroup="1"
+                  name="Salida predeterminada de división condicional"
+                  synchronousInputId="Package\PoblarDimDate\División condicional.Inputs[Entrada de división condicional]">
+                  <properties>
+                    <property
+                      dataType="System.Boolean"
+                      name="IsDefaultOut">true</property>
+                  </properties>
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\PoblarDimDate\División condicional.Outputs[Salida de error de división condicional]"
+                  description="Salida de error de la transformación División condicional"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="Salida de error de división condicional"
+                  synchronousInputId="Package\PoblarDimDate\División condicional.Inputs[Entrada de división condicional]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\PoblarDimDate\División condicional.Outputs[Salida de error de división condicional].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\PoblarDimDate\División condicional.Outputs[Salida de error de división condicional].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\PoblarDimDate\División condicional.Outputs[Salida de error de división condicional].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\PoblarDimDate\División condicional.Outputs[Salida de error de división condicional].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\PoblarDimDate\Insertar nuevas fechas al DW"
+              componentClassID="Microsoft.ManagedComponentHost"
+              contactInfo="Carga datos en una base de datos compatible con ADO.NET que use una vista o tabla de base de datos. Se cargan datos en una tabla nueva o existente. Por ejemplo, se usa un proveedor ADO.NET para ODBC para cargar datos en un destino ODBC.;Microsoft Corporation; Microsoft SQL Server; © Microsoft Corporation; Todos los derechos reservados; http://www.microsoft.com/sql/support;2"
+              description="Carga datos en una base de datos compatible con ADO.NET que use una vista o tabla de base de datos. Se cargan datos en una tabla nueva o existente. Por ejemplo, se usa un proveedor ADO.NET para ODBC para cargar datos en un destino ODBC."
+              name="Insertar nuevas fechas al DW"
+              usesDispositions="true"
+              version="2">
+              <properties>
+                <property
+                  dataType="System.String"
+                  description="Nombre de la tabla de la base de datos de destino."
+                  expressionType="Notify"
+                  name="TableOrViewName"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor">"dbo"."DimDate"</property>
+                <property
+                  dataType="System.Int32"
+                  description="Especifique el número de filas por lote. El valor predeterminado es 0, que utiliza el mismo tamaño que el búfer interno de SSIS. "
+                  expressionType="Notify"
+                  name="BatchSize">0</property>
+                <property
+                  dataType="System.Int32"
+                  description="Número de segundos antes de que se agote el tiempo de espera de un comando. Un valor de 0 indica un tiempo de espera infinito. "
+                  expressionType="Notify"
+                  name="CommandTimeout">30</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Especifica si se debe usar la interfaz SqlBulkCopy para mejorar el rendimiento de las operaciones de inserción masiva. No todos los proveedores admiten esta interfaz."
+                  expressionType="Notify"
+                  name="UseBulkInsertWhenPossible">true</property>
+                <property
+                  dataType="System.String"
+                  name="UserComponentTypeName">Microsoft.ADONETDestination</property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\PoblarDimDate\Insertar nuevas fechas al DW.Connections[IDbConnection]"
+                  connectionManagerID="{DF18FE9E-6142-4ED6-B311-E003BD7BEFA8}:external"
+                  connectionManagerRefId="Project.ConnectionManagers[(localdb)_MSSQLLocalDB.NorthWindDW]"
+                  description="Administrador de conexiones administrado"
+                  name="IDbConnection" />
+              </connections>
+              <inputs>
+                <input
+                  refId="Package\PoblarDimDate\Insertar nuevas fechas al DW.Inputs[Entrada de destino de ADO NET]"
+                  errorRowDisposition="FailComponent"
+                  hasSideEffects="true"
+                  name="Entrada de destino de ADO NET">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\PoblarDimDate\Insertar nuevas fechas al DW.Inputs[Entrada de destino de ADO NET].Columns[FullDate]"
+                      cachedDataType="dbDate"
+                      cachedName="FullDate"
+                      cachedSortKeyPosition="1"
+                      externalMetadataColumnId="Package\PoblarDimDate\Insertar nuevas fechas al DW.Inputs[Entrada de destino de ADO NET].ExternalColumns[FullDate]"
+                      lineageId="Package\PoblarDimDate\Combinación de mezcla.Outputs[Salida de combinación de mezcla].Columns[FullDate]" />
+                    <inputColumn
+                      refId="Package\PoblarDimDate\Insertar nuevas fechas al DW.Inputs[Entrada de destino de ADO NET].Columns[MonthName]"
+                      cachedDataType="wstr"
+                      cachedLength="30"
+                      cachedName="MonthName"
+                      externalMetadataColumnId="Package\PoblarDimDate\Insertar nuevas fechas al DW.Inputs[Entrada de destino de ADO NET].ExternalColumns[MonthName]"
+                      lineageId="Package\PoblarDimDate\Combinación de mezcla.Outputs[Salida de combinación de mezcla].Columns[MonthName]" />
+                    <inputColumn
+                      refId="Package\PoblarDimDate\Insertar nuevas fechas al DW.Inputs[Entrada de destino de ADO NET].Columns[QuarterName]"
+                      cachedDataType="wstr"
+                      cachedLength="30"
+                      cachedName="QuarterName"
+                      externalMetadataColumnId="Package\PoblarDimDate\Insertar nuevas fechas al DW.Inputs[Entrada de destino de ADO NET].ExternalColumns[QuarterName]"
+                      lineageId="Package\PoblarDimDate\Combinación de mezcla.Outputs[Salida de combinación de mezcla].Columns[QuarterName]" />
+                    <inputColumn
+                      refId="Package\PoblarDimDate\Insertar nuevas fechas al DW.Inputs[Entrada de destino de ADO NET].Columns[DayOfWeek]"
+                      cachedDataType="i4"
+                      cachedName="DayOfWeek"
+                      externalMetadataColumnId="Package\PoblarDimDate\Insertar nuevas fechas al DW.Inputs[Entrada de destino de ADO NET].ExternalColumns[DayOfWeek]"
+                      lineageId="Package\PoblarDimDate\Combinación de mezcla.Outputs[Salida de combinación de mezcla].Columns[DayOfWeek]" />
+                    <inputColumn
+                      refId="Package\PoblarDimDate\Insertar nuevas fechas al DW.Inputs[Entrada de destino de ADO NET].Columns[DayName]"
+                      cachedDataType="wstr"
+                      cachedLength="30"
+                      cachedName="DayName"
+                      externalMetadataColumnId="Package\PoblarDimDate\Insertar nuevas fechas al DW.Inputs[Entrada de destino de ADO NET].ExternalColumns[DayName]"
+                      lineageId="Package\PoblarDimDate\Combinación de mezcla.Outputs[Salida de combinación de mezcla].Columns[DayName]" />
+                    <inputColumn
+                      refId="Package\PoblarDimDate\Insertar nuevas fechas al DW.Inputs[Entrada de destino de ADO NET].Columns[IsWeekend]"
+                      cachedDataType="i4"
+                      cachedName="IsWeekend"
+                      externalMetadataColumnId="Package\PoblarDimDate\Insertar nuevas fechas al DW.Inputs[Entrada de destino de ADO NET].ExternalColumns[IsWeekend]"
+                      lineageId="Package\PoblarDimDate\Combinación de mezcla.Outputs[Salida de combinación de mezcla].Columns[IsWeekend]" />
+                    <inputColumn
+                      refId="Package\PoblarDimDate\Insertar nuevas fechas al DW.Inputs[Entrada de destino de ADO NET].Columns[WeekOfYear]"
+                      cachedDataType="i4"
+                      cachedName="WeekOfYear"
+                      externalMetadataColumnId="Package\PoblarDimDate\Insertar nuevas fechas al DW.Inputs[Entrada de destino de ADO NET].ExternalColumns[WeekOfYear]"
+                      lineageId="Package\PoblarDimDate\Combinación de mezcla.Outputs[Salida de combinación de mezcla].Columns[WeekOfYear]" />
+                    <inputColumn
+                      refId="Package\PoblarDimDate\Insertar nuevas fechas al DW.Inputs[Entrada de destino de ADO NET].Columns[Semester]"
+                      cachedDataType="i4"
+                      cachedName="Semester"
+                      externalMetadataColumnId="Package\PoblarDimDate\Insertar nuevas fechas al DW.Inputs[Entrada de destino de ADO NET].ExternalColumns[Semester]"
+                      lineageId="Package\PoblarDimDate\Combinación de mezcla.Outputs[Salida de combinación de mezcla].Columns[Semester]" />
+                    <inputColumn
+                      refId="Package\PoblarDimDate\Insertar nuevas fechas al DW.Inputs[Entrada de destino de ADO NET].Columns[SemesterName]"
+                      cachedDataType="wstr"
+                      cachedLength="16"
+                      cachedName="SemesterName"
+                      externalMetadataColumnId="Package\PoblarDimDate\Insertar nuevas fechas al DW.Inputs[Entrada de destino de ADO NET].ExternalColumns[SemesterName]"
+                      lineageId="Package\PoblarDimDate\Combinación de mezcla.Outputs[Salida de combinación de mezcla].Columns[SemesterName]" />
+                    <inputColumn
+                      refId="Package\PoblarDimDate\Insertar nuevas fechas al DW.Inputs[Entrada de destino de ADO NET].Columns[IsHoliday]"
+                      cachedDataType="i4"
+                      cachedName="IsHoliday"
+                      externalMetadataColumnId="Package\PoblarDimDate\Insertar nuevas fechas al DW.Inputs[Entrada de destino de ADO NET].ExternalColumns[IsHoliday]"
+                      lineageId="Package\PoblarDimDate\Combinación de mezcla.Outputs[Salida de combinación de mezcla].Columns[IsHoliday]" />
+                    <inputColumn
+                      refId="Package\PoblarDimDate\Insertar nuevas fechas al DW.Inputs[Entrada de destino de ADO NET].Columns[HolidayName]"
+                      cachedDataType="i4"
+                      cachedName="HolidayName"
+                      externalMetadataColumnId="Package\PoblarDimDate\Insertar nuevas fechas al DW.Inputs[Entrada de destino de ADO NET].ExternalColumns[HolidayName]"
+                      lineageId="Package\PoblarDimDate\Combinación de mezcla.Outputs[Salida de combinación de mezcla].Columns[HolidayName]" />
+                    <inputColumn
+                      refId="Package\PoblarDimDate\Insertar nuevas fechas al DW.Inputs[Entrada de destino de ADO NET].Columns[Year]"
+                      cachedDataType="i4"
+                      cachedName="Year"
+                      externalMetadataColumnId="Package\PoblarDimDate\Insertar nuevas fechas al DW.Inputs[Entrada de destino de ADO NET].ExternalColumns[Year]"
+                      lineageId="Package\PoblarDimDate\Columna derivada.Outputs[Salida de columna derivada].Columns[Year]" />
+                    <inputColumn
+                      refId="Package\PoblarDimDate\Insertar nuevas fechas al DW.Inputs[Entrada de destino de ADO NET].Columns[Quarter]"
+                      cachedDataType="i4"
+                      cachedName="Quarter"
+                      externalMetadataColumnId="Package\PoblarDimDate\Insertar nuevas fechas al DW.Inputs[Entrada de destino de ADO NET].ExternalColumns[Quarter]"
+                      lineageId="Package\PoblarDimDate\Columna derivada.Outputs[Salida de columna derivada].Columns[Quarter]" />
+                    <inputColumn
+                      refId="Package\PoblarDimDate\Insertar nuevas fechas al DW.Inputs[Entrada de destino de ADO NET].Columns[Month]"
+                      cachedDataType="i4"
+                      cachedName="Month"
+                      externalMetadataColumnId="Package\PoblarDimDate\Insertar nuevas fechas al DW.Inputs[Entrada de destino de ADO NET].ExternalColumns[Month]"
+                      lineageId="Package\PoblarDimDate\Columna derivada.Outputs[Salida de columna derivada].Columns[Month]" />
+                    <inputColumn
+                      refId="Package\PoblarDimDate\Insertar nuevas fechas al DW.Inputs[Entrada de destino de ADO NET].Columns[Day]"
+                      cachedDataType="i4"
+                      cachedName="Day"
+                      externalMetadataColumnId="Package\PoblarDimDate\Insertar nuevas fechas al DW.Inputs[Entrada de destino de ADO NET].ExternalColumns[Day]"
+                      lineageId="Package\PoblarDimDate\Columna derivada.Outputs[Salida de columna derivada].Columns[Day]" />
+                  </inputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\PoblarDimDate\Insertar nuevas fechas al DW.Inputs[Entrada de destino de ADO NET].ExternalColumns[DateKey]"
+                      dataType="i4"
+                      name="DateKey" />
+                    <externalMetadataColumn
+                      refId="Package\PoblarDimDate\Insertar nuevas fechas al DW.Inputs[Entrada de destino de ADO NET].ExternalColumns[FullDate]"
+                      dataType="dbTimeStamp"
+                      name="FullDate" />
+                    <externalMetadataColumn
+                      refId="Package\PoblarDimDate\Insertar nuevas fechas al DW.Inputs[Entrada de destino de ADO NET].ExternalColumns[Year]"
+                      dataType="i4"
+                      name="Year" />
+                    <externalMetadataColumn
+                      refId="Package\PoblarDimDate\Insertar nuevas fechas al DW.Inputs[Entrada de destino de ADO NET].ExternalColumns[Quarter]"
+                      dataType="i4"
+                      name="Quarter" />
+                    <externalMetadataColumn
+                      refId="Package\PoblarDimDate\Insertar nuevas fechas al DW.Inputs[Entrada de destino de ADO NET].ExternalColumns[Month]"
+                      dataType="i4"
+                      name="Month" />
+                    <externalMetadataColumn
+                      refId="Package\PoblarDimDate\Insertar nuevas fechas al DW.Inputs[Entrada de destino de ADO NET].ExternalColumns[Day]"
+                      dataType="i4"
+                      name="Day" />
+                    <externalMetadataColumn
+                      refId="Package\PoblarDimDate\Insertar nuevas fechas al DW.Inputs[Entrada de destino de ADO NET].ExternalColumns[MonthName]"
+                      dataType="wstr"
+                      length="20"
+                      name="MonthName" />
+                    <externalMetadataColumn
+                      refId="Package\PoblarDimDate\Insertar nuevas fechas al DW.Inputs[Entrada de destino de ADO NET].ExternalColumns[QuarterName]"
+                      dataType="wstr"
+                      length="10"
+                      name="QuarterName" />
+                    <externalMetadataColumn
+                      refId="Package\PoblarDimDate\Insertar nuevas fechas al DW.Inputs[Entrada de destino de ADO NET].ExternalColumns[DayOfWeek]"
+                      dataType="i4"
+                      name="DayOfWeek" />
+                    <externalMetadataColumn
+                      refId="Package\PoblarDimDate\Insertar nuevas fechas al DW.Inputs[Entrada de destino de ADO NET].ExternalColumns[DayName]"
+                      dataType="wstr"
+                      length="20"
+                      name="DayName" />
+                    <externalMetadataColumn
+                      refId="Package\PoblarDimDate\Insertar nuevas fechas al DW.Inputs[Entrada de destino de ADO NET].ExternalColumns[IsWeekend]"
+                      dataType="bool"
+                      name="IsWeekend" />
+                    <externalMetadataColumn
+                      refId="Package\PoblarDimDate\Insertar nuevas fechas al DW.Inputs[Entrada de destino de ADO NET].ExternalColumns[WeekOfYear]"
+                      dataType="i4"
+                      name="WeekOfYear" />
+                    <externalMetadataColumn
+                      refId="Package\PoblarDimDate\Insertar nuevas fechas al DW.Inputs[Entrada de destino de ADO NET].ExternalColumns[Semester]"
+                      dataType="i4"
+                      name="Semester" />
+                    <externalMetadataColumn
+                      refId="Package\PoblarDimDate\Insertar nuevas fechas al DW.Inputs[Entrada de destino de ADO NET].ExternalColumns[SemesterName]"
+                      dataType="wstr"
+                      length="10"
+                      name="SemesterName" />
+                    <externalMetadataColumn
+                      refId="Package\PoblarDimDate\Insertar nuevas fechas al DW.Inputs[Entrada de destino de ADO NET].ExternalColumns[IsHoliday]"
+                      dataType="bool"
+                      name="IsHoliday" />
+                    <externalMetadataColumn
+                      refId="Package\PoblarDimDate\Insertar nuevas fechas al DW.Inputs[Entrada de destino de ADO NET].ExternalColumns[HolidayName]"
+                      dataType="wstr"
+                      length="100"
+                      name="HolidayName" />
+                  </externalMetadataColumns>
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\PoblarDimDate\Insertar nuevas fechas al DW.Outputs[Salida de error de destino de ADO NET]"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="Salida de error de destino de ADO NET"
+                  synchronousInputId="Package\PoblarDimDate\Insertar nuevas fechas al DW.Inputs[Entrada de destino de ADO NET]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\PoblarDimDate\Insertar nuevas fechas al DW.Outputs[Salida de error de destino de ADO NET].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\PoblarDimDate\Insertar nuevas fechas al DW.Outputs[Salida de error de destino de ADO NET].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\PoblarDimDate\Insertar nuevas fechas al DW.Outputs[Salida de error de destino de ADO NET].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\PoblarDimDate\Insertar nuevas fechas al DW.Outputs[Salida de error de destino de ADO NET].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\PoblarDimDate\Leer Date desde DW"
+              componentClassID="Microsoft.ManagedComponentHost"
+              contactInfo="Consume datos de SQL Server, OLE DB, ODBC u Oracle mediante el correspondiente proveedor de datos de .NET Framework. Se usa una instrucción Transact-SQL para definir el conjunto de resultados. Por ejemplo, se extraen datos de SQL Server con el proveedor de datos de .NET Framework para SQL Server.;Microsoft Corporation; Microsoft SQL Server; © Microsoft Corporation; Todos los derechos reservados; http://www.microsoft.com/sql/support;4"
+              description="Consume datos de SQL Server, OLE DB, ODBC u Oracle mediante el correspondiente proveedor de datos de .NET Framework. Se usa una instrucción Transact-SQL para definir el conjunto de resultados. Por ejemplo, se extraen datos de SQL Server con el proveedor de datos de .NET Framework para SQL Server."
+              name="Leer Date desde DW"
+              usesDispositions="true"
+              version="4">
+              <properties>
+                <property
+                  dataType="System.String"
+                  description="Especifica la instrucción SQL utilizada por el componente para extraer datos."
+                  expressionType="Notify"
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor">SELECT FullDate
+FROM     DimDate</property>
+                <property
+                  dataType="System.Int32"
+                  description="Número de segundos antes de que se agote el tiempo de espera de un comando. Un valor de 0 indica un tiempo de espera infinito."
+                  name="CommandTimeout">30</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indica si se debe permitir que columnas externas que no sean de cadenas se conviertan implícitamente en cadenas en las columnas de salida."
+                  name="AllowImplicitStringConversion">true</property>
+                <property
+                  dataType="System.String"
+                  description="Nombre de la tabla de la base de datos de origen."
+                  expressionType="Notify"
+                  name="TableOrViewName"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Especificar el modo de recuperar información de columnas externas"
+                  name="AccessMode"
+                  typeConverter="Microsoft.SqlServer.Dts.Pipeline.DataReaderSourceAdapter+EnumToStringConverter">2</property>
+                <property
+                  dataType="System.String"
+                  name="UserComponentTypeName">Microsoft.DataReaderSourceAdapter</property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\PoblarDimDate\Leer Date desde DW.Connections[IDbConnection]"
+                  connectionManagerID="{DF18FE9E-6142-4ED6-B311-E003BD7BEFA8}:external"
+                  connectionManagerRefId="Project.ConnectionManagers[(localdb)_MSSQLLocalDB.NorthWindDW]"
+                  description="Administrador de conexiones administrado"
+                  name="IDbConnection" />
+              </connections>
+              <outputs>
+                <output
+                  refId="Package\PoblarDimDate\Leer Date desde DW.Outputs[Salida de origen de ADO NET]"
+                  name="Salida de origen de ADO NET">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\PoblarDimDate\Leer Date desde DW.Outputs[Salida de origen de ADO NET].Columns[FullDate]"
+                      dataType="dbDate"
+                      errorOrTruncationOperation="Conversión"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\PoblarDimDate\Leer Date desde DW.Outputs[Salida de origen de ADO NET].ExternalColumns[FullDate]"
+                      lineageId="Package\PoblarDimDate\Leer Date desde DW.Outputs[Salida de origen de ADO NET].Columns[FullDate]"
+                      name="FullDate"
+                      truncationRowDisposition="FailComponent" />
+                  </outputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\PoblarDimDate\Leer Date desde DW.Outputs[Salida de origen de ADO NET].ExternalColumns[FullDate]"
+                      dataType="dbDate"
+                      name="FullDate" />
+                  </externalMetadataColumns>
+                </output>
+                <output
+                  refId="Package\PoblarDimDate\Leer Date desde DW.Outputs[Salida de error de origen de ADO NET]"
+                  isErrorOut="true"
+                  name="Salida de error de origen de ADO NET">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\PoblarDimDate\Leer Date desde DW.Outputs[Salida de error de origen de ADO NET].Columns[FullDate]"
+                      dataType="dbDate"
+                      lineageId="Package\PoblarDimDate\Leer Date desde DW.Outputs[Salida de error de origen de ADO NET].Columns[FullDate]"
+                      name="FullDate" />
+                    <outputColumn
+                      refId="Package\PoblarDimDate\Leer Date desde DW.Outputs[Salida de error de origen de ADO NET].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\PoblarDimDate\Leer Date desde DW.Outputs[Salida de error de origen de ADO NET].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\PoblarDimDate\Leer Date desde DW.Outputs[Salida de error de origen de ADO NET].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\PoblarDimDate\Leer Date desde DW.Outputs[Salida de error de origen de ADO NET].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\PoblarDimDate\Leer ShippedDate desde OLTP"
+              componentClassID="Microsoft.ManagedComponentHost"
+              contactInfo="Consume datos de SQL Server, OLE DB, ODBC u Oracle mediante el correspondiente proveedor de datos de .NET Framework. Se usa una instrucción Transact-SQL para definir el conjunto de resultados. Por ejemplo, se extraen datos de SQL Server con el proveedor de datos de .NET Framework para SQL Server.;Microsoft Corporation; Microsoft SQL Server; © Microsoft Corporation; Todos los derechos reservados; http://www.microsoft.com/sql/support;4"
+              description="Consume datos de SQL Server, OLE DB, ODBC u Oracle mediante el correspondiente proveedor de datos de .NET Framework. Se usa una instrucción Transact-SQL para definir el conjunto de resultados. Por ejemplo, se extraen datos de SQL Server con el proveedor de datos de .NET Framework para SQL Server."
+              name="Leer ShippedDate desde OLTP"
+              usesDispositions="true"
+              version="4">
+              <properties>
+                <property
+                  dataType="System.String"
+                  description="Especifica la instrucción SQL utilizada por el componente para extraer datos."
+                  expressionType="Notify"
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor">SELECT DISTINCT CONVERT(DATE, FullDate) FullDate,
+    DATENAME(MONTH, CONVERT(DATE, FullDate)) AS MonthName,
+    DATENAME(QUARTER, CONVERT(DATE, FullDate)) AS QuarterName,
+    DATEPART(WEEKDAY, CONVERT(DATE, FullDate)) AS DayOfWeek,
+    DATENAME(WEEKDAY, CONVERT(DATE, FullDate)) AS DayName,
+    CASE 
+        WHEN DATEPART(WEEKDAY, CONVERT(DATE, FullDate)) IN (1, 7) THEN 1 
+        ELSE 0 
+    END AS IsWeekend,
+    DATEPART(WEEK, CONVERT(DATE, FullDate)) AS WeekOfYear,
+    CASE 
+        WHEN DATEPART(MONTH, CONVERT(DATE, FullDate)) &lt;= 6 THEN 1 
+        ELSE 2 
+    END AS Semester,
+    CASE 
+        WHEN DATEPART(MONTH, CONVERT(DATE, FullDate)) &lt;= 6 THEN 'First' 
+        ELSE 'Second' 
+    END AS SemesterName,
+    0 AS IsHoliday,                -- Siempre falso
+    NULL AS HolidayName             -- Siempre NULL
+
+FROM(
+SELECT OrderDate AS FullDate
+FROM     Orders
+UNION ALL
+SELECT ShippedDate AS FullDate
+FROM     Orders AS Orders_2
+UNION ALL
+SELECT RequiredDate AS FullDate
+FROM     Orders AS Orders_1) AS Dates
+WHERE FullDate IS NOT NULL</property>
+                <property
+                  dataType="System.Int32"
+                  description="Número de segundos antes de que se agote el tiempo de espera de un comando. Un valor de 0 indica un tiempo de espera infinito."
+                  name="CommandTimeout">30</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indica si se debe permitir que columnas externas que no sean de cadenas se conviertan implícitamente en cadenas en las columnas de salida."
+                  name="AllowImplicitStringConversion">true</property>
+                <property
+                  dataType="System.String"
+                  description="Nombre de la tabla de la base de datos de origen."
+                  expressionType="Notify"
+                  name="TableOrViewName"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Especificar el modo de recuperar información de columnas externas"
+                  name="AccessMode"
+                  typeConverter="Microsoft.SqlServer.Dts.Pipeline.DataReaderSourceAdapter+EnumToStringConverter">2</property>
+                <property
+                  dataType="System.String"
+                  name="UserComponentTypeName">Microsoft.DataReaderSourceAdapter</property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\PoblarDimDate\Leer ShippedDate desde OLTP.Connections[IDbConnection]"
+                  connectionManagerID="{59F5F486-722A-45DD-B287-734612BE1244}:external"
+                  connectionManagerRefId="Project.ConnectionManagers[(localdb)_MSSQLLocalDB.NorthWind]"
+                  description="Administrador de conexiones administrado"
+                  name="IDbConnection" />
+              </connections>
+              <outputs>
+                <output
+                  refId="Package\PoblarDimDate\Leer ShippedDate desde OLTP.Outputs[Salida de origen de ADO NET]"
+                  name="Salida de origen de ADO NET">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\PoblarDimDate\Leer ShippedDate desde OLTP.Outputs[Salida de origen de ADO NET].Columns[FullDate]"
+                      dataType="dbDate"
+                      errorOrTruncationOperation="Conversión"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\PoblarDimDate\Leer ShippedDate desde OLTP.Outputs[Salida de origen de ADO NET].ExternalColumns[FullDate]"
+                      lineageId="Package\PoblarDimDate\Leer ShippedDate desde OLTP.Outputs[Salida de origen de ADO NET].Columns[FullDate]"
+                      name="FullDate"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\PoblarDimDate\Leer ShippedDate desde OLTP.Outputs[Salida de origen de ADO NET].Columns[MonthName]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversión"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\PoblarDimDate\Leer ShippedDate desde OLTP.Outputs[Salida de origen de ADO NET].ExternalColumns[MonthName]"
+                      length="30"
+                      lineageId="Package\PoblarDimDate\Leer ShippedDate desde OLTP.Outputs[Salida de origen de ADO NET].Columns[MonthName]"
+                      name="MonthName"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\PoblarDimDate\Leer ShippedDate desde OLTP.Outputs[Salida de origen de ADO NET].Columns[QuarterName]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversión"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\PoblarDimDate\Leer ShippedDate desde OLTP.Outputs[Salida de origen de ADO NET].ExternalColumns[QuarterName]"
+                      length="30"
+                      lineageId="Package\PoblarDimDate\Leer ShippedDate desde OLTP.Outputs[Salida de origen de ADO NET].Columns[QuarterName]"
+                      name="QuarterName"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\PoblarDimDate\Leer ShippedDate desde OLTP.Outputs[Salida de origen de ADO NET].Columns[DayOfWeek]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Conversión"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\PoblarDimDate\Leer ShippedDate desde OLTP.Outputs[Salida de origen de ADO NET].ExternalColumns[DayOfWeek]"
+                      lineageId="Package\PoblarDimDate\Leer ShippedDate desde OLTP.Outputs[Salida de origen de ADO NET].Columns[DayOfWeek]"
+                      name="DayOfWeek"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\PoblarDimDate\Leer ShippedDate desde OLTP.Outputs[Salida de origen de ADO NET].Columns[DayName]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversión"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\PoblarDimDate\Leer ShippedDate desde OLTP.Outputs[Salida de origen de ADO NET].ExternalColumns[DayName]"
+                      length="30"
+                      lineageId="Package\PoblarDimDate\Leer ShippedDate desde OLTP.Outputs[Salida de origen de ADO NET].Columns[DayName]"
+                      name="DayName"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\PoblarDimDate\Leer ShippedDate desde OLTP.Outputs[Salida de origen de ADO NET].Columns[IsWeekend]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Conversión"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\PoblarDimDate\Leer ShippedDate desde OLTP.Outputs[Salida de origen de ADO NET].ExternalColumns[IsWeekend]"
+                      lineageId="Package\PoblarDimDate\Leer ShippedDate desde OLTP.Outputs[Salida de origen de ADO NET].Columns[IsWeekend]"
+                      name="IsWeekend"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\PoblarDimDate\Leer ShippedDate desde OLTP.Outputs[Salida de origen de ADO NET].Columns[WeekOfYear]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Conversión"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\PoblarDimDate\Leer ShippedDate desde OLTP.Outputs[Salida de origen de ADO NET].ExternalColumns[WeekOfYear]"
+                      lineageId="Package\PoblarDimDate\Leer ShippedDate desde OLTP.Outputs[Salida de origen de ADO NET].Columns[WeekOfYear]"
+                      name="WeekOfYear"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\PoblarDimDate\Leer ShippedDate desde OLTP.Outputs[Salida de origen de ADO NET].Columns[Semester]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Conversión"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\PoblarDimDate\Leer ShippedDate desde OLTP.Outputs[Salida de origen de ADO NET].ExternalColumns[Semester]"
+                      lineageId="Package\PoblarDimDate\Leer ShippedDate desde OLTP.Outputs[Salida de origen de ADO NET].Columns[Semester]"
+                      name="Semester"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\PoblarDimDate\Leer ShippedDate desde OLTP.Outputs[Salida de origen de ADO NET].Columns[SemesterName]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversión"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\PoblarDimDate\Leer ShippedDate desde OLTP.Outputs[Salida de origen de ADO NET].ExternalColumns[SemesterName]"
+                      length="6"
+                      lineageId="Package\PoblarDimDate\Leer ShippedDate desde OLTP.Outputs[Salida de origen de ADO NET].Columns[SemesterName]"
+                      name="SemesterName"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\PoblarDimDate\Leer ShippedDate desde OLTP.Outputs[Salida de origen de ADO NET].Columns[IsHoliday]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Conversión"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\PoblarDimDate\Leer ShippedDate desde OLTP.Outputs[Salida de origen de ADO NET].ExternalColumns[IsHoliday]"
+                      lineageId="Package\PoblarDimDate\Leer ShippedDate desde OLTP.Outputs[Salida de origen de ADO NET].Columns[IsHoliday]"
+                      name="IsHoliday"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\PoblarDimDate\Leer ShippedDate desde OLTP.Outputs[Salida de origen de ADO NET].Columns[HolidayName]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Conversión"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\PoblarDimDate\Leer ShippedDate desde OLTP.Outputs[Salida de origen de ADO NET].ExternalColumns[HolidayName]"
+                      lineageId="Package\PoblarDimDate\Leer ShippedDate desde OLTP.Outputs[Salida de origen de ADO NET].Columns[HolidayName]"
+                      name="HolidayName"
+                      truncationRowDisposition="FailComponent" />
+                  </outputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\PoblarDimDate\Leer ShippedDate desde OLTP.Outputs[Salida de origen de ADO NET].ExternalColumns[FullDate]"
+                      dataType="dbDate"
+                      name="FullDate" />
+                    <externalMetadataColumn
+                      refId="Package\PoblarDimDate\Leer ShippedDate desde OLTP.Outputs[Salida de origen de ADO NET].ExternalColumns[MonthName]"
+                      dataType="wstr"
+                      length="30"
+                      name="MonthName" />
+                    <externalMetadataColumn
+                      refId="Package\PoblarDimDate\Leer ShippedDate desde OLTP.Outputs[Salida de origen de ADO NET].ExternalColumns[QuarterName]"
+                      dataType="wstr"
+                      length="30"
+                      name="QuarterName" />
+                    <externalMetadataColumn
+                      refId="Package\PoblarDimDate\Leer ShippedDate desde OLTP.Outputs[Salida de origen de ADO NET].ExternalColumns[DayOfWeek]"
+                      dataType="i4"
+                      name="DayOfWeek" />
+                    <externalMetadataColumn
+                      refId="Package\PoblarDimDate\Leer ShippedDate desde OLTP.Outputs[Salida de origen de ADO NET].ExternalColumns[DayName]"
+                      dataType="wstr"
+                      length="30"
+                      name="DayName" />
+                    <externalMetadataColumn
+                      refId="Package\PoblarDimDate\Leer ShippedDate desde OLTP.Outputs[Salida de origen de ADO NET].ExternalColumns[IsWeekend]"
+                      dataType="i4"
+                      name="IsWeekend" />
+                    <externalMetadataColumn
+                      refId="Package\PoblarDimDate\Leer ShippedDate desde OLTP.Outputs[Salida de origen de ADO NET].ExternalColumns[WeekOfYear]"
+                      dataType="i4"
+                      name="WeekOfYear" />
+                    <externalMetadataColumn
+                      refId="Package\PoblarDimDate\Leer ShippedDate desde OLTP.Outputs[Salida de origen de ADO NET].ExternalColumns[Semester]"
+                      dataType="i4"
+                      name="Semester" />
+                    <externalMetadataColumn
+                      refId="Package\PoblarDimDate\Leer ShippedDate desde OLTP.Outputs[Salida de origen de ADO NET].ExternalColumns[SemesterName]"
+                      dataType="wstr"
+                      length="6"
+                      name="SemesterName" />
+                    <externalMetadataColumn
+                      refId="Package\PoblarDimDate\Leer ShippedDate desde OLTP.Outputs[Salida de origen de ADO NET].ExternalColumns[IsHoliday]"
+                      dataType="i4"
+                      name="IsHoliday" />
+                    <externalMetadataColumn
+                      refId="Package\PoblarDimDate\Leer ShippedDate desde OLTP.Outputs[Salida de origen de ADO NET].ExternalColumns[HolidayName]"
+                      dataType="i4"
+                      name="HolidayName" />
+                  </externalMetadataColumns>
+                </output>
+                <output
+                  refId="Package\PoblarDimDate\Leer ShippedDate desde OLTP.Outputs[Salida de error de origen de ADO NET]"
+                  isErrorOut="true"
+                  name="Salida de error de origen de ADO NET">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\PoblarDimDate\Leer ShippedDate desde OLTP.Outputs[Salida de error de origen de ADO NET].Columns[FullDate]"
+                      dataType="dbDate"
+                      lineageId="Package\PoblarDimDate\Leer ShippedDate desde OLTP.Outputs[Salida de error de origen de ADO NET].Columns[FullDate]"
+                      name="FullDate" />
+                    <outputColumn
+                      refId="Package\PoblarDimDate\Leer ShippedDate desde OLTP.Outputs[Salida de error de origen de ADO NET].Columns[MonthName]"
+                      dataType="wstr"
+                      length="30"
+                      lineageId="Package\PoblarDimDate\Leer ShippedDate desde OLTP.Outputs[Salida de error de origen de ADO NET].Columns[MonthName]"
+                      name="MonthName" />
+                    <outputColumn
+                      refId="Package\PoblarDimDate\Leer ShippedDate desde OLTP.Outputs[Salida de error de origen de ADO NET].Columns[QuarterName]"
+                      dataType="wstr"
+                      length="30"
+                      lineageId="Package\PoblarDimDate\Leer ShippedDate desde OLTP.Outputs[Salida de error de origen de ADO NET].Columns[QuarterName]"
+                      name="QuarterName" />
+                    <outputColumn
+                      refId="Package\PoblarDimDate\Leer ShippedDate desde OLTP.Outputs[Salida de error de origen de ADO NET].Columns[DayOfWeek]"
+                      dataType="i4"
+                      lineageId="Package\PoblarDimDate\Leer ShippedDate desde OLTP.Outputs[Salida de error de origen de ADO NET].Columns[DayOfWeek]"
+                      name="DayOfWeek" />
+                    <outputColumn
+                      refId="Package\PoblarDimDate\Leer ShippedDate desde OLTP.Outputs[Salida de error de origen de ADO NET].Columns[DayName]"
+                      dataType="wstr"
+                      length="30"
+                      lineageId="Package\PoblarDimDate\Leer ShippedDate desde OLTP.Outputs[Salida de error de origen de ADO NET].Columns[DayName]"
+                      name="DayName" />
+                    <outputColumn
+                      refId="Package\PoblarDimDate\Leer ShippedDate desde OLTP.Outputs[Salida de error de origen de ADO NET].Columns[IsWeekend]"
+                      dataType="i4"
+                      lineageId="Package\PoblarDimDate\Leer ShippedDate desde OLTP.Outputs[Salida de error de origen de ADO NET].Columns[IsWeekend]"
+                      name="IsWeekend" />
+                    <outputColumn
+                      refId="Package\PoblarDimDate\Leer ShippedDate desde OLTP.Outputs[Salida de error de origen de ADO NET].Columns[WeekOfYear]"
+                      dataType="i4"
+                      lineageId="Package\PoblarDimDate\Leer ShippedDate desde OLTP.Outputs[Salida de error de origen de ADO NET].Columns[WeekOfYear]"
+                      name="WeekOfYear" />
+                    <outputColumn
+                      refId="Package\PoblarDimDate\Leer ShippedDate desde OLTP.Outputs[Salida de error de origen de ADO NET].Columns[Semester]"
+                      dataType="i4"
+                      lineageId="Package\PoblarDimDate\Leer ShippedDate desde OLTP.Outputs[Salida de error de origen de ADO NET].Columns[Semester]"
+                      name="Semester" />
+                    <outputColumn
+                      refId="Package\PoblarDimDate\Leer ShippedDate desde OLTP.Outputs[Salida de error de origen de ADO NET].Columns[SemesterName]"
+                      dataType="wstr"
+                      length="6"
+                      lineageId="Package\PoblarDimDate\Leer ShippedDate desde OLTP.Outputs[Salida de error de origen de ADO NET].Columns[SemesterName]"
+                      name="SemesterName" />
+                    <outputColumn
+                      refId="Package\PoblarDimDate\Leer ShippedDate desde OLTP.Outputs[Salida de error de origen de ADO NET].Columns[IsHoliday]"
+                      dataType="i4"
+                      lineageId="Package\PoblarDimDate\Leer ShippedDate desde OLTP.Outputs[Salida de error de origen de ADO NET].Columns[IsHoliday]"
+                      name="IsHoliday" />
+                    <outputColumn
+                      refId="Package\PoblarDimDate\Leer ShippedDate desde OLTP.Outputs[Salida de error de origen de ADO NET].Columns[HolidayName]"
+                      dataType="i4"
+                      lineageId="Package\PoblarDimDate\Leer ShippedDate desde OLTP.Outputs[Salida de error de origen de ADO NET].Columns[HolidayName]"
+                      name="HolidayName" />
+                    <outputColumn
+                      refId="Package\PoblarDimDate\Leer ShippedDate desde OLTP.Outputs[Salida de error de origen de ADO NET].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\PoblarDimDate\Leer ShippedDate desde OLTP.Outputs[Salida de error de origen de ADO NET].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\PoblarDimDate\Leer ShippedDate desde OLTP.Outputs[Salida de error de origen de ADO NET].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\PoblarDimDate\Leer ShippedDate desde OLTP.Outputs[Salida de error de origen de ADO NET].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\PoblarDimDate\Ordenar 1"
+              componentClassID="Microsoft.Sort"
+              contactInfo="Ordenar;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; Todos los derechos reservados; http://www.microsoft.com/sql/support;1"
+              description="Ordena los datos de entrada de manera ascendente o descendente cuando no es posible ordenarlos en su origen. Por ejemplo, se ordenan los datos de ventas por 'id. de cliente' antes de que se escriban en un archivo plano y se entreguen a otro departamento. Nota: no se recomienda realizar esta transformación para grandes flujos de datos."
+              name="Ordenar 1"
+              version="1">
+              <properties>
+                <property
+                  dataType="System.Boolean"
+                  description="Indica si la transformación Ordenar quita filas con valores de ordenación duplicados."
+                  name="EliminateDuplicates">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Especifica el número máximo de subprocesos que se deben usar para la ordenación."
+                  expressionType="Notify"
+                  name="MaximumThreads">-1</property>
+              </properties>
+              <inputs>
+                <input
+                  refId="Package\PoblarDimDate\Ordenar 1.Inputs[Entrada de ordenación]"
+                  name="Entrada de ordenación">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\PoblarDimDate\Ordenar 1.Inputs[Entrada de ordenación].Columns[FullDate]"
+                      cachedDataType="dbDate"
+                      cachedName="FullDate"
+                      lineageId="Package\PoblarDimDate\Leer ShippedDate desde OLTP.Outputs[Salida de origen de ADO NET].Columns[FullDate]">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          description="Especifica las opciones de comparación para datos de caracteres."
+                          name="NewComparisonFlags">0</property>
+                        <property
+                          dataType="System.Int32"
+                          description="Especifica el criterio de ordenación de la columna."
+                          name="NewSortKeyPosition">1</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn
+                      refId="Package\PoblarDimDate\Ordenar 1.Inputs[Entrada de ordenación].Columns[MonthName]"
+                      cachedDataType="wstr"
+                      cachedLength="30"
+                      cachedName="MonthName"
+                      lineageId="Package\PoblarDimDate\Leer ShippedDate desde OLTP.Outputs[Salida de origen de ADO NET].Columns[MonthName]">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          description="Especifica las opciones de comparación para datos de caracteres."
+                          name="NewComparisonFlags">0</property>
+                        <property
+                          dataType="System.Int32"
+                          description="Especifica el criterio de ordenación de la columna."
+                          name="NewSortKeyPosition">2</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn
+                      refId="Package\PoblarDimDate\Ordenar 1.Inputs[Entrada de ordenación].Columns[QuarterName]"
+                      cachedDataType="wstr"
+                      cachedLength="30"
+                      cachedName="QuarterName"
+                      lineageId="Package\PoblarDimDate\Leer ShippedDate desde OLTP.Outputs[Salida de origen de ADO NET].Columns[QuarterName]">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          description="Especifica las opciones de comparación para datos de caracteres."
+                          name="NewComparisonFlags">0</property>
+                        <property
+                          dataType="System.Int32"
+                          description="Especifica el criterio de ordenación de la columna."
+                          name="NewSortKeyPosition">3</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn
+                      refId="Package\PoblarDimDate\Ordenar 1.Inputs[Entrada de ordenación].Columns[DayOfWeek]"
+                      cachedDataType="i4"
+                      cachedName="DayOfWeek"
+                      lineageId="Package\PoblarDimDate\Leer ShippedDate desde OLTP.Outputs[Salida de origen de ADO NET].Columns[DayOfWeek]">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          description="Especifica las opciones de comparación para datos de caracteres."
+                          name="NewComparisonFlags">0</property>
+                        <property
+                          dataType="System.Int32"
+                          description="Especifica el criterio de ordenación de la columna."
+                          name="NewSortKeyPosition">4</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn
+                      refId="Package\PoblarDimDate\Ordenar 1.Inputs[Entrada de ordenación].Columns[DayName]"
+                      cachedDataType="wstr"
+                      cachedLength="30"
+                      cachedName="DayName"
+                      lineageId="Package\PoblarDimDate\Leer ShippedDate desde OLTP.Outputs[Salida de origen de ADO NET].Columns[DayName]">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          description="Especifica las opciones de comparación para datos de caracteres."
+                          name="NewComparisonFlags">0</property>
+                        <property
+                          dataType="System.Int32"
+                          description="Especifica el criterio de ordenación de la columna."
+                          name="NewSortKeyPosition">5</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn
+                      refId="Package\PoblarDimDate\Ordenar 1.Inputs[Entrada de ordenación].Columns[IsWeekend]"
+                      cachedDataType="i4"
+                      cachedName="IsWeekend"
+                      lineageId="Package\PoblarDimDate\Leer ShippedDate desde OLTP.Outputs[Salida de origen de ADO NET].Columns[IsWeekend]">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          description="Especifica las opciones de comparación para datos de caracteres."
+                          name="NewComparisonFlags">0</property>
+                        <property
+                          dataType="System.Int32"
+                          description="Especifica el criterio de ordenación de la columna."
+                          name="NewSortKeyPosition">6</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn
+                      refId="Package\PoblarDimDate\Ordenar 1.Inputs[Entrada de ordenación].Columns[WeekOfYear]"
+                      cachedDataType="i4"
+                      cachedName="WeekOfYear"
+                      lineageId="Package\PoblarDimDate\Leer ShippedDate desde OLTP.Outputs[Salida de origen de ADO NET].Columns[WeekOfYear]">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          description="Especifica las opciones de comparación para datos de caracteres."
+                          name="NewComparisonFlags">0</property>
+                        <property
+                          dataType="System.Int32"
+                          description="Especifica el criterio de ordenación de la columna."
+                          name="NewSortKeyPosition">7</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn
+                      refId="Package\PoblarDimDate\Ordenar 1.Inputs[Entrada de ordenación].Columns[Semester]"
+                      cachedDataType="i4"
+                      cachedName="Semester"
+                      lineageId="Package\PoblarDimDate\Leer ShippedDate desde OLTP.Outputs[Salida de origen de ADO NET].Columns[Semester]">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          description="Especifica las opciones de comparación para datos de caracteres."
+                          name="NewComparisonFlags">0</property>
+                        <property
+                          dataType="System.Int32"
+                          description="Especifica el criterio de ordenación de la columna."
+                          name="NewSortKeyPosition">8</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn
+                      refId="Package\PoblarDimDate\Ordenar 1.Inputs[Entrada de ordenación].Columns[SemesterName]"
+                      cachedDataType="wstr"
+                      cachedLength="6"
+                      cachedName="SemesterName"
+                      lineageId="Package\PoblarDimDate\Leer ShippedDate desde OLTP.Outputs[Salida de origen de ADO NET].Columns[SemesterName]">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          description="Especifica las opciones de comparación para datos de caracteres."
+                          name="NewComparisonFlags">0</property>
+                        <property
+                          dataType="System.Int32"
+                          description="Especifica el criterio de ordenación de la columna."
+                          name="NewSortKeyPosition">9</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn
+                      refId="Package\PoblarDimDate\Ordenar 1.Inputs[Entrada de ordenación].Columns[IsHoliday]"
+                      cachedDataType="i4"
+                      cachedName="IsHoliday"
+                      lineageId="Package\PoblarDimDate\Leer ShippedDate desde OLTP.Outputs[Salida de origen de ADO NET].Columns[IsHoliday]">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          description="Especifica las opciones de comparación para datos de caracteres."
+                          name="NewComparisonFlags">0</property>
+                        <property
+                          dataType="System.Int32"
+                          description="Especifica el criterio de ordenación de la columna."
+                          name="NewSortKeyPosition">10</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn
+                      refId="Package\PoblarDimDate\Ordenar 1.Inputs[Entrada de ordenación].Columns[HolidayName]"
+                      cachedDataType="i4"
+                      cachedName="HolidayName"
+                      lineageId="Package\PoblarDimDate\Leer ShippedDate desde OLTP.Outputs[Salida de origen de ADO NET].Columns[HolidayName]">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          description="Especifica las opciones de comparación para datos de caracteres."
+                          name="NewComparisonFlags">0</property>
+                        <property
+                          dataType="System.Int32"
+                          description="Especifica el criterio de ordenación de la columna."
+                          name="NewSortKeyPosition">11</property>
+                      </properties>
+                    </inputColumn>
+                  </inputColumns>
+                  <externalMetadataColumns />
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\PoblarDimDate\Ordenar 1.Outputs[Salida de ordenación]"
+                  isSorted="true"
+                  name="Salida de ordenación">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\PoblarDimDate\Ordenar 1.Outputs[Salida de ordenación].Columns[FullDate]"
+                      dataType="dbDate"
+                      lineageId="Package\PoblarDimDate\Ordenar 1.Outputs[Salida de ordenación].Columns[FullDate]"
+                      name="FullDate"
+                      sortKeyPosition="1">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Especifica el identificador de linaje de la columna de entrada que está asociada a esta columna de salida."
+                          name="SortColumnId">#{Package\PoblarDimDate\Leer ShippedDate desde OLTP.Outputs[Salida de origen de ADO NET].Columns[FullDate]}</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\PoblarDimDate\Ordenar 1.Outputs[Salida de ordenación].Columns[MonthName]"
+                      dataType="wstr"
+                      length="30"
+                      lineageId="Package\PoblarDimDate\Ordenar 1.Outputs[Salida de ordenación].Columns[MonthName]"
+                      name="MonthName"
+                      sortKeyPosition="2">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Especifica el identificador de linaje de la columna de entrada que está asociada a esta columna de salida."
+                          name="SortColumnId">#{Package\PoblarDimDate\Leer ShippedDate desde OLTP.Outputs[Salida de origen de ADO NET].Columns[MonthName]}</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\PoblarDimDate\Ordenar 1.Outputs[Salida de ordenación].Columns[QuarterName]"
+                      dataType="wstr"
+                      length="30"
+                      lineageId="Package\PoblarDimDate\Ordenar 1.Outputs[Salida de ordenación].Columns[QuarterName]"
+                      name="QuarterName"
+                      sortKeyPosition="3">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Especifica el identificador de linaje de la columna de entrada que está asociada a esta columna de salida."
+                          name="SortColumnId">#{Package\PoblarDimDate\Leer ShippedDate desde OLTP.Outputs[Salida de origen de ADO NET].Columns[QuarterName]}</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\PoblarDimDate\Ordenar 1.Outputs[Salida de ordenación].Columns[DayOfWeek]"
+                      dataType="i4"
+                      lineageId="Package\PoblarDimDate\Ordenar 1.Outputs[Salida de ordenación].Columns[DayOfWeek]"
+                      name="DayOfWeek"
+                      sortKeyPosition="4">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Especifica el identificador de linaje de la columna de entrada que está asociada a esta columna de salida."
+                          name="SortColumnId">#{Package\PoblarDimDate\Leer ShippedDate desde OLTP.Outputs[Salida de origen de ADO NET].Columns[DayOfWeek]}</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\PoblarDimDate\Ordenar 1.Outputs[Salida de ordenación].Columns[DayName]"
+                      dataType="wstr"
+                      length="30"
+                      lineageId="Package\PoblarDimDate\Ordenar 1.Outputs[Salida de ordenación].Columns[DayName]"
+                      name="DayName"
+                      sortKeyPosition="5">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Especifica el identificador de linaje de la columna de entrada que está asociada a esta columna de salida."
+                          name="SortColumnId">#{Package\PoblarDimDate\Leer ShippedDate desde OLTP.Outputs[Salida de origen de ADO NET].Columns[DayName]}</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\PoblarDimDate\Ordenar 1.Outputs[Salida de ordenación].Columns[IsWeekend]"
+                      dataType="i4"
+                      lineageId="Package\PoblarDimDate\Ordenar 1.Outputs[Salida de ordenación].Columns[IsWeekend]"
+                      name="IsWeekend"
+                      sortKeyPosition="6">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Especifica el identificador de linaje de la columna de entrada que está asociada a esta columna de salida."
+                          name="SortColumnId">#{Package\PoblarDimDate\Leer ShippedDate desde OLTP.Outputs[Salida de origen de ADO NET].Columns[IsWeekend]}</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\PoblarDimDate\Ordenar 1.Outputs[Salida de ordenación].Columns[WeekOfYear]"
+                      dataType="i4"
+                      lineageId="Package\PoblarDimDate\Ordenar 1.Outputs[Salida de ordenación].Columns[WeekOfYear]"
+                      name="WeekOfYear"
+                      sortKeyPosition="7">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Especifica el identificador de linaje de la columna de entrada que está asociada a esta columna de salida."
+                          name="SortColumnId">#{Package\PoblarDimDate\Leer ShippedDate desde OLTP.Outputs[Salida de origen de ADO NET].Columns[WeekOfYear]}</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\PoblarDimDate\Ordenar 1.Outputs[Salida de ordenación].Columns[Semester]"
+                      dataType="i4"
+                      lineageId="Package\PoblarDimDate\Ordenar 1.Outputs[Salida de ordenación].Columns[Semester]"
+                      name="Semester"
+                      sortKeyPosition="8">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Especifica el identificador de linaje de la columna de entrada que está asociada a esta columna de salida."
+                          name="SortColumnId">#{Package\PoblarDimDate\Leer ShippedDate desde OLTP.Outputs[Salida de origen de ADO NET].Columns[Semester]}</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\PoblarDimDate\Ordenar 1.Outputs[Salida de ordenación].Columns[SemesterName]"
+                      dataType="wstr"
+                      length="6"
+                      lineageId="Package\PoblarDimDate\Ordenar 1.Outputs[Salida de ordenación].Columns[SemesterName]"
+                      name="SemesterName"
+                      sortKeyPosition="9">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Especifica el identificador de linaje de la columna de entrada que está asociada a esta columna de salida."
+                          name="SortColumnId">#{Package\PoblarDimDate\Leer ShippedDate desde OLTP.Outputs[Salida de origen de ADO NET].Columns[SemesterName]}</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\PoblarDimDate\Ordenar 1.Outputs[Salida de ordenación].Columns[IsHoliday]"
+                      dataType="i4"
+                      lineageId="Package\PoblarDimDate\Ordenar 1.Outputs[Salida de ordenación].Columns[IsHoliday]"
+                      name="IsHoliday"
+                      sortKeyPosition="10">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Especifica el identificador de linaje de la columna de entrada que está asociada a esta columna de salida."
+                          name="SortColumnId">#{Package\PoblarDimDate\Leer ShippedDate desde OLTP.Outputs[Salida de origen de ADO NET].Columns[IsHoliday]}</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\PoblarDimDate\Ordenar 1.Outputs[Salida de ordenación].Columns[HolidayName]"
+                      dataType="i4"
+                      lineageId="Package\PoblarDimDate\Ordenar 1.Outputs[Salida de ordenación].Columns[HolidayName]"
+                      name="HolidayName"
+                      sortKeyPosition="11">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Especifica el identificador de linaje de la columna de entrada que está asociada a esta columna de salida."
+                          name="SortColumnId">#{Package\PoblarDimDate\Leer ShippedDate desde OLTP.Outputs[Salida de origen de ADO NET].Columns[HolidayName]}</property>
+                      </properties>
+                    </outputColumn>
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\PoblarDimDate\Ordenar 2"
+              componentClassID="Microsoft.Sort"
+              contactInfo="Ordenar;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; Todos los derechos reservados; http://www.microsoft.com/sql/support;1"
+              description="Ordena los datos de entrada de manera ascendente o descendente cuando no es posible ordenarlos en su origen. Por ejemplo, se ordenan los datos de ventas por 'id. de cliente' antes de que se escriban en un archivo plano y se entreguen a otro departamento. Nota: no se recomienda realizar esta transformación para grandes flujos de datos."
+              name="Ordenar 2"
+              version="1">
+              <properties>
+                <property
+                  dataType="System.Boolean"
+                  description="Indica si la transformación Ordenar quita filas con valores de ordenación duplicados."
+                  name="EliminateDuplicates">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Especifica el número máximo de subprocesos que se deben usar para la ordenación."
+                  expressionType="Notify"
+                  name="MaximumThreads">-1</property>
+              </properties>
+              <inputs>
+                <input
+                  refId="Package\PoblarDimDate\Ordenar 2.Inputs[Entrada de ordenación]"
+                  name="Entrada de ordenación">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\PoblarDimDate\Ordenar 2.Inputs[Entrada de ordenación].Columns[FullDate]"
+                      cachedDataType="dbDate"
+                      cachedName="FullDate"
+                      lineageId="Package\PoblarDimDate\Leer Date desde DW.Outputs[Salida de origen de ADO NET].Columns[FullDate]">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          description="Especifica las opciones de comparación para datos de caracteres."
+                          name="NewComparisonFlags">0</property>
+                        <property
+                          dataType="System.Int32"
+                          description="Especifica el criterio de ordenación de la columna."
+                          name="NewSortKeyPosition">1</property>
+                      </properties>
+                    </inputColumn>
+                  </inputColumns>
+                  <externalMetadataColumns />
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\PoblarDimDate\Ordenar 2.Outputs[Salida de ordenación]"
+                  isSorted="true"
+                  name="Salida de ordenación">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\PoblarDimDate\Ordenar 2.Outputs[Salida de ordenación].Columns[FullDate]"
+                      dataType="dbDate"
+                      lineageId="Package\PoblarDimDate\Ordenar 2.Outputs[Salida de ordenación].Columns[FullDate]"
+                      name="FullDate"
+                      sortKeyPosition="1">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Especifica el identificador de linaje de la columna de entrada que está asociada a esta columna de salida."
+                          name="SortColumnId">#{Package\PoblarDimDate\Leer Date desde DW.Outputs[Salida de origen de ADO NET].Columns[FullDate]}</property>
+                      </properties>
+                    </outputColumn>
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+          </components>
+          <paths>
+            <path
+              refId="Package\PoblarDimDate.Paths[Nuevo Registro]"
+              endId="Package\PoblarDimDate\Columna derivada.Inputs[Entrada de columna derivada]"
+              name="Nuevo Registro"
+              startId="Package\PoblarDimDate\División condicional.Outputs[Nuevo Registro]" />
+            <path
+              refId="Package\PoblarDimDate.Paths[Salida de columna derivada]"
+              endId="Package\PoblarDimDate\Insertar nuevas fechas al DW.Inputs[Entrada de destino de ADO NET]"
+              name="Salida de columna derivada"
+              startId="Package\PoblarDimDate\Columna derivada.Outputs[Salida de columna derivada]" />
+            <path
+              refId="Package\PoblarDimDate.Paths[Salida de combinación de mezcla]"
+              endId="Package\PoblarDimDate\División condicional.Inputs[Entrada de división condicional]"
+              name="Salida de combinación de mezcla"
+              startId="Package\PoblarDimDate\Combinación de mezcla.Outputs[Salida de combinación de mezcla]" />
+            <path
+              refId="Package\PoblarDimDate.Paths[Salida de ordenación]"
+              endId="Package\PoblarDimDate\Combinación de mezcla.Inputs[Entrada izquierda de combinación de mezcla]"
+              name="Salida de ordenación"
+              startId="Package\PoblarDimDate\Ordenar 1.Outputs[Salida de ordenación]" />
+            <path
+              refId="Package\PoblarDimDate.Paths[Salida de ordenación1]"
+              endId="Package\PoblarDimDate\Combinación de mezcla.Inputs[Entrada derecha de combinación de mezcla]"
+              name="Salida de ordenación"
+              startId="Package\PoblarDimDate\Ordenar 2.Outputs[Salida de ordenación]" />
+            <path
+              refId="Package\PoblarDimDate.Paths[Salida de origen de ADO NET]"
+              endId="Package\PoblarDimDate\Ordenar 2.Inputs[Entrada de ordenación]"
+              name="Salida de origen de ADO NET"
+              startId="Package\PoblarDimDate\Leer Date desde DW.Outputs[Salida de origen de ADO NET]" />
+            <path
+              refId="Package\PoblarDimDate.Paths[Salida de origen de ADO NET1]"
+              endId="Package\PoblarDimDate\Ordenar 1.Inputs[Entrada de ordenación]"
+              name="Salida de origen de ADO NET"
+              startId="Package\PoblarDimDate\Leer ShippedDate desde OLTP.Outputs[Salida de origen de ADO NET]" />
+          </paths>
+        </pipeline>
+      </DTS:ObjectData>
+    </DTS:Executable>
+  </DTS:Executables>
+  <DTS:DesignTimeProperties><![CDATA[<?xml version="1.0"?>
+<!--Esta sección CDATA contiene la información de diseño del paquete. Esta sección incluye información como, por ejemplo, las coordenadas (x,y), el ancho y el alto.-->
+<!--Si edita manualmente esta sección y comete un error, puede eliminarlo. -->
+<!--El paquete podrá cargarse normalmente, pero se perderá la información de diseño anterior y el diseñador reorganizará los elementos automáticamente en la superficie de diseño.-->
+<Objects
+  Version="8">
+  <!--Cada uno de los nodos siguientes contiene propiedades que no afectan al comportamiento en tiempo de ejecución.-->
+  <Package
+    design-time-name="Package">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph">
+        <NodeLayout
+          Size="148.8,41.6"
+          Id="Package\PoblarDimDate"
+          TopLeft="172.142857509304,113.941176370714" />
+      </GraphLayout>
+    </LayoutInfo>
+  </Package>
+  <TaskHost
+    design-time-name="Package\PoblarDimDate">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="16" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mssgm="clr-namespace:Microsoft.SqlServer.Graph.Model;assembly=Microsoft.SqlServer.Graph">
+        <NodeLayout
+          Size="175.2,41.6"
+          Id="Package\PoblarDimDate\Leer Date desde DW"
+          TopLeft="717.91428714206,57.3529411261985" />
+        <NodeLayout
+          Size="220.8,41.6"
+          Id="Package\PoblarDimDate\Leer ShippedDate desde OLTP"
+          TopLeft="472.457143842444,56.4823529807238" />
+        <NodeLayout
+          Size="125.6,41.6"
+          Id="Package\PoblarDimDate\Ordenar 1"
+          TopLeft="512.085714369343,166.705882206817" />
+        <NodeLayout
+          Size="188.8,41.6"
+          Id="Package\PoblarDimDate\Combinación de mezcla"
+          TopLeft="585.200000234161,291.047058577531" />
+        <NodeLayout
+          Size="163.2,41.6"
+          Id="Package\PoblarDimDate\Columna derivada"
+          TopLeft="602.342857413511,508.788234868481" />
+        <NodeLayout
+          Size="170.4,41.6"
+          Id="Package\PoblarDimDate\División condicional"
+          TopLeft="597.342857402867,397.647058474976" />
+        <NodeLayout
+          Size="125.6,41.6"
+          Id="Package\PoblarDimDate\Ordenar 2"
+          TopLeft="741.000000564115,162.611764573164" />
+        <EdgeLayout
+          Id="Package\PoblarDimDate.Paths[Salida de origen de ADO NET1]"
+          TopLeft="578.871429105894,98.0823529807238">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,68.6235292260932"
+              Start="0,0"
+              End="0,61.1235292260932">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,61.1235292260932" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\PoblarDimDate.Paths[Salida de origen de ADO NET]"
+          TopLeft="804.657143853088,98.9529411261985">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,63.6588234469655"
+              Start="0,0"
+              End="0,56.1588234469655">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,56.1588234469655" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\PoblarDimDate.Paths[Salida de ordenación1]"
+          TopLeft="803.800000564115,204.211764573164">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="-94.0666669966211,86.8352940043674"
+              Start="0,0"
+              End="-94.0666669966211,79.3352940043674">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,47.6633513908337" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,47.6633513908337"
+                    Point2="0,51.6633513908337"
+                    Point3="-4,51.6633513908337" />
+                  <mssgle:LineSegment
+                    End="-90.0666669966211,51.6633513908337" />
+                  <mssgle:CubicBezierSegment
+                    Point1="-90.0666669966211,51.6633513908337"
+                    Point2="-94.0666669966211,51.6633513908337"
+                    Point3="-94.0666669966211,55.6633513908337" />
+                  <mssgle:LineSegment
+                    End="-94.0666669966211,79.3352940043674" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\PoblarDimDate.Paths[Salida de ordenación]"
+          TopLeft="574.885714369343,208.305882206817">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="104.714285864818,82.7411763707144"
+              Start="0,0"
+              End="104.714285864818,75.2411763707144">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,37.3705881853572" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,37.3705881853572"
+                    Point2="0,41.3705881853572"
+                    Point3="4,41.3705881853572" />
+                  <mssgle:LineSegment
+                    End="100.714285864818,41.3705881853572" />
+                  <mssgle:CubicBezierSegment
+                    Point1="100.714285864818,41.3705881853572"
+                    Point2="104.714285864818,41.3705881853572"
+                    Point3="104.714285864818,45.3705881853572" />
+                  <mssgle:LineSegment
+                    End="104.714285864818,75.2411763707144" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\PoblarDimDate.Paths[Salida de combinación de mezcla]"
+          TopLeft="681.071428818514,332.647058577531">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,64.9999998974449"
+              Start="0,0"
+              End="0,57.4999998974449">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,57.4999998974449" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\PoblarDimDate.Paths[Nuevo Registro]"
+          TopLeft="683.242857408189,439.247058474976">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,69.5411763935044"
+              Start="0,0"
+              End="0,62.0411763935044">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,62.0411763935044" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <mssgm:EdgeLabel
+              BoundingBox="-34.07703125,25.3282053842522,68.1540625,11.384765625"
+              RelativePosition="Any" />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <NodeLayout
+          Size="216.8,41.6"
+          Id="Package\PoblarDimDate\Insertar nuevas fechas al DW"
+          TopLeft="598.400000468322,606.988234879876" />
+        <EdgeLayout
+          Id="Package\PoblarDimDate.Paths[Salida de columna derivada]"
+          TopLeft="683.942857413511,550.388234868481">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="22.8571430548111,56.600000011395"
+              Start="0,0"
+              End="22.8571430548111,49.100000011395">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,24.3000000056975" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,24.3000000056975"
+                    Point2="0,28.3000000056975"
+                    Point3="4,28.3000000056975" />
+                  <mssgle:LineSegment
+                    End="18.8571430548111,28.3000000056975" />
+                  <mssgle:CubicBezierSegment
+                    Point1="18.8571430548111,28.3000000056975"
+                    Point2="22.8571430548111,28.3000000056975"
+                    Point3="22.8571430548111,32.3000000056975" />
+                  <mssgle:LineSegment
+                    End="22.8571430548111,49.100000011395" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </TaskHost>
+  <PipelineComponentMetadata
+    design-time-name="Package\PoblarDimDate\Leer Date desde DW">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <PipelineComponentMetadata
+    design-time-name="Package\PoblarDimDate\Leer ShippedDate desde OLTP">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <PipelineComponentMetadata
+    design-time-name="Package\PoblarDimDate\Insertar nuevas fechas al DW">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+</Objects>]]></DTS:DesignTimeProperties>
+</DTS:Executable>

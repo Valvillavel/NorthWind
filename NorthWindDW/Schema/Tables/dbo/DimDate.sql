@@ -1,6 +1,6 @@
 ﻿CREATE TABLE [dbo].[DimDate]
 (
-    [DateKey]           INT           NOT NULL,
+    [DateKey]           INT           IDENTITY(1,1) NOT NULL,
     [FullDate]          DATE          NOT NULL,
     [Year]              INT           NOT NULL,
     [Quarter]           INT           NOT NULL,
