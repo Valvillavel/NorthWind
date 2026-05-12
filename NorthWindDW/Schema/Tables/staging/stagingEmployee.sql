@@ -17,5 +17,4 @@
     [ManagerName]            NVARCHAR(31)   NULL,
     [TerritoryDescription]   NVARCHAR(50)   NULL,
     [RegionDescription]      NVARCHAR(50)   NULL,
-    CONSTRAINT [PK_staging_Employee] PRIMARY KEY CLUSTERED ([EmployeeID] ASC)
 );
