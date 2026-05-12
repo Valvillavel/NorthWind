@@ -81,6 +81,8 @@
     <Build Include="Schema\Tables\staging\stagingEmployee.sql" />
     <Build Include="Schema\Tables\staging\CrearSchemaStaging.sql" />
     <Build Include="Schema\Tables\dbo\PackageConfig.sql" />
+    <None Include="Schema\Programmability\Stored Procedures\PackageConfigInit.sql" />
+    <Build Include="Schema\Tables\staging\stagingShipper.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Scripts\DimDate.data.sql" />
@@ -91,6 +93,5 @@
     <None Include="Scripts\DimEmployee.data.sql" />
     <None Include="Scripts\DimProduct.data.sql" />
     <None Include="Scripts\DimShipper.data.sql" />
-    <None Include="Scripts\PackageConfigInit.sql" />
   </ItemGroup>
 </Project>
