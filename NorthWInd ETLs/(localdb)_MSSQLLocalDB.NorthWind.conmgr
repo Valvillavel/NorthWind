@@ -1,10 +1,12 @@
 ﻿<?xml version="1.0"?>
 <DTS:ConnectionManager xmlns:DTS="www.microsoft.com/SqlServer/Dts"
-  DTS:ObjectName="(localdb)_MSSQLLocalDB.NorthWind"
-  DTS:DTSID="{59F5F486-722A-45DD-B287-734612BE1244}"
-  DTS:CreationName="ADO.NET:Microsoft.Data.SqlClient.SqlConnection, Microsoft.Data.SqlClient, Version=5.0.0.0, Culture=neutral, PublicKeyToken=23ec7fc2d6eaa4a5">
+  DTS:ObjectName="localdb _MSSQLLocalDB NorthWind"
+  DTS:DTSID="{DD8970EA-0DCF-4519-8FEF-C7638D61A664}"
+  DTS:CreationName="OLEDB">
   <DTS:ObjectData>
     <DTS:ConnectionManager
-      DTS:ConnectionString="Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=NorthWind;Integrated Security=True;" />
+      DTS:ConnectRetryCount="1"
+      DTS:ConnectRetryInterval="5"
+      DTS:ConnectionString="Data Source=(localdb)\MSSQLLocalDB;User ID=;Initial Catalog=NorthWind;Provider=MSOLEDBSQL.1;Persist Security Info=False;Integrated Security=SSPI;Initial File Name=;Server SPN=;Authentication=;Access Token=;Application Name=SSIS-NorthWInd ETLs-{DD8970EA-0DCF-4519-8FEF-C7638D61A664}(localdb)\MSSQLLocalDB.NorthWind1;Auto Translate=False;" />
   </DTS:ObjectData>
 </DTS:ConnectionManager>

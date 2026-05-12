@@ -4,8 +4,7 @@
 AS
 BEGIN
 	UPDATE [dbo].[PackageConfig]
-	SET [ConfigValue] = CAST(@LastRowVersion AS NVARCHAR(500)),
-		[ModifiedDate] = GETDATE()
-	WHERE [ConfigName] = @PackageName + '_LastRowVersion'
+	SET [LastRowVersion] = CAST(@LastRowVersion AS NVARCHAR(500))
+	WHERE [TableName] = @PackageName
 END
 GO

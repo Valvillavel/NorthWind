@@ -2,8 +2,8 @@
 	@PackageName NVARCHAR(100)
 AS
 BEGIN
-	SELECT CONVERT(BIGINT, [ConfigValue]) AS LastRowVersion
+	SELECT CONVERT(BIGINT, [LastRowVersion]) AS LastRowVersion
 	FROM [dbo].[PackageConfig]
-	WHERE [ConfigName] = @PackageName + '_LastRowVersion'
+	WHERE [TableName] = @PackageName
 END
 GO
