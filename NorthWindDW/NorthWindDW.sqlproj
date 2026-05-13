@@ -83,6 +83,7 @@
     <Build Include="Schema\Tables\dbo\PackageConfig.sql" />
     <None Include="Schema\Programmability\Stored Procedures\PackageConfigInit.sql" />
     <Build Include="Schema\Tables\staging\stagingShipper.sql" />
+    <Build Include="Schema\Tables\staging\stagingProduct.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Scripts\DimDate.data.sql" />
