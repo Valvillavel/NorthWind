@@ -21,7 +21,21 @@
     [CreatedDate]           DATETIME      NOT NULL DEFAULT GETDATE(),
     [ETLBatchID]            INT           NULL,
     [SourceSystem]          NVARCHAR (50) DEFAULT ('Northwind_OLTP'),
-    CONSTRAINT [PK_FactOrders] PRIMARY KEY CLUSTERED ([OrderKey] ASC)
+    CONSTRAINT [PK_FactOrders] PRIMARY KEY CLUSTERED ([OrderKey] ASC),
+    CONSTRAINT [FK_FactOrders_DimCustomer]
+        FOREIGN KEY ([CustomerKey]) REFERENCES [dbo].[DimCustomer] ([CustomerKey]),
+    CONSTRAINT [FK_FactOrders_DimEmployee]
+        FOREIGN KEY ([EmployeeKey]) REFERENCES [dbo].[DimEmployee] ([EmployeeKey]),
+    CONSTRAINT [FK_FactOrders_DimProduct]
+        FOREIGN KEY ([ProductKey])  REFERENCES [dbo].[DimProduct]  ([ProductKey]),
+    CONSTRAINT [FK_FactOrders_DimShipper]
+        FOREIGN KEY ([ShipperKey])  REFERENCES [dbo].[DimShipper]  ([ShipperKey]),
+    CONSTRAINT [FK_FactOrders_DimDate_Order]
+        FOREIGN KEY ([DateKeyOrder])    REFERENCES [dbo].[DimDate] ([DateKey]),
+    CONSTRAINT [FK_FactOrders_DimDate_Required]
+        FOREIGN KEY ([DateKeyRequired]) REFERENCES [dbo].[DimDate] ([DateKey]),
+    CONSTRAINT [FK_FactOrders_DimDate_Shipped]
+        FOREIGN KEY ([DateKeyShipped])  REFERENCES [dbo].[DimDate] ([DateKey])
 );
 GO
 
@@ -57,31 +71,3 @@ CREATE NONCLUSTERED COLUMNSTORE INDEX [CCI_FactOrders]
     );
 GO
 
-
-ALTER TABLE [dbo].[FactOrders] ADD CONSTRAINT [FK_FactOrders_DimCustomer] 
-    FOREIGN KEY ([CustomerKey]) REFERENCES [dbo].[DimCustomer] ([CustomerKey]);
-GO
-
-ALTER TABLE [dbo].[FactOrders] ADD CONSTRAINT [FK_FactOrders_DimEmployee] 
-    FOREIGN KEY ([EmployeeKey]) REFERENCES [dbo].[DimEmployee] ([EmployeeKey]);
-GO
-
-ALTER TABLE [dbo].[FactOrders] ADD CONSTRAINT [FK_FactOrders_DimProduct] 
-    FOREIGN KEY ([ProductKey]) REFERENCES [dbo].[DimProduct] ([ProductKey]);
-GO
-
-ALTER TABLE [dbo].[FactOrders] ADD CONSTRAINT [FK_FactOrders_DimShipper] 
-    FOREIGN KEY ([ShipperKey]) REFERENCES [dbo].[DimShipper] ([ShipperKey]);
-GO
-
-ALTER TABLE [dbo].[FactOrders] ADD CONSTRAINT [FK_FactOrders_DimDate_Order] 
-    FOREIGN KEY ([DateKeyOrder]) REFERENCES [dbo].[DimDate] ([DateKey]);
-GO
-
-ALTER TABLE [dbo].[FactOrders] ADD CONSTRAINT [FK_FactOrders_DimDate_Required] 
-    FOREIGN KEY ([DateKeyRequired]) REFERENCES [dbo].[DimDate] ([DateKey]);
-GO
-
-ALTER TABLE [dbo].[FactOrders] ADD CONSTRAINT [FK_FactOrders_DimDate_Shipped] 
-    FOREIGN KEY ([DateKeyShipped]) REFERENCES [dbo].[DimDate] ([DateKey]);
-GO

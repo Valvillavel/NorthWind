@@ -14,7 +14,12 @@
     [ShipPostalCode] NVARCHAR (10) NULL,
     [ShipCountry]    NVARCHAR (15) NULL,
     [rowversion]     ROWVERSION    NULL,
+    [CreatedDate]    DATETIME      NOT NULL CONSTRAINT [DF_Orders_CreatedDate] DEFAULT GETDATE(),
+    [UpdatedDate]    DATETIME      NOT NULL CONSTRAINT [DF_Orders_UpdatedDate] DEFAULT GETDATE(),
     CONSTRAINT [PK_Orders] PRIMARY KEY CLUSTERED ([OrderID] ASC),
+    CONSTRAINT [CK_Orders_ShippedAfterOrdered] CHECK ([ShippedDate] IS NULL OR [ShippedDate] >= [OrderDate]),
+    CONSTRAINT [CK_Orders_RequiredAfterOrdered] CHECK ([RequiredDate] IS NULL OR [RequiredDate] >= [OrderDate]),
+    CONSTRAINT [CK_Orders_Freight] CHECK ([Freight] >= 0),
     CONSTRAINT [FK_Orders_Customers] FOREIGN KEY ([CustomerID]) REFERENCES [dbo].[Customers] ([CustomerID]),
     CONSTRAINT [FK_Orders_Employees] FOREIGN KEY ([EmployeeID]) REFERENCES [dbo].[Employees] ([EmployeeID]),
     CONSTRAINT [FK_Orders_Shippers] FOREIGN KEY ([ShipVia]) REFERENCES [dbo].[Shippers] ([ShipperID])
@@ -49,6 +54,12 @@ CREATE NONCLUSTERED INDEX [OrderDate]
 GO
 CREATE NONCLUSTERED INDEX [ShippedDate]
     ON [dbo].[Orders]([ShippedDate] ASC);
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_Orders_CustomerID_OrderDate]
+    ON [dbo].[Orders]([CustomerID] ASC, [OrderDate] ASC)
+    INCLUDE ([EmployeeID], [ShipVia], [Freight]);
 
 
 GO

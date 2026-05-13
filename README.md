@@ -1,4 +1,387 @@
-# NorthWind - Diseño de Base de Datos OLTP y Data Warehouse en SQL Server
+# NorthWind — Enterprise Data Management & Business Intelligence Solution
+
+A production-grade, end-to-end BI solution built on **SQL Server / T-SQL** using the classic Northwind trading company domain. The repository demonstrates a complete data engineering stack from transactional source to analytical warehouse.
+
+---
+
+## Architecture Overview
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                        NorthWindOLTP                            │
+│         Transactional Source (3NF, SSDT DACPAC)                 │
+│  Customers │ Employees │ Products │ Orders │ OrderDetails │ ...  │
+└────────────────────────────┬────────────────────────────────────┘
+                             │  rowversion-based extraction
+                             ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                   NorthWindDW — staging schema                  │
+│   staging.Customer │ Employee │ Product │ Shipper │ Order       │
+│   ── validation (DW_ValidateStagingData) ──────────────────     │
+└────────────────────────────┬────────────────────────────────────┘
+                             │  upsert / merge
+                             ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                   NorthWindDW — star schema                     │
+│                                                                 │
+│   DimDate    DimCustomer   DimEmployee   DimProduct  DimShipper │
+│        └──────────┬──────────────┬──────────┘           │      │
+│                   └──────► FactOrders ◄──────────────────┘      │
+│                     (grain: OrderID + ProductID)                │
+└─────────────────────────────────────────────────────────────────┘
+                             │  analytical views + ad-hoc SQL
+                             ▼
+                       Analytics Layer
+              vw_SalesByDate │ vw_SalesByCustomer │ vw_KPISummary
+                   Analytics/SalesAnalytics.sql
+```
+
+---
+
+## Repository Structure
+
+```
+NorthWind/
+├── NorthWindOLTP/                      OLTP transactional database (SSDT)
+│   └── dbo/
+│       ├── Tables/                     13 normalized tables
+│       ├── Views/                      16 operational views
+│       └── Stored Procedures/          ETL helpers + business SPs
+│
+├── NorthWindDW/                        Data Warehouse (SSDT)
+│   ├── Schema/
+│   │   ├── Tables/
+│   │   │   ├── dbo/                    DimDate, DimCustomer, DimEmployee,
+│   │   │   │                           DimProduct, DimShipper, FactOrders,
+│   │   │   │                           ETLExecutionLog, ETLErrorLog, PackageConfig
+│   │   │   └── staging/                staging.Customer/Employee/Product/Shipper/Order
+│   │   ├── Views/                      8 analytical views (vw_*)
+│   │   └── Programmability/
+│   │       └── Stored Procedures/      15 ETL procedures
+│   └── Scripts/                        Post-deployment seed data
+│
+├── Analytics/                          Ad-hoc analytical query library
+│   └── SalesAnalytics.sql              12+ BI queries with window functions
+│
+├── Scripts/
+│   └── Bootstrap/                      Deployment automation
+│       ├── 00_MasterDeploy.sql         Deployment guide and orchestration
+│       ├── 01_CreateOLTPDatabase.sql   Create OLTP schema from scratch
+│       ├── 02_CreateDWDatabase.sql     Create DW database + staging schema
+│       ├── 03_SeedOLTPData.sql         Insert Northwind sample data
+│       ├── 04_Bootstrap_DW.sql         Create all DW tables and ETL procs
+│       ├── 05_SeedDimDate.sql          Populate DimDate + Unknown members
+│       ├── 06_RunFullLoad.sql          Execute first full ETL pipeline
+│       └── 07_ValidateDeployment.sql   Row counts + integrity checks
+│
+├── Docs/
+│   ├── ETL_Architecture.md             ETL pipeline design, monitoring queries
+│   └── DataDictionary.md               Column-level data dictionary
+│
+└── README.md                           This file
+```
+
+---
+
+## 1. OLTP Database — NorthWindOLTP
+
+### Model Summary
+
+A fully normalized (3NF) transactional model with 13 tables:
+
+| Table | Purpose |
+|---|---|
+| Categories | Product category master |
+| Customers | Customer master with 5-char business key |
+| Employees | Employee master with self-referencing manager FK |
+| Shippers | Shipping carrier master |
+| Suppliers | Product supplier master |
+| Products | Product catalog with category + supplier FKs |
+| Orders | Order header with date, customer, employee, shipper |
+| OrderDetails | Order line items (grain: OrderID + ProductID) |
+| Region | Geographic region reference |
+| Territories | Territory master (FK → Region) |
+| EmployeeTerritories | Employee-to-territory assignment |
+| CustomerDemographics | Customer segmentation categories |
+| CustomerCustomerDemo | Customer-to-segment assignment |
+
+### Design Standards Applied
+
+- **Primary keys** on all tables
+- **Foreign keys** with referential integrity
+- **CHECK constraints**: date ordering, non-negative prices, valid discount range
+- **UNIQUE constraints**: CategoryName
+- **Audit columns**: `CreatedDate`, `UpdatedDate`, `rowversion` on all core tables
+- **Operational indexes**: covering indexes for common join patterns
+- **Business rules encoded in constraints** (ShippedDate ≥ OrderDate, etc.)
+
+---
+
+## 2. Data Warehouse — NorthWindDW
+
+### Star Schema Design
+
+```
+                    DimDate
+                   (DateKey)
+                      │
+DimCustomer ─── FactOrders ─── DimEmployee
+(CustomerKey)  (OrderKey)     (EmployeeKey)
+                    │
+          DimProduct    DimShipper
+          (ProductKey) (ShipperKey)
+```
+
+**Fact grain**: one row per `OrderID + ProductID` (order line level)
+
+**Key measures** in FactOrders:
+- `Quantity` — units ordered
+- `UnitPrice` — selling price at order time
+- `Discount` — discount fraction
+- `Freight` — shipping cost
+- `LineTotal` (computed) — `Quantity × UnitPrice × (1 − Discount)`
+- `OrderTotal` — pre-aggregated sum for the order header
+
+### Dimensional Design Decisions
+
+| Dimension | Type | Notes |
+|---|---|---|
+| DimCustomer | SCD Type 1 | `IsCurrent`, `ValidFrom`, `ValidTo` columns present for optional SCD Type 2 upgrade |
+| DimEmployee | SCD Type 1 | Denormalized manager name, territory, region |
+| DimProduct | SCD Type 1 | Denormalized category and supplier names |
+| DimShipper | SCD Type 1 | Simple carrier reference |
+| DimDate | Static | Pre-seeded calendar 1996–1999 + DateKey=0 Unknown |
+
+**Unknown members** (surrogate key = −1) seeded for all dimensions. DateKey = 0 for NULL dates. These allow FactOrders inserts to never fail due to unresolved FK.
+
+---
+
+## 3. Staging Layer
+
+The `staging` schema acts as an isolated extraction buffer:
+
+| Staging Table | Source OLTP Tables |
+|---|---|
+| staging.Customer | Customers + CustomerDemographics |
+| staging.Employee | Employees + Territories + Region |
+| staging.Product | Products + Categories + Suppliers |
+| staging.Shipper | Shippers |
+| staging.Order | Orders + OrderDetails (joined at line grain) |
+
+**Benefits**: isolates extraction failures, enables troubleshooting, supports replay.
+
+---
+
+## 4. ETL Architecture
+
+### Pipeline Overview
+
+```
+Extract ──► Validate ──► Merge Dimensions ──► Load Fact ──► Update Watermarks
+```
+
+### ETL Procedures
+
+| Procedure | Purpose |
+|---|---|
+| `DW_LoadStagingCustomers` | Extract customers (full or incremental by rowversion) |
+| `DW_LoadStagingEmployees` | Extract employees + denormalize territory/region |
+| `DW_LoadStagingProducts` | Extract products + denormalize category/supplier |
+| `DW_LoadStagingShippers` | Extract shippers |
+| `DW_LoadStagingOrders` | Extract order lines (OrderHeader JOIN OrderDetails) |
+| `DW_ValidateStagingData` | 8 data quality checks (4 errors, 4 warnings) |
+| `DW_MergeDimCustomer` | Upsert customers into DimCustomer |
+| `DW_MergeDimEmployee` | Upsert employees into DimEmployee |
+| `DW_MergeDimProduct` | Upsert products into DimProduct |
+| `DW_MergeDimShipper` | Upsert shippers into DimShipper |
+| `DW_MergeFactOrders` | Append new order lines into FactOrders |
+| `DW_RunFullLoad` | Orchestrates complete full reload |
+| `DW_RunIncrementalLoad` | Orchestrates incremental load by watermark |
+| `GetLastPackageRowVersion` | Helper: read watermark from PackageConfig |
+| `UpdateLastPackageRowVersion` | Helper: write watermark to PackageConfig |
+
+### ETL Quality Standards
+
+All ETL procedures implement:
+- `SET NOCOUNT ON` + `TRY/CATCH/THROW`
+- Explicit `BEGIN TRANSACTION` / `ROLLBACK`
+- Structured logging to `ETLExecutionLog` (success path) and `ETLErrorLog` (error path)
+- `BatchID` tracking across all steps of a run
+- Row count metrics (`RowsExtracted`, `RowsInserted`, `RowsUpdated`)
+
+---
+
+## 5. Incremental Load Strategy
+
+Uses **SQL Server `rowversion`** as a monotonic change-detection watermark:
+
+1. OLTP tables each carry a `rowversion` column (auto-updated by SQL Server on every row change)
+2. After each successful load, the max rowversion processed is stored in `PackageConfig`
+3. Next incremental run extracts only rows where `rowversion > lastProcessed`
+4. Shippers and Orders are always full-reloaded (small tables or append-only pattern)
+
+---
+
+## 6. Data Quality Validation
+
+`DW_ValidateStagingData` runs before any dimension or fact merge:
+
+| Check | Type | Action |
+|---|---|---|
+| NULL/empty CustomerID or CompanyName | Error | Halt ETL |
+| Duplicate CustomerID in staging | Error | Halt ETL |
+| NULL mandatory Employee fields | Error | Halt ETL |
+| Invalid UnitPrice, Quantity, Discount | Error | Halt ETL |
+| Orders referencing unknown CustomerIDs | Warning | Log only |
+| Future OrderDate | Warning | Log only |
+| RequiredDate before OrderDate | Warning | Log only |
+| NULL CategoryName or SupplierCompanyName | Warning | Log only |
+
+---
+
+## 7. Analytics Layer
+
+### Analytical Views (NorthWindDW)
+
+| View | Description |
+|---|---|
+| `vw_SalesByDate` | Revenue, order count, units by calendar date |
+| `vw_SalesByCustomer` | Revenue, order count, first/last order by customer |
+| `vw_SalesByEmployee` | Sales rep performance metrics |
+| `vw_SalesByProduct` | Product revenue, units, discount impact |
+| `vw_SalesByShipper` | Shipper freight and order volume |
+| `vw_MonthlyRevenueTrend` | Monthly revenue with quarter context |
+| `vw_Top10Products` | Top 10 products by total revenue |
+| `vw_KPISummary` | Single-row KPI snapshot (total revenue, orders, etc.) |
+
+### Ad-Hoc Query Library (`Analytics/SalesAnalytics.sql`)
+
+12 queries covering:
+- Revenue by Year/Quarter
+- Monthly YoY Growth (LAG window function)
+- Top 10 Customers
+- Sales by Geography
+- Employee performance ranking (RANK)
+- Product category revenue share (SUM OVER)
+- Discount band impact analysis
+- Average Order Value by country
+- Shipper freight analysis
+- Rolling 3-month trend
+- Customer retention cohort (first order year)
+- Late shipment analysis
+
+---
+
+## 8. Deployment Guide
+
+### Prerequisites
+
+- SQL Server 2017 or later
+- SQL Server Management Studio (SSMS) or Azure Data Studio
+- Optional: Visual Studio with SQL Server Data Tools (SSDT) for DACPAC deployment
+
+### Option A — SSDT (Recommended)
+
+1. Open `NorthWind.slnx` in Visual Studio
+2. Build and publish `NorthWindOLTP` (NorthWind.sqlproj) to your SQL Server
+3. Build and publish `NorthWindDW` project to your SQL Server
+4. Run `Scripts/Bootstrap/03_SeedOLTPData.sql` to populate sample data
+5. Run `Scripts/Bootstrap/06_RunFullLoad.sql` to execute the first ETL run
+6. Run `Scripts/Bootstrap/07_ValidateDeployment.sql` to verify
+
+### Option B — Scripts Only
+
+Execute in order in SSMS against your SQL Server instance:
+
+```
+01_CreateOLTPDatabase.sql   → creates NorthWindOLTP tables
+02_CreateDWDatabase.sql     → creates NorthWindDW + staging schema
+03_SeedOLTPData.sql         → inserts sample data
+04_Bootstrap_DW.sql         → creates DW tables, FKs, staging tables
+05_SeedDimDate.sql          → populates DimDate + Unknown members
+06_RunFullLoad.sql          → runs first full ETL pipeline
+07_ValidateDeployment.sql   → validates row counts and KPIs
+```
+
+All scripts are **idempotent** — safe to re-run.
+
+---
+
+## 9. Quick Start Queries
+
+```sql
+-- KPI snapshot
+USE NorthWindDW;
+SELECT * FROM [dbo].[vw_KPISummary];
+
+-- Revenue by month
+SELECT * FROM [dbo].[vw_MonthlyRevenueTrend]
+ORDER BY [Year], [Month];
+
+-- Top customers
+SELECT * FROM [dbo].[vw_SalesByCustomer]
+ORDER BY [TotalRevenue] DESC;
+
+-- Check ETL status
+SELECT TOP 10 * FROM [dbo].[ETLExecutionLog]
+ORDER BY [StartTime] DESC;
+
+-- Run incremental load
+EXEC [dbo].[DW_RunIncrementalLoad];
+```
+
+---
+
+## 10. Design Decisions & Assumptions
+
+| Decision | Rationale |
+|---|---|
+| rowversion watermark (not ModifiedDate) | Auto-maintained by SQL Server, immune to application-layer gaps |
+| staging TRUNCATE per load | Clean room pattern — no stale data in staging |
+| Unknown members (key = −1) | FK integrity without blocking fact inserts from unresolved lookups |
+| SCD Type 1 for all dimensions | Appropriate for Northwind analytical scope; Type 2 upgrade path is prepared in DimCustomer |
+| Computed LineTotal in FactOrders | Removes ETL calculation risk; always formula-consistent |
+| Columnstore index on FactOrders | Accelerates analytical aggregation workloads |
+| Modular staging procedures | Each entity independently extractable and testable |
+| Separate DimDate (pre-seeded) | Standard DW pattern — no ETL dependency, supports arbitrary date attributes |
+
+---
+
+## 11. Naming Conventions
+
+| Object Type | Convention | Example |
+|---|---|---|
+| DW Dimension | `Dim` prefix, PascalCase | `DimCustomer` |
+| DW Fact | `Fact` prefix, PascalCase | `FactOrders` |
+| Staging | `staging.` schema, singular | `staging.Customer` |
+| OLTP Tables | PascalCase, plural | `OrderDetails` |
+| Primary Keys | `PK_<Table>` | `PK_FactOrders` |
+| Foreign Keys | `FK_<Table>_<Ref>` | `FK_FactOrders_DimCustomer` |
+| Indexes (DW) | `IX_<Table>_<Column>` | `IX_DimCustomer_CustomerID` |
+| ETL Procedures | `DW_<Action><Object>` | `DW_MergeDimCustomer` |
+| OLTP Procedures | `usp_<Verb><Object>` | `usp_GetCustomerOrders` |
+| Analytical Views | `vw_<Description>` | `vw_SalesByDate` |
+
+---
+
+## Technology Stack
+
+| Component | Technology |
+|---|---|
+| Database engine | SQL Server 2017+ |
+| Schema management | SSDT / DACPAC |
+| ETL | T-SQL stored procedures |
+| Analytics | T-SQL views + ad-hoc queries |
+| Change detection | SQL Server `rowversion` |
+| Performance | Columnstore index on FactOrders |
+
+---
+
+## Documentation
+
+- [`Docs/ETL_Architecture.md`](Docs/ETL_Architecture.md) — ETL pipeline design, monitoring queries, error handling patterns
+- [`Docs/DataDictionary.md`](Docs/DataDictionary.md) — Column-level data dictionary for all OLTP and DW tables
+
 
 ## Descripción del proyecto
 

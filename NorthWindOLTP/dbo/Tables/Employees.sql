@@ -18,6 +18,8 @@
     [ReportsTo]       INT            NULL,
     [PhotoPath]       NVARCHAR (255) NULL,
     [rowversion]      ROWVERSION     NULL,
+    [CreatedDate]     DATETIME       NOT NULL CONSTRAINT [DF_Employees_CreatedDate] DEFAULT GETDATE(),
+    [UpdatedDate]     DATETIME       NOT NULL CONSTRAINT [DF_Employees_UpdatedDate] DEFAULT GETDATE(),
     CONSTRAINT [PK_Employees] PRIMARY KEY CLUSTERED ([EmployeeID] ASC),
     CONSTRAINT [CK_Birthdate] CHECK ([BirthDate]<getdate()),
     CONSTRAINT [FK_Employees_Employees] FOREIGN KEY ([ReportsTo]) REFERENCES [dbo].[Employees] ([EmployeeID])

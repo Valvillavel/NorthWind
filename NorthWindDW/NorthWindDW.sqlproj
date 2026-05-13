@@ -22,6 +22,7 @@
     <SqlServerVerification>False</SqlServerVerification>
     <IncludeCompositeObjects>True</IncludeCompositeObjects>
     <TargetDatabaseSet>True</TargetDatabaseSet>
+    <SqlCmdMode>True</SqlCmdMode>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <OutputPath>bin\Release\</OutputPath>
@@ -38,6 +39,7 @@
     <OutputPath>bin\Debug\</OutputPath>
     <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <SuppressWarnings>71562;SQL80001</SuppressWarnings>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -60,32 +62,53 @@
     <Folder Include="Schema" />
     <Folder Include="Schema\Tables" />
     <Folder Include="Schema\Tables\dbo" />
+    <Folder Include="Schema\Tables\staging" />
+    <Folder Include="Schema\Views" />
     <Folder Include="Schema\Programmability" />
     <Folder Include="Schema\Programmability\Stored Procedures" />
   </ItemGroup>
   <ItemGroup>
+    <Build Include="Schema\staging.sql" />
+    <Build Include="Schema\Tables\dbo\PackageConfig.sql" />
+    <Build Include="Schema\Tables\dbo\ETLExecutionLog.sql" />
+    <Build Include="Schema\Tables\dbo\ETLErrorLog.sql" />
     <Build Include="Schema\Tables\dbo\DimCustomer.sql" />
     <Build Include="Schema\Tables\dbo\DimDate.sql" />
     <Build Include="Schema\Tables\dbo\DimEmployee.sql" />
     <Build Include="Schema\Tables\dbo\DimProduct.sql" />
     <Build Include="Schema\Tables\dbo\DimShipper.sql" />
     <Build Include="Schema\Tables\dbo\FactOrders.sql" />
+    <Build Include="Schema\Tables\staging\Customer.sql" />
+    <Build Include="Schema\Tables\staging\Employee.sql" />
+    <Build Include="Schema\Tables\staging\Product.sql" />
+    <Build Include="Schema\Tables\staging\Shipper.sql" />
+    <Build Include="Schema\Tables\staging\Order.sql" />
+    <Build Include="Schema\Views\AnalyticsViews.sql" />
+    <Build Include="Schema\Programmability\Stored Procedures\GetLastPackageRowVersion.sql" />
+    <Build Include="Schema\Programmability\Stored Procedures\UpdateLastPackageRowVersion.sql" />
+    <Build Include="Schema\Programmability\Stored Procedures\DW_LoadStagingCustomers.sql" />
+    <Build Include="Schema\Programmability\Stored Procedures\DW_LoadStagingEmployees.sql" />
+    <Build Include="Schema\Programmability\Stored Procedures\DW_LoadStagingProducts.sql" />
+    <Build Include="Schema\Programmability\Stored Procedures\DW_LoadStagingShippers.sql" />
+    <Build Include="Schema\Programmability\Stored Procedures\DW_LoadStagingOrders.sql" />
     <Build Include="Schema\Programmability\Stored Procedures\DW_MergeDimCustomer.sql" />
     <Build Include="Schema\Programmability\Stored Procedures\DW_MergeDimEmployee.sql" />
     <Build Include="Schema\Programmability\Stored Procedures\DW_MergeDimProduct.sql" />
     <Build Include="Schema\Programmability\Stored Procedures\DW_MergeDimShipper.sql" />
     <Build Include="Schema\Programmability\Stored Procedures\DW_MergeFactOrders.sql" />
-    <Build Include="Schema\Programmability\Stored Procedures\GetLastPackageRowVersion.sql" />
-    <Build Include="Schema\Programmability\Stored Procedures\UpdateLastPackageRowVersion.sql" />
+    <Build Include="Schema\Programmability\Stored Procedures\DW_ValidateStagingData.sql" />
+    <Build Include="Schema\Programmability\Stored Procedures\DW_RunFullLoad.sql" />
+    <Build Include="Schema\Programmability\Stored Procedures\DW_RunIncrementalLoad.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Scripts\DimDate.data.sql" />
     <None Include="Scripts\PackageConfig.data.sql" />
     <None Include="Scripts\PatchDimDate.data.sql" />
-    <None Include="Scripts\Script.PostDeployment.sql" />
+    <None Include="Scripts\UnknownMembers.data.sql" />
     <None Include="Scripts\DimCustomer.data.sql" />
     <None Include="Scripts\DimEmployee.data.sql" />
     <None Include="Scripts\DimProduct.data.sql" />
     <None Include="Scripts\DimShipper.data.sql" />
+    <PostDeploy Include="Scripts\Script.PostDeployment.sql" />
   </ItemGroup>
 </Project>

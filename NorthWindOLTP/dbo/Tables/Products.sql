@@ -10,6 +10,8 @@
     [ReorderLevel]    SMALLINT      CONSTRAINT [DF_Products_ReorderLevel] DEFAULT ((0)) NULL,
     [Discontinued]    BIT           CONSTRAINT [DF_Products_Discontinued] DEFAULT ((0)) NOT NULL,
     [rowversion]      ROWVERSION    NULL,
+    [CreatedDate]     DATETIME      NOT NULL CONSTRAINT [DF_Products_CreatedDate] DEFAULT GETDATE(),
+    [UpdatedDate]     DATETIME      NOT NULL CONSTRAINT [DF_Products_UpdatedDate] DEFAULT GETDATE(),
     CONSTRAINT [PK_Products] PRIMARY KEY CLUSTERED ([ProductID] ASC),
     CONSTRAINT [CK_Products_UnitPrice] CHECK ([UnitPrice]>=(0)),
     CONSTRAINT [CK_ReorderLevel] CHECK ([ReorderLevel]>=(0)),

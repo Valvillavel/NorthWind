@@ -11,6 +11,8 @@
     [Phone]        NVARCHAR (24) NULL,
     [Fax]          NVARCHAR (24) NULL,
     [rowversion]   ROWVERSION    NULL,
+    [CreatedDate]  DATETIME      NOT NULL CONSTRAINT [DF_Customers_CreatedDate]  DEFAULT GETDATE(),
+    [UpdatedDate]  DATETIME      NOT NULL CONSTRAINT [DF_Customers_UpdatedDate]  DEFAULT GETDATE(),
     CONSTRAINT [PK_Customers] PRIMARY KEY CLUSTERED ([CustomerID] ASC)
 );
 

@@ -12,6 +12,8 @@
     [Fax]          NVARCHAR (24)  NULL,
     [HomePage]     NVARCHAR (MAX) NULL,
     [rowversion]   ROWVERSION     NULL,
+    [CreatedDate]  DATETIME       NOT NULL CONSTRAINT [DF_Suppliers_CreatedDate] DEFAULT GETDATE(),
+    [UpdatedDate]  DATETIME       NOT NULL CONSTRAINT [DF_Suppliers_UpdatedDate] DEFAULT GETDATE(),
     CONSTRAINT [PK_Suppliers] PRIMARY KEY CLUSTERED ([SupplierID] ASC)
 );
 

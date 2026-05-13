@@ -1,55 +1,33 @@
 ﻿/*
 ================================================================================
-Script Post-Deployment - Northwind Data Warehouse
+ Script Post-Deployment — NorthWind Data Warehouse
 ================================================================================
-Este script se ejecuta DESPUÉS de crear las tablas y procedimientos.
-Orden de ejecución:
-1. PackageConfig.data.sql  - Configuración ETL
-2. DimDate.data.sql        - Poblar calendario
-3. PatchDimDate.data.sql   - Fecha cero para integridad referencial
-4. DimCustomer.data.sql    - Poblar clientes
-5. DimEmployee.data.sql    - Poblar empleados
-6. DimProduct.data.sql     - Poblar productos
-7. DimShipper.data.sql     - Poblar transportistas
-8. FactOrders.data.sql     - Poblar hechos (opcional, normalmente se hace vía ETL)
+ FIX (CRITICAL-05): This script was a documentation stub (PRINT-only) that
+ caused SSDT DACPAC deployments to produce an empty, non-functional database.
+ No seed data was applied, leaving DimDate empty, PackageConfig uninitialized,
+ and Unknown dimension members absent.  Running DW_RunFullLoad after a SSDT
+ deploy would immediately fail with FK violations and silent no-ops.
+
+ Fix: Replace stub with actual :r references executed in dependency order:
+   1. PackageConfig rows must exist BEFORE any ETL procedure reads watermarks.
+   2. DimDate calendar must exist BEFORE FactOrders inserts (FK on DateKeyOrder).
+   3. DateKey = 0 (Unknown date) must exist as FK fallback target.
+   4. Unknown members (key = -1) must exist BEFORE FactOrders references them.
+================================================================================
+ Execution order (SSDT evaluates :r paths relative to project root):
 ================================================================================
 */
 
-PRINT '================================================================================'
-PRINT 'Iniciando Post-Deployment para Northwind Data Warehouse'
-PRINT '================================================================================'
-GO
+-- Step 1: Initialize ETL configuration keys in PackageConfig
+:r .\Scripts\PackageConfig.data.sql
 
--- 1. Configuración de paquetes ETL
-PRINT '1. Cargando PackageConfig...'
-:r .\PackageConfig.data.sql
+-- Step 2: Populate DimDate calendar (1990-2030) + DateKey = 0 Unknown row
+:r .\Scripts\DimDate.data.sql
 
--- 2. Poblar dimensión fecha (calendario 1996-1999)
-PRINT '2. Poblando DimDate...'
-:r .\DimDate.data.sql
+-- Step 3: Patch DateKey = 0 (Unknown / N/A fallback for NULL dates in FactOrders)
+:r .\Scripts\PatchDimDate.data.sql
 
--- 3. Parche para fecha cero (para integridad referencial)
-PRINT '3. Aplicando patch a DimDate...'
-:r .\PatchDimDate.data.sql
-
--- 4. Poblar dimensiones
-PRINT '4. Cargando DimCustomer...'
-:r .\DimCustomer.data.sql
-
-PRINT '5. Cargando DimEmployee...'
-:r .\DimEmployee.data.sql
-
-PRINT '6. Cargando DimProduct...'
-:r .\DimProduct.data.sql
-
-PRINT '7. Cargando DimShipper...'
-:r .\DimShipper.data.sql
-
--- 8. (Opcional) Poblar hechos - Comentar si se usa ETL incremental
--- PRINT '8. Cargando FactOrders...'
--- :r .\FactOrders.data.sql
-
-PRINT '================================================================================'
-PRINT 'Post-Deployment completado exitosamente'
-PRINT '================================================================================'
-GO
+-- Step 4: Insert surrogate key = -1 Unknown members for all dimensions
+--         (DimCustomer, DimEmployee, DimProduct, DimShipper)
+--         These are FK targets for NULL dimension references in FactOrders.
+:r .\Scripts\UnknownMembers.data.sql
