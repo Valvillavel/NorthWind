@@ -24,3 +24,9 @@ CREATE TABLE [staging].[Employee]
     CONSTRAINT [PK_stg_Employee] PRIMARY KEY CLUSTERED ([EmployeeID] ASC)
 );
 GO
+
+-- Index for DW_MergeDimEmployee join on EmployeeID
+CREATE NONCLUSTERED INDEX [IX_stg_Employee_EmployeeID]
+    ON [staging].[Employee] ([EmployeeID])
+    INCLUDE ([LastName], [FirstName], [RowVersion]);
+GO

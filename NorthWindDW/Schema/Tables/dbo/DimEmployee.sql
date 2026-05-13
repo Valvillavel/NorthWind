@@ -27,7 +27,8 @@
 GO
 
 CREATE NONCLUSTERED INDEX [IX_DimEmployee_EmployeeID] 
-    ON [dbo].[DimEmployee] ([EmployeeID]);
+    ON [dbo].[DimEmployee] ([EmployeeID])
+    INCLUDE ([EmployeeKey]);
 GO
 
 CREATE NONCLUSTERED INDEX [IX_DimEmployee_Country] 

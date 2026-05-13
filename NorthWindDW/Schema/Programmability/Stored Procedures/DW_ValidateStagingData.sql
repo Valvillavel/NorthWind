@@ -1,4 +1,4 @@
-CREATE PROCEDURE [dbo].[DW_ValidateStagingData]
+CREATE OR ALTER PROCEDURE [dbo].[DW_ValidateStagingData]
     @BatchID     INT  = NULL,
     @ExecutionID INT  = NULL,
     @FailOnError BIT  = 0

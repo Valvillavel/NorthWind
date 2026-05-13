@@ -11,5 +11,6 @@
 GO
 
 CREATE NONCLUSTERED INDEX [IX_DimShipper_ShipperID] 
-    ON [dbo].[DimShipper] ([ShipperID]);
+    ON [dbo].[DimShipper] ([ShipperID])
+    INCLUDE ([ShipperKey]);
 GO

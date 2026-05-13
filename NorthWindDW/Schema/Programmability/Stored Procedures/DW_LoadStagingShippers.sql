@@ -1,4 +1,4 @@
-CREATE PROCEDURE [dbo].[DW_LoadStagingShippers]
+CREATE OR ALTER PROCEDURE [dbo].[DW_LoadStagingShippers]
     @BatchID     INT    = NULL,
     @ExecutionID INT    = NULL
 AS
@@ -22,7 +22,7 @@ BEGIN
             s.[Phone],
             CONVERT(BIGINT, s.[rowversion]),
             @BatchID
-        FROM [NorthWindOLTP].[dbo].[Shippers] s;
+        FROM [NorthWind].[dbo].[Shippers] s;
 
         SET @RowsExtracted = @@ROWCOUNT;
 

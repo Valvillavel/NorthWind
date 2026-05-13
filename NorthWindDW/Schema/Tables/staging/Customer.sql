@@ -18,3 +18,10 @@ CREATE TABLE [staging].[Customer]
     CONSTRAINT [PK_stg_Customer] PRIMARY KEY CLUSTERED ([CustomerID] ASC)
 );
 GO
+
+-- Covering index for SCD2 change detection in DW_MergeDimCustomer
+CREATE NONCLUSTERED INDEX [IX_stg_Customer_CustomerID]
+    ON [staging].[Customer] ([CustomerID])
+    INCLUDE ([CompanyName], [ContactName], [ContactTitle], [Address],
+             [City], [Region], [PostalCode], [Country], [Phone], [Fax]);
+GO

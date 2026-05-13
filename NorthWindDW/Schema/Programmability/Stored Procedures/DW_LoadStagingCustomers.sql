@@ -1,4 +1,4 @@
-CREATE PROCEDURE [dbo].[DW_LoadStagingCustomers]
+CREATE OR ALTER PROCEDURE [dbo].[DW_LoadStagingCustomers]
     @BatchID     INT  = NULL,
     @ExecutionID INT  = NULL,
     @StartRow    BIGINT = 0,
@@ -13,7 +13,7 @@ BEGIN
     BEGIN TRY
         -- Resolve upper bound to current max rowversion when not provided
         IF @EndRow IS NULL
-            SELECT @EndRow = CONVERT(BIGINT, MAX([rowversion])) FROM [NorthWindOLTP].[dbo].[Customers];
+            SELECT @EndRow = CONVERT(BIGINT, MAX([rowversion])) FROM [NorthWind].[dbo].[Customers];
 
         BEGIN TRANSACTION;
 
@@ -39,10 +39,10 @@ BEGIN
             g.[CustomerDesc],
             CONVERT(BIGINT, c.[rowversion]),
             @BatchID
-        FROM [NorthWindOLTP].[dbo].[Customers] c
-        LEFT JOIN [NorthWindOLTP].[dbo].[CustomerCustomerDemo] d
+        FROM [NorthWind].[dbo].[Customers] c
+        LEFT JOIN [NorthWind].[dbo].[CustomerCustomerDemo] d
             ON c.[CustomerID] = d.[CustomerID]
-        LEFT JOIN [NorthWindOLTP].[dbo].[CustomerDemographics] g
+        LEFT JOIN [NorthWind].[dbo].[CustomerDemographics] g
             ON d.[CustomerTypeID] = g.[CustomerTypeID]
         WHERE
             CONVERT(BIGINT, c.[rowversion]) > @StartRow

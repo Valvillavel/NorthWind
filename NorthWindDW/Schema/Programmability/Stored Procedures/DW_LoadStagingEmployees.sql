@@ -1,4 +1,4 @@
-CREATE PROCEDURE [dbo].[DW_LoadStagingEmployees]
+CREATE OR ALTER PROCEDURE [dbo].[DW_LoadStagingEmployees]
     @BatchID     INT    = NULL,
     @ExecutionID INT    = NULL,
     @StartRow    BIGINT = 0,
@@ -25,7 +25,7 @@ BEGIN
     BEGIN TRY
         IF @EndRow IS NULL
             SELECT @EndRow = ISNULL(CONVERT(BIGINT, MAX([rowversion])), 0)
-            FROM [NorthWindOLTP].[dbo].[Employees];
+            FROM [NorthWind].[dbo].[Employees];
 
         BEGIN TRANSACTION;
 
@@ -63,14 +63,14 @@ BEGIN
             -- rowversion: same physical value for all rows of same employee
             MAX(CONVERT(BIGINT, e.[rowversion]))                    AS [RowVersion],
             @BatchID                                                AS [BatchID]
-        FROM [NorthWindOLTP].[dbo].[Employees] e
-        LEFT JOIN [NorthWindOLTP].[dbo].[Employees] m
+        FROM [NorthWind].[dbo].[Employees] e
+        LEFT JOIN [NorthWind].[dbo].[Employees] m
             ON e.[ReportsTo] = m.[EmployeeID]
-        LEFT JOIN [NorthWindOLTP].[dbo].[EmployeeTerritories] et
+        LEFT JOIN [NorthWind].[dbo].[EmployeeTerritories] et
             ON e.[EmployeeID] = et.[EmployeeID]
-        LEFT JOIN [NorthWindOLTP].[dbo].[Territories] t
+        LEFT JOIN [NorthWind].[dbo].[Territories] t
             ON et.[TerritoryID] = t.[TerritoryID]
-        LEFT JOIN [NorthWindOLTP].[dbo].[Region] r
+        LEFT JOIN [NorthWind].[dbo].[Region] r
             ON t.[RegionID] = r.[RegionID]
         WHERE
             CONVERT(BIGINT, e.[rowversion]) > @StartRow

@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [dbo].[DW_MergeDimProduct]
+CREATE OR ALTER PROCEDURE [dbo].[DW_MergeDimProduct]
 	@BatchID    INT = NULL,
 	@ExecutionID INT = NULL
 AS

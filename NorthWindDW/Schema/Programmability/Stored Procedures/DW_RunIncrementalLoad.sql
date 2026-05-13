@@ -1,4 +1,4 @@
-CREATE PROCEDURE [dbo].[DW_RunIncrementalLoad]
+CREATE OR ALTER PROCEDURE [dbo].[DW_RunIncrementalLoad]
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -15,6 +15,8 @@ BEGIN
     DECLARE @EmployeeEnd   BIGINT;
     DECLARE @ProductStart  BIGINT;
     DECLARE @ProductEnd    BIGINT;
+    DECLARE @OrderStart    BIGINT;
+    DECLARE @OrderEnd      BIGINT;
 
     SELECT @BatchID = ISNULL(MAX([BatchID]), 0) + 1
     FROM [dbo].[ETLExecutionLog];
@@ -29,16 +31,20 @@ BEGIN
         EXEC [dbo].[GetLastPackageRowVersion] 'Customer', @LastRowVersion = @CustomerStart OUTPUT;
         EXEC [dbo].[GetLastPackageRowVersion] 'Employee', @LastRowVersion = @EmployeeStart OUTPUT;
         EXEC [dbo].[GetLastPackageRowVersion] 'Product',  @LastRowVersion = @ProductStart  OUTPUT;
+        EXEC [dbo].[GetLastPackageRowVersion] 'Orders',   @LastRowVersion = @OrderStart    OUTPUT;
 
         -- Compute current max rowversion per entity
         SELECT @CustomerEnd = ISNULL(MAX(CONVERT(BIGINT, [rowversion])), 0)
-        FROM [NorthWindOLTP].[dbo].[Customers];
+        FROM [NorthWind].[dbo].[Customers];
 
         SELECT @EmployeeEnd = ISNULL(MAX(CONVERT(BIGINT, [rowversion])), 0)
-        FROM [NorthWindOLTP].[dbo].[Employees];
+        FROM [NorthWind].[dbo].[Employees];
 
         SELECT @ProductEnd = ISNULL(MAX(CONVERT(BIGINT, [rowversion])), 0)
-        FROM [NorthWindOLTP].[dbo].[Products];
+        FROM [NorthWind].[dbo].[Products];
+
+        SELECT @OrderEnd = ISNULL(MAX(CONVERT(BIGINT, [rowversion])), 0)
+        FROM [NorthWind].[dbo].[Orders];
 
         -- ============================================================
         -- Step 1 — Load changed Customers
@@ -117,28 +123,42 @@ BEGIN
         ELSE PRINT 'Products — No changes detected.';
 
         -- ============================================================
-        -- Step 4 — Always reload Orders (append-only, new orders only)
+        -- Step 4 — Load changed Orders (watermark-driven delta)
         -- ============================================================
-        SET @StepName = 'DW_LoadStagingOrders (incremental)';
-        INSERT INTO [dbo].[ETLExecutionLog] ([BatchID], [ProcedureName], [Status], [TargetObject])
-        VALUES (@BatchID, @StepName, 'RUNNING', '[staging].[Order]');
-        SET @ExecutionID = SCOPE_IDENTITY();
+        -- DW_LoadStagingOrders now accepts @StartRow/@EndRow to filter
+        -- only orders whose rowversion changed since last run.
+        -- If no orders changed, skip staging load entirely.
+        -- ============================================================
+        IF @OrderEnd > @OrderStart
+        BEGIN
+            SET @StepName = 'DW_LoadStagingOrders (incremental)';
+            INSERT INTO [dbo].[ETLExecutionLog] ([BatchID], [ProcedureName], [Status], [TargetObject], [Notes])
+            VALUES (@BatchID, @StepName, 'RUNNING', '[staging].[Order]',
+                    'StartRow=' + CAST(@OrderStart AS VARCHAR) + ' EndRow=' + CAST(@OrderEnd AS VARCHAR));
+            SET @ExecutionID = SCOPE_IDENTITY();
 
-        EXEC [dbo].[DW_LoadStagingOrders]
-            @BatchID = @BatchID, @ExecutionID = @ExecutionID;
+            EXEC [dbo].[DW_LoadStagingOrders]
+                @BatchID     = @BatchID,
+                @ExecutionID = @ExecutionID,
+                @StartRow    = @OrderStart,
+                @EndRow      = @OrderEnd;
 
-        SET @StepName = 'DW_MergeFactOrders (incremental)';
-        INSERT INTO [dbo].[ETLExecutionLog] ([BatchID], [ProcedureName], [Status], [TargetObject])
-        VALUES (@BatchID, @StepName, 'RUNNING', '[dbo].[FactOrders]');
-        SET @ExecutionID = SCOPE_IDENTITY();
+            SET @StepName = 'DW_MergeFactOrders (incremental)';
+            INSERT INTO [dbo].[ETLExecutionLog] ([BatchID], [ProcedureName], [Status], [TargetObject])
+            VALUES (@BatchID, @StepName, 'RUNNING', '[dbo].[FactOrders]');
+            SET @ExecutionID = SCOPE_IDENTITY();
 
-        EXEC [dbo].[DW_MergeFactOrders] @BatchID = @BatchID, @ExecutionID = @ExecutionID;
+            EXEC [dbo].[DW_MergeFactOrders] @BatchID = @BatchID, @ExecutionID = @ExecutionID;
+
+            EXEC [dbo].[UpdateLastPackageRowVersion] 'Orders', @OrderEnd;
+        END
+        ELSE PRINT 'Orders — No changes detected.';
 
         PRINT 'DW_RunIncrementalLoad — Completed successfully. BatchID: ' + CAST(@BatchID AS VARCHAR);
 
     END TRY
     BEGIN CATCH
-        DECLARE @ErrMsg NVARCHAR(MAX) = ERROR_MESSAGE();
+        DECLARE @ErrMsg NVARCHAR(MAX) = ISNULL(ERROR_MESSAGE(), 'Unknown error in DW_RunIncrementalLoad');
 
         INSERT INTO [dbo].[ETLErrorLog] (
             [BatchID], [ExecutionID], [ProcedureName], [ErrorNumber],

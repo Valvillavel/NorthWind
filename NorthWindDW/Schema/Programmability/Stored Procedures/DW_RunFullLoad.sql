@@ -1,4 +1,4 @@
-CREATE PROCEDURE [dbo].[DW_RunFullLoad]
+CREATE OR ALTER PROCEDURE [dbo].[DW_RunFullLoad]
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -76,7 +76,8 @@ BEGIN
         SET @ExecutionID = SCOPE_IDENTITY();
 
         EXEC [dbo].[DW_LoadStagingOrders]
-            @BatchID = @BatchID, @ExecutionID = @ExecutionID;
+            @BatchID = @BatchID, @ExecutionID = @ExecutionID,
+            @StartRow = 0, @EndRow = NULL;  -- full load: all orders
 
         -- ============================================================
         -- Step 6 — Validate Staging Data
@@ -136,20 +137,23 @@ BEGIN
         DECLARE @RVEmployee  BIGINT;
         DECLARE @RVProduct   BIGINT;
         DECLARE @RVShipper   BIGINT;
-        SELECT @RVCustomer = ISNULL(MAX(CONVERT(BIGINT, [rowversion])), 0) FROM [NorthWindOLTP].[dbo].[Customers];
-        SELECT @RVEmployee = ISNULL(MAX(CONVERT(BIGINT, [rowversion])), 0) FROM [NorthWindOLTP].[dbo].[Employees];
-        SELECT @RVProduct  = ISNULL(MAX(CONVERT(BIGINT, [rowversion])), 0) FROM [NorthWindOLTP].[dbo].[Products];
-        SELECT @RVShipper  = ISNULL(MAX(CONVERT(BIGINT, [rowversion])), 0) FROM [NorthWindOLTP].[dbo].[Shippers];
+        DECLARE @RVOrders    BIGINT;
+        SELECT @RVCustomer = ISNULL(MAX(CONVERT(BIGINT, [rowversion])), 0) FROM [NorthWind].[dbo].[Customers];
+        SELECT @RVEmployee = ISNULL(MAX(CONVERT(BIGINT, [rowversion])), 0) FROM [NorthWind].[dbo].[Employees];
+        SELECT @RVProduct  = ISNULL(MAX(CONVERT(BIGINT, [rowversion])), 0) FROM [NorthWind].[dbo].[Products];
+        SELECT @RVShipper  = ISNULL(MAX(CONVERT(BIGINT, [rowversion])), 0) FROM [NorthWind].[dbo].[Shippers];
+        SELECT @RVOrders   = ISNULL(MAX(CONVERT(BIGINT, [rowversion])), 0) FROM [NorthWind].[dbo].[Orders];
         EXEC [dbo].[UpdateLastPackageRowVersion] 'Customer', @RVCustomer;
         EXEC [dbo].[UpdateLastPackageRowVersion] 'Employee', @RVEmployee;
         EXEC [dbo].[UpdateLastPackageRowVersion] 'Product',  @RVProduct;
         EXEC [dbo].[UpdateLastPackageRowVersion] 'Shipper',  @RVShipper;
+        EXEC [dbo].[UpdateLastPackageRowVersion] 'Orders',   @RVOrders;
 
         PRINT 'DW_RunFullLoad — Completed successfully. BatchID: ' + CAST(@BatchID AS VARCHAR);
 
     END TRY
     BEGIN CATCH
-        DECLARE @ErrMsg NVARCHAR(MAX) = ERROR_MESSAGE();
+        DECLARE @ErrMsg NVARCHAR(MAX) = ISNULL(ERROR_MESSAGE(), 'Unknown error in DW_RunFullLoad');
 
         INSERT INTO [dbo].[ETLErrorLog] (
             [BatchID], [ExecutionID], [ProcedureName], [ErrorNumber],

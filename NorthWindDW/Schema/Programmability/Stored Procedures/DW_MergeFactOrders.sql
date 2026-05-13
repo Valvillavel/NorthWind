@@ -1,4 +1,4 @@
-ï»¿CREATE PROCEDURE [dbo].[DW_MergeFactOrders]
+CREATE OR ALTER PROCEDURE [dbo].[DW_MergeFactOrders]
 	@BatchID    INT = NULL,
 	@ExecutionID INT = NULL
 AS
@@ -14,7 +14,7 @@ BEGIN
 	-- table.  Fix: use LEFT JOIN + ISNULL(..., -1) to route unresolved
 	-- references to the pre-seeded Unknown member (surrogate key = -1).
 	--
-	-- HIGH-04: There was no UPDATE path â€” modified orders were never
+	-- HIGH-04: There was no UPDATE path — modified orders were never
 	-- reflected in FactOrders after the initial load.  Fix: add an
 	-- UPDATE block before the INSERT that refreshes measures for any
 	-- existing fact row whose staging source has changed.
@@ -28,7 +28,7 @@ BEGIN
 		BEGIN TRANSACTION;
 
 		-- ============================================================
-		-- Step A â€” UPDATE existing fact rows whose measures changed
+		-- Step A — UPDATE existing fact rows whose measures changed
 		-- ============================================================
 		UPDATE fo
 		SET
@@ -54,7 +54,7 @@ BEGIN
 		SET @RowsUpdated = @@ROWCOUNT;
 
 		-- ============================================================
-		-- Step B â€” INSERT new fact rows not yet in FactOrders
+		-- Step B — INSERT new fact rows not yet in FactOrders
 		-- ============================================================
 		-- LEFT JOIN strategy: orders with NULL CustomerID/EmployeeID/
 		-- ShipVia map to Unknown member (-1) instead of being dropped.
@@ -69,11 +69,11 @@ BEGIN
 		)
 		SELECT
 			so.[OrderID],
-			ISNULL(dc.[CustomerKey], -1),                -- NULL CustomerID â†’ Unknown
-			ISNULL(de.[EmployeeKey], -1),                -- NULL EmployeeID â†’ Unknown
+			ISNULL(dc.[CustomerKey], -1),                -- NULL CustomerID ? Unknown
+			ISNULL(de.[EmployeeKey], -1),                -- NULL EmployeeID ? Unknown
 			dp.[ProductKey],
-			ISNULL(ds.[ShipperKey],  -1),                -- NULL ShipVia    â†’ Unknown
-			ISNULL(ddo.[DateKey], 0),                    -- NULL OrderDate  â†’ DateKey 0
+			ISNULL(ds.[ShipperKey],  -1),                -- NULL ShipVia    ? Unknown
+			ISNULL(ddo.[DateKey], 0),                    -- NULL OrderDate  ? DateKey 0
 			ISNULL(ddr.[DateKey], 0),                    -- NULL RequiredDate
 			ISNULL(dds.[DateKey], 0),                    -- NULL ShippedDate
 			so.[Quantity],
@@ -85,19 +85,19 @@ BEGIN
 			ISNULL(so.[BatchID], @BatchID),
 			'Northwind_OLTP'
 		FROM [staging].[Order] so
-		-- Customer: LEFT JOIN â€” NULL CustomerID resolves to -1 (Unknown)
+		-- Customer: LEFT JOIN — NULL CustomerID resolves to -1 (Unknown)
 		LEFT JOIN [dbo].[DimCustomer] dc
 			ON so.[CustomerID] = dc.[CustomerID] AND dc.[IsCurrent] = 1
-		-- Employee: LEFT JOIN â€” NULL EmployeeID resolves to -1 (Unknown)
+		-- Employee: LEFT JOIN — NULL EmployeeID resolves to -1 (Unknown)
 		LEFT JOIN [dbo].[DimEmployee] de
 			ON so.[EmployeeID] = de.[EmployeeID]
-		-- Product: INNER JOIN â€” ProductID is mandatory; missing product = data error
+		-- Product: INNER JOIN — ProductID is mandatory; missing product = data error
 		INNER JOIN [dbo].[DimProduct] dp
 			ON so.[ProductID] = dp.[ProductID]
-		-- Shipper: LEFT JOIN â€” NULL ShipVia resolves to -1 (Unknown)
+		-- Shipper: LEFT JOIN — NULL ShipVia resolves to -1 (Unknown)
 		LEFT JOIN [dbo].[DimShipper] ds
 			ON so.[ShipperID] = ds.[ShipperID]
-		-- Date lookups: LEFT JOIN â€” NULL/unmapped dates resolve to DateKey 0
+		-- Date lookups: LEFT JOIN — NULL/unmapped dates resolve to DateKey 0
 		LEFT JOIN [dbo].[DimDate] ddo
 			ON CAST(CONVERT(VARCHAR(8), so.[OrderDate],    112) AS INT) = ddo.[DateKey]
 		LEFT JOIN [dbo].[DimDate] ddr

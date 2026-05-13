@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [dbo].[GetLastPackageRowVersion]
+CREATE OR ALTER PROCEDURE [dbo].[GetLastPackageRowVersion]
 	@PackageName    NVARCHAR(100),
 	@LastRowVersion BIGINT OUTPUT
 AS

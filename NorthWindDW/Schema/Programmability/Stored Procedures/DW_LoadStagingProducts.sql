@@ -1,4 +1,4 @@
-CREATE PROCEDURE [dbo].[DW_LoadStagingProducts]
+CREATE OR ALTER PROCEDURE [dbo].[DW_LoadStagingProducts]
     @BatchID     INT    = NULL,
     @ExecutionID INT    = NULL,
     @StartRow    BIGINT = 0,
@@ -12,7 +12,7 @@ BEGIN
 
     BEGIN TRY
         IF @EndRow IS NULL
-            SELECT @EndRow = CONVERT(BIGINT, MAX([rowversion])) FROM [NorthWindOLTP].[dbo].[Products];
+            SELECT @EndRow = CONVERT(BIGINT, MAX([rowversion])) FROM [NorthWind].[dbo].[Products];
 
         BEGIN TRANSACTION;
 
@@ -36,10 +36,10 @@ BEGIN
             p.[Discontinued],
             CONVERT(BIGINT, p.[rowversion]),
             @BatchID
-        FROM [NorthWindOLTP].[dbo].[Products] p
-        LEFT JOIN [NorthWindOLTP].[dbo].[Categories] c
+        FROM [NorthWind].[dbo].[Products] p
+        LEFT JOIN [NorthWind].[dbo].[Categories] c
             ON p.[CategoryID] = c.[CategoryID]
-        LEFT JOIN [NorthWindOLTP].[dbo].[Suppliers] s
+        LEFT JOIN [NorthWind].[dbo].[Suppliers] s
             ON p.[SupplierID] = s.[SupplierID]
         WHERE
             CONVERT(BIGINT, p.[rowversion]) > @StartRow

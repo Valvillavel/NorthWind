@@ -18,7 +18,8 @@
 GO
 
 CREATE NONCLUSTERED INDEX [IX_DimProduct_ProductID] 
-    ON [dbo].[DimProduct] ([ProductID]);
+    ON [dbo].[DimProduct] ([ProductID])
+    INCLUDE ([ProductKey]);
 GO
 
 CREATE NONCLUSTERED INDEX [IX_DimProduct_Category] 
