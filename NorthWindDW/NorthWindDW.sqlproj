@@ -84,6 +84,13 @@
     <None Include="Schema\Programmability\Stored Procedures\PackageConfigInit.sql" />
     <Build Include="Schema\Tables\staging\stagingShipper.sql" />
     <Build Include="Schema\Tables\staging\stagingProduct.sql" />
+    <Build Include="Schema\Programmability\Stored Procedures\DW_RunFullLoad.sql" />
+    <Build Include="Schema\Programmability\Stored Procedures\DW_RunIncrementalLoad.sql" />
+    <Build Include="Schema\Programmability\Stored Procedures\DW_ValidateStagingCustomers.sql" />
+    <Build Include="Schema\Programmability\Stored Procedures\DW_ValidateStagingData.sql" />
+    <Build Include="Schema\Tables\dbo\ETLErrorLog.sql" />
+    <Build Include="Schema\Tables\dbo\ETLExecutionLog.sql" />
+    <Build Include="Schema\Tables\staging\Customer.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Scripts\DimDate.data.sql" />
