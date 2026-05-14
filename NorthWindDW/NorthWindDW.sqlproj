@@ -66,6 +66,7 @@
     <Folder Include="Schema\Views" />
     <Folder Include="Schema\Programmability" />
     <Folder Include="Schema\Programmability\Stored Procedures" />
+    <Folder Include="Schema\Tables\staging" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Schema\staging.sql" />
@@ -96,9 +97,13 @@
     <Build Include="Schema\Programmability\Stored Procedures\DW_MergeDimProduct.sql" />
     <Build Include="Schema\Programmability\Stored Procedures\DW_MergeDimShipper.sql" />
     <Build Include="Schema\Programmability\Stored Procedures\DW_MergeFactOrders.sql" />
-    <Build Include="Schema\Programmability\Stored Procedures\DW_ValidateStagingData.sql" />
-    <Build Include="Schema\Programmability\Stored Procedures\DW_RunFullLoad.sql" />
-    <Build Include="Schema\Programmability\Stored Procedures\DW_RunIncrementalLoad.sql" />
+    <Build Include="Schema\Programmability\Stored Procedures\GetLastPackageRowVersion.sql" />
+    <Build Include="Schema\Programmability\Stored Procedures\UpdateLastPackageRowVersion.sql" />
+    <Build Include="Schema\Tables\staging\stagingEmployee.sql" />
+    <Build Include="Schema\Tables\staging\CrearSchemaStaging.sql" />
+    <Build Include="Schema\Tables\dbo\PackageConfig.sql" />
+    <None Include="Schema\Programmability\Stored Procedures\PackageConfigInit.sql" />
+    <Build Include="Schema\Tables\staging\stagingShipper.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Scripts\DimDate.data.sql" />

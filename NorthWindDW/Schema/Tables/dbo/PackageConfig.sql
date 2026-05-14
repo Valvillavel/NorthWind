@@ -1,16 +1,10 @@
-CREATE TABLE [dbo].[PackageConfig]
+CREATE TABLE [dbo].[PackageConfig](
+	[PackageID] [int] IDENTITY(1,1) NOT NULL,
+	[TableName] [nvarchar](128) NOT NULL,
+	[LastRowVersion] [bigint] NULL,
+PRIMARY KEY CLUSTERED 
 (
-    [ConfigID]      INT            IDENTITY (1, 1) NOT NULL,
-    [ConfigName]    NVARCHAR (100) NOT NULL,
-    [ConfigValue]   NVARCHAR (500) NOT NULL,
-    [Description]   NVARCHAR (500) NULL,
-    [CreatedDate]   DATETIME       NOT NULL CONSTRAINT [DF_PackageConfig_CreatedDate] DEFAULT GETDATE(),
-    [ModifiedDate]  DATETIME       NOT NULL CONSTRAINT [DF_PackageConfig_ModifiedDate] DEFAULT GETDATE(),
-    CONSTRAINT [PK_PackageConfig] PRIMARY KEY CLUSTERED ([ConfigID] ASC),
-    CONSTRAINT [UQ_PackageConfig_ConfigName] UNIQUE ([ConfigName])
-);
-GO
-
-CREATE NONCLUSTERED INDEX [IX_PackageConfig_ConfigName]
-    ON [dbo].[PackageConfig] ([ConfigName]);
+	[PackageID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
 GO

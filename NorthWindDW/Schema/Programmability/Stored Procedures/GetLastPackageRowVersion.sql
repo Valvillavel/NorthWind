@@ -3,14 +3,8 @@ CREATE OR ALTER PROCEDURE [dbo].[GetLastPackageRowVersion]
 	@LastRowVersion BIGINT OUTPUT
 AS
 BEGIN
-	SET NOCOUNT ON;
-
-	SELECT @LastRowVersion = ISNULL(CONVERT(BIGINT, [ConfigValue]), 0)
+	SELECT CONVERT(BIGINT, [LastRowVersion]) AS LastRowVersion
 	FROM [dbo].[PackageConfig]
-	WHERE [ConfigName] = @PackageName + '_LastRowVersion';
-
-	-- Default to 0 if no config row found
-	IF @LastRowVersion IS NULL
-		SET @LastRowVersion = 0;
+	WHERE [TableName] = @PackageName
 END
 GO

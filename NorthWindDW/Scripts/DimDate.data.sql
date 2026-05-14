@@ -12,6 +12,8 @@
 -- ================================================================================
 IF NOT EXISTS (SELECT 1 FROM [dbo].[DimDate] WHERE [DateKey] = 19900101)
 BEGIN
+	SET IDENTITY_INSERT [dbo].[DimDate] ON;
+
 	BEGIN TRANSACTION;
 
 	DECLARE @startdate DATE = '1990-01-01';
@@ -60,5 +62,7 @@ BEGIN
 	WHERE dd.[FullDate] IS NULL;
 
 	COMMIT TRANSACTION;
+
+	SET IDENTITY_INSERT [dbo].[DimDate] OFF;
 END
 GO

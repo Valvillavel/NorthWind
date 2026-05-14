@@ -10,6 +10,7 @@ BEGIN
   SELECT e.[EmployeeID]
       ,e.[LastName]
       ,e.[FirstName]
+      ,e.[FirstName] + ' ' + e.[LastName] AS FullName
       ,e.[Title]
       ,e.[TitleOfCourtesy]
       ,e.[BirthDate]
@@ -24,11 +25,13 @@ BEGIN
       ,e.[Photo]
       ,e.[Notes]
       ,e.[ReportsTo]
+      ,m.[FirstName] + ' ' + m.[LastName] AS ManagerName
       ,e.[PhotoPath]
     ,t.[TerritoryDescription]
     ,r.[RegionDescription]
   FROM 
   [dbo].[Employees] e
+  LEFT JOIN [dbo].[Employees] m ON e.ReportsTo = m.EmployeeID
   INNER JOIN [dbo].[EmployeeTerritories] et ON e.EmployeeID=et.EmployeeID
   INNER JOIN [dbo].[Territories] t ON et.TerritoryID=t.TerritoryID
   INNER JOIN [dbo].[Region] r ON t.RegionID=r.RegionID
