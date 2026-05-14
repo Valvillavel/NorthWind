@@ -1,46 +1,41 @@
 CREATE OR ALTER PROCEDURE [dbo].[DW_MergeDimCustomer]
 	@BatchID     INT = NULL,
-	@ExecutionID INT = NULL
+	@ExecutionID INT = NULL OUTPUT
 AS
 BEGIN
 	SET NOCOUNT ON;
 
-	-- ================================================================
-	-- ARCHITECTURAL DECISION: SCD TYPE 2 (Slowly Changing Dimension)
-	-- ================================================================
-	-- DimCustomer tracks full history of customer attribute changes.
-	-- Each time a tracked attribute changes in the OLTP source, the
-	-- current DW row is expired (ValidTo = today, IsCurrent = 0) and
-	-- a new row is inserted (ValidFrom = today, IsCurrent = 1).
-	--
-	-- Tracked attributes (any change triggers a new version):
-	--   CompanyName, ContactName, ContactTitle, Address, City,
-	--   Region, PostalCode, Country, Phone, Fax, CustomerDesc
-	--
-	-- Non-tracked (administrative, not historised):
-	--   ModifiedDate — always updated in-place on the current row.
-	--
-	-- FK behaviour in FactOrders:
-	--   Historical fact rows retain their CustomerKey, pointing to
-	--   the customer version that was active when the order was placed.
-	--   LEFT JOIN + IsCurrent=1 in DW_MergeFactOrders resolves the
-	--   *current* customer version for new orders.
-	-- ================================================================
+	DECLARE @ProcName      NVARCHAR(200) = OBJECT_NAME(@@PROCID);
+	DECLARE @RowsInserted  INT = 0;  -- new SCD2 versions (new customers + re-versions)
+	DECLARE @RowsExpired   INT = 0;  -- old versions closed
+	DECLARE @RowsNew       INT = 0;  -- brand-new customers (no prior DimCustomer row)
+	DECLARE @RowsRejected  INT = 0;  -- staging rows skipped due to DQ failures
+	DECLARE @Now           DATETIME = GETDATE();
 
-	DECLARE @ProcName     NVARCHAR(200) = OBJECT_NAME(@@PROCID);
-	DECLARE @RowsInserted INT = 0;
-	DECLARE @RowsUpdated  INT = 0;   -- rows expired (version closed)
-	DECLARE @RowsNew      INT = 0;   -- brand-new customers (no prior row)
-	DECLARE @Now          DATETIME   = GETDATE();
+	-- -------------------------------------------------------------------------
+	-- 1. Auto-register execution log if not provided by the caller
+	-- -------------------------------------------------------------------------
+	IF @ExecutionID IS NULL OR @ExecutionID = 0
+	BEGIN
+		INSERT INTO [dbo].[ETLExecutionLog]
+			([BatchID], [ProcedureName], [StartTime], [Status], [TargetObject], [SourceSystem])
+		VALUES
+			(ISNULL(@BatchID, -1), @ProcName, GETDATE(), 'RUNNING',
+			 '[dbo].[DimCustomer]', 'Northwind_OLTP');
+
+		SET @ExecutionID = SCOPE_IDENTITY();
+	END
 
 	BEGIN TRY
+
+		-- Count DQ-rejected rows for reporting
+		SELECT @RowsRejected = COUNT(*) FROM [staging].[Customer] WHERE [IsValid] = 0;
+
 		BEGIN TRANSACTION;
 
-		-- ============================================================
-		-- Step 1 — Expire current rows where tracked attributes changed
-		-- ============================================================
-		-- A row needs expiry when the current DW version (IsCurrent=1)
-		-- differs from staging on any tracked attribute.
+		-- =====================================================================
+		-- SCD TYPE 2 â€” STEP A: Expire current rows that have changed
+		-- =====================================================================
 		UPDATE dc
 		SET
 			dc.[ValidTo]      = @Now,
@@ -48,30 +43,39 @@ BEGIN
 			dc.[ModifiedDate] = @Now
 		FROM [dbo].[DimCustomer] dc
 		INNER JOIN [staging].[Customer] sc
-			ON dc.[CustomerID] = sc.[CustomerID]
-		   AND dc.[IsCurrent]  = 1
+			ON  dc.[CustomerID] = sc.[CustomerID]
+			AND dc.[IsCurrent]  = 1
+			AND sc.[IsValid]    = 1
 		WHERE
-			ISNULL(dc.[CompanyName],  '') <> ISNULL(sc.[CompanyName],  '')
-		 OR ISNULL(dc.[ContactName],  '') <> ISNULL(sc.[ContactName],  '')
-		 OR ISNULL(dc.[ContactTitle], '') <> ISNULL(sc.[ContactTitle], '')
-		 OR ISNULL(dc.[Address],      '') <> ISNULL(sc.[Address],      '')
-		 OR ISNULL(dc.[City],         '') <> ISNULL(sc.[City],         '')
-		 OR ISNULL(dc.[Region],       '') <> ISNULL(sc.[Region],       '')
-		 OR ISNULL(dc.[PostalCode],   '') <> ISNULL(sc.[PostalCode],   '')
-		 OR ISNULL(dc.[Country],      '') <> ISNULL(sc.[Country],      '')
-		 OR ISNULL(dc.[Phone],        '') <> ISNULL(sc.[Phone],        '')
-		 OR ISNULL(dc.[Fax],          '') <> ISNULL(sc.[Fax],          '')
-		 OR ISNULL(dc.[CustomerDesc], '') <> ISNULL(sc.[CustomerDesc], '');
+			ISNULL(dc.[CompanyName],    '') <> ISNULL(sc.[CompanyName],    '')
+		 OR ISNULL(dc.[ContactName],    '') <> ISNULL(sc.[ContactName],    '')
+		 OR ISNULL(dc.[ContactTitle],   '') <> ISNULL(sc.[ContactTitle],   '')
+		 OR ISNULL(dc.[Address],        '') <> ISNULL(sc.[Address],        '')
+		 OR ISNULL(dc.[City],           '') <> ISNULL(sc.[City],           '')
+		 OR ISNULL(dc.[Region],         '') <> ISNULL(sc.[Region],         '')
+		 OR ISNULL(dc.[PostalCode],     '') <> ISNULL(sc.[PostalCode],     '')
+		 OR ISNULL(dc.[Country],        '') <> ISNULL(sc.[Country],        '')
+		 OR ISNULL(dc.[Phone],          '') <> ISNULL(sc.[Phone],          '')
+		 OR ISNULL(dc.[Fax],            '') <> ISNULL(sc.[Fax],            '')
+		 OR ISNULL(dc.[CustomerDesc],   '') <> ISNULL(sc.[CustomerDesc],   '');
 
-		SET @RowsUpdated = @@ROWCOUNT;
+		SET @RowsExpired = @@ROWCOUNT;
 
-		-- ============================================================
-		-- Step 2 — Insert new version rows for:
-		--   a) Customers that had an attribute change (just expired above)
-		--   b) Brand-new customers with no prior DW row at all
-		-- ============================================================
-		-- Both cases share the same INSERT: any CustomerID with no
-		-- IsCurrent=1 row after step 1 needs a fresh version inserted.
+		-- =====================================================================
+		-- SCD TYPE 2 â€” STEP B: Insert new current versions
+		--   Covers two cases:
+		--     (a) brand-new CustomerID â€” no prior row in DimCustomer
+		--     (b) existing CustomerID whose current row was just expired (Step A)
+		-- =====================================================================
+		-- Count net-new customers before the insert so we can report them
+		SELECT @RowsNew = COUNT(*)
+		FROM [staging].[Customer] sc
+		WHERE sc.[IsValid] = 1
+		  AND NOT EXISTS (
+				SELECT 1 FROM [dbo].[DimCustomer] dc
+				WHERE dc.[CustomerID] = sc.[CustomerID]
+			  );
+
 		INSERT INTO [dbo].[DimCustomer] (
 			[CustomerID], [CompanyName], [ContactName], [ContactTitle],
 			[Address], [City], [Region], [PostalCode], [Country],
@@ -92,33 +96,37 @@ BEGIN
 			sc.[Phone],
 			sc.[Fax],
 			sc.[CustomerDesc],
-			@Now,    -- ValidFrom: this version becomes active now
-			NULL,    -- ValidTo:   open-ended (current version)
-			1,       -- IsCurrent: this is the active version
-			@Now,
-			@Now
+			@Now,   -- ValidFrom
+			NULL,   -- ValidTo  (open-ended = current version)
+			1,      -- IsCurrent
+			@Now,   -- CreatedDate
+			@Now    -- ModifiedDate
 		FROM [staging].[Customer] sc
-		-- Exclude any CustomerID that already has an IsCurrent=1 row
-		-- (unchanged customers — step 1 did not expire them)
-		WHERE NOT EXISTS (
-			SELECT 1 FROM [dbo].[DimCustomer] dc
-			WHERE dc.[CustomerID] = sc.[CustomerID]
-			  AND dc.[IsCurrent]  = 1
-		);
+		WHERE sc.[IsValid] = 1
+		  AND NOT EXISTS (
+				SELECT 1 FROM [dbo].[DimCustomer] dc
+				WHERE dc.[CustomerID] = sc.[CustomerID]
+				  AND dc.[IsCurrent]  = 1
+			  );
 
 		SET @RowsInserted = @@ROWCOUNT;
-		SET @RowsNew      = @RowsInserted - @RowsUpdated;  -- net new customers
 
 		COMMIT TRANSACTION;
 
+		-- -------------------------------------------------------------------------
+		-- 2. Finalise execution log
+		-- -------------------------------------------------------------------------
 		UPDATE [dbo].[ETLExecutionLog]
 		SET
 			[Status]       = 'SUCCESS',
 			[EndTime]      = GETDATE(),
 			[RowsInserted] = @RowsInserted,
-			[RowsUpdated]  = @RowsUpdated,
-			[Notes]        = CAST(@RowsNew AS VARCHAR) + ' new customers; '
-						   + CAST(@RowsUpdated AS VARCHAR) + ' versions expired'
+			[RowsUpdated]  = @RowsExpired,
+			[RowsRejected] = @RowsRejected,
+			[Notes]        = CAST(@RowsNew      AS VARCHAR(10)) + ' new customers; ' +
+							 CAST(@RowsExpired  AS VARCHAR(10)) + ' versions expired; ' +
+							 CAST(@RowsInserted AS VARCHAR(10)) + ' versions inserted; ' +
+							 CAST(@RowsRejected AS VARCHAR(10)) + ' staging rows skipped (DQ)'
 		WHERE [ExecutionID] = @ExecutionID;
 
 	END TRY
@@ -129,12 +137,14 @@ BEGIN
 
 		INSERT INTO [dbo].[ETLErrorLog] (
 			[BatchID], [ExecutionID], [ProcedureName], [ErrorNumber],
-			[ErrorSeverity], [ErrorState], [ErrorLine], [ErrorMessage], [AffectedObject]
+			[ErrorSeverity], [ErrorState], [ErrorLine], [ErrorMessage],
+			[AffectedObject], [InputParameters]
 		)
 		VALUES (
 			ISNULL(@BatchID, -1), @ExecutionID, @ProcName,
 			ERROR_NUMBER(), ERROR_SEVERITY(), ERROR_STATE(), ERROR_LINE(),
-			@ErrMsg, '[dbo].[DimCustomer]'
+			@ErrMsg, '[dbo].[DimCustomer]',
+			'@BatchID=' + CAST(ISNULL(@BatchID, -1) AS VARCHAR)
 		);
 
 		UPDATE [dbo].[ETLExecutionLog]

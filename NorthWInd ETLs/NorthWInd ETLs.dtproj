@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <DeploymentModel>Project</DeploymentModel>
   <ProductVersion>17.0.1016.0</ProductVersion>
@@ -33,6 +33,7 @@
           <SSIS:Package SSIS:Name="PoblarDimDate.dtsx" SSIS:EntryPoint="1" />
           <SSIS:Package SSIS:Name="Employeee.dtsx" SSIS:EntryPoint="1" />
           <SSIS:Package SSIS:Name="Shipper.dtsx" SSIS:EntryPoint="1" />
+          <SSIS:Package SSIS:Name="Customer.dtsx" SSIS:EntryPoint="1" />
         </SSIS:Packages>
         <SSIS:ConnectionManagers>
           <SSIS:ConnectionManager SSIS:Name="(local).NorthWind OLTP.conmgr" />

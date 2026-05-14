@@ -1,15 +1,6 @@
 ﻿-- ================================================================================
 -- DimDate Calendar Seed — 1990-01-01 through 2030-12-31
 -- ================================================================================
--- FIX (CRITICAL-04): Original script only covered 1996–1999.  Any OLTP date
--- outside that range mapped to DateKey = 0 (Unknown), silently corrupting all
--- date-based analytics.  Extended to 1990–2030 to cover historical data plus
--- a safe forward buffer for current and future transactions.
---
--- Guard: IF NOT EXISTS on the first expected calendar row (19900101) makes this
--- script safely re-runnable; it skips population if already seeded.
--- The inner LEFT JOIN / WHERE dd.FullDate IS NULL also handles partial re-runs.
--- ================================================================================
 IF NOT EXISTS (SELECT 1 FROM [dbo].[DimDate] WHERE [DateKey] = 19900101)
 BEGIN
 	SET IDENTITY_INSERT [dbo].[DimDate] ON;

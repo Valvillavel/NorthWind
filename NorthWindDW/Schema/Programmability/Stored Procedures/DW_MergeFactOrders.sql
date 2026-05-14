@@ -5,21 +5,6 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
-	-- ---------------------------------------------------------------
-	-- FIX (CRITICAL-04 / HIGH-02 / HIGH-04):
-	--
-	-- CRITICAL-04 / HIGH-02: Original INNER JOINs to DimCustomer,
-	-- DimEmployee, and DimShipper silently dropped any fact row where
-	-- CustomerID, EmployeeID, or ShipVia was NULL in the OLTP Orders
-	-- table.  Fix: use LEFT JOIN + ISNULL(..., -1) to route unresolved
-	-- references to the pre-seeded Unknown member (surrogate key = -1).
-	--
-	-- HIGH-04: There was no UPDATE path — modified orders were never
-	-- reflected in FactOrders after the initial load.  Fix: add an
-	-- UPDATE block before the INSERT that refreshes measures for any
-	-- existing fact row whose staging source has changed.
-	-- ---------------------------------------------------------------
-
 	DECLARE @ProcName     NVARCHAR(200) = OBJECT_NAME(@@PROCID);
 	DECLARE @RowsInserted INT = 0;
 	DECLARE @RowsUpdated  INT = 0;
@@ -27,9 +12,6 @@ BEGIN
 	BEGIN TRY
 		BEGIN TRANSACTION;
 
-		-- ============================================================
-		-- Step A — UPDATE existing fact rows whose measures changed
-		-- ============================================================
 		UPDATE fo
 		SET
 			fo.[Quantity]   = so.[Quantity],
@@ -54,12 +36,7 @@ BEGIN
 		SET @RowsUpdated = @@ROWCOUNT;
 
 		-- ============================================================
-		-- Step B — INSERT new fact rows not yet in FactOrders
-		-- ============================================================
-		-- LEFT JOIN strategy: orders with NULL CustomerID/EmployeeID/
-		-- ShipVia map to Unknown member (-1) instead of being dropped.
-		-- DimProduct uses INNER JOIN because ProductID is NOT NULL in
-		-- staging.Order and a missing product IS a data quality error.
+		-- INSERT new fact rows not yet in FactOrders
 		-- ============================================================
 		INSERT INTO [dbo].[FactOrders] (
 			[OrderID], [CustomerKey], [EmployeeKey], [ProductKey],
@@ -69,13 +46,13 @@ BEGIN
 		)
 		SELECT
 			so.[OrderID],
-			ISNULL(dc.[CustomerKey], -1),                -- NULL CustomerID ? Unknown
-			ISNULL(de.[EmployeeKey], -1),                -- NULL EmployeeID ? Unknown
+			ISNULL(dc.[CustomerKey], -1),              
+			ISNULL(de.[EmployeeKey], -1),               
 			dp.[ProductKey],
-			ISNULL(ds.[ShipperKey],  -1),                -- NULL ShipVia    ? Unknown
-			ISNULL(ddo.[DateKey], 0),                    -- NULL OrderDate  ? DateKey 0
-			ISNULL(ddr.[DateKey], 0),                    -- NULL RequiredDate
-			ISNULL(dds.[DateKey], 0),                    -- NULL ShippedDate
+			ISNULL(ds.[ShipperKey],  -1),               
+			ISNULL(ddo.[DateKey], 0),                    
+			ISNULL(ddr.[DateKey], 0),                    
+			ISNULL(dds.[DateKey], 0),                    
 			so.[Quantity],
 			so.[UnitPrice],
 			so.[Discount],
@@ -104,7 +81,6 @@ BEGIN
 			ON CAST(CONVERT(VARCHAR(8), so.[RequiredDate], 112) AS INT) = ddr.[DateKey]
 		LEFT JOIN [dbo].[DimDate] dds
 			ON CAST(CONVERT(VARCHAR(8), so.[ShippedDate],  112) AS INT) = dds.[DateKey]
-		-- Existence check: skip rows already in FactOrders (handled by UPDATE above)
 		LEFT JOIN [dbo].[FactOrders] fo
 			ON so.[OrderID] = fo.[OrderID] AND dp.[ProductKey] = fo.[ProductKey]
 		WHERE fo.[OrderKey] IS NULL;

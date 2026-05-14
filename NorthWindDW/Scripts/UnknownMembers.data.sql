@@ -1,9 +1,3 @@
--- ================================================================================
--- Seed "Unknown" / "Not Applicable" members for all Dimensions
--- These surrogate key = -1 rows act as FK fallback targets for NULL/unresolved
--- foreign keys in FactOrders (instead of blocking inserts).
--- ================================================================================
-
 -- DimCustomer — Unknown member (CustomerKey = -1)
 SET IDENTITY_INSERT [dbo].[DimCustomer] ON;
 
@@ -15,10 +9,22 @@ BEGIN
         [CustomerDesc], [ValidFrom], [ValidTo], [IsCurrent], [CreatedDate], [ModifiedDate]
     )
     VALUES (
-        -1, 'N/A', 'Unknown', NULL, NULL,
+        -1, N'UNK  ', 'Unknown', NULL, NULL,
         NULL, NULL, NULL, NULL, NULL, NULL, NULL,
         NULL, '1900-01-01', NULL, 1, '1900-01-01', '1900-01-01'
     );
+END
+ELSE
+BEGIN
+    -- Idempotent correction: ensure CustomerID is canonical 'UNK' value
+    UPDATE [dbo].[DimCustomer]
+    SET    [CustomerID]   = N'UNK  ',
+           [CompanyName]  = 'Unknown',
+           [IsCurrent]    = 1,
+           [ValidTo]      = NULL,
+           [ModifiedDate] = '1900-01-01'
+    WHERE  [CustomerKey] = -1
+      AND  [CustomerID]  <> N'UNK  ';
 END
 
 SET IDENTITY_INSERT [dbo].[DimCustomer] OFF;

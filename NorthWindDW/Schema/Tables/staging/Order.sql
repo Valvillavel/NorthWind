@@ -19,17 +19,14 @@ CREATE TABLE [staging].[Order]
 );
 GO
 
--- Index for DW_ValidateStagingData customer orphan check and DW_MergeFactOrders join
 CREATE NONCLUSTERED INDEX [IX_stg_Order_CustomerID]
     ON [staging].[Order] ([CustomerID]);
 GO
 
--- Index for DW_ValidateStagingData employee orphan check
 CREATE NONCLUSTERED INDEX [IX_stg_Order_EmployeeID]
     ON [staging].[Order] ([EmployeeID]);
 GO
 
--- Index for DW_MergeFactOrders incremental delete by OrderID
 CREATE NONCLUSTERED INDEX [IX_stg_Order_OrderID]
     ON [staging].[Order] ([OrderID]);
 GO

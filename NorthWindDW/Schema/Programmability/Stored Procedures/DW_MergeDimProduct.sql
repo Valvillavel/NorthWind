@@ -12,7 +12,6 @@ BEGIN
 	BEGIN TRY
 		BEGIN TRANSACTION;
 
-		-- UPDATE: existing records
 		UPDATE dp
 		SET
 			dp.[ProductName]         = sp.[ProductName],
@@ -30,7 +29,6 @@ BEGIN
 
 		SET @RowsUpdated = @@ROWCOUNT;
 
-		-- INSERT: new records
 		INSERT INTO [dbo].[DimProduct] (
 			[ProductID], [ProductName], [CategoryName], [SupplierCompanyName],
 			[QuantityPerUnit], [UnitPrice], [UnitsInStock], [UnitsOnOrder],

@@ -10,16 +10,17 @@ CREATE TABLE [staging].[Customer]
     [PostalCode]    NVARCHAR (10)  NULL,
     [Country]       NVARCHAR (15)  NULL,
     [Phone]         NVARCHAR (24)  NULL,
-    [Fax]           NVARCHAR (24)  NULL,
-    [CustomerDesc]  NVARCHAR (MAX) NULL,
-    [RowVersion]    BIGINT         NULL,
-    [BatchID]       INT            NULL,
-    [LoadedAt]      DATETIME       NOT NULL CONSTRAINT [DF_stg_Customer_LoadedAt] DEFAULT GETDATE(),
+    [Fax]               NVARCHAR (24)   NULL,
+    [CustomerDesc]      NVARCHAR (MAX)  NULL,
+    [RowVersion]        BIGINT          NULL,
+    [BatchID]           INT             NULL,
+    [LoadedAt]          DATETIME        NOT NULL CONSTRAINT [DF_stg_Customer_LoadedAt] DEFAULT GETDATE(),
+    [IsValid]           BIT             NOT NULL CONSTRAINT [DF_stg_Customer_IsValid] DEFAULT 1,
+    [ValidationMessage] NVARCHAR (500)  NULL,
     CONSTRAINT [PK_stg_Customer] PRIMARY KEY CLUSTERED ([CustomerID] ASC)
 );
 GO
 
--- Covering index for SCD2 change detection in DW_MergeDimCustomer
 CREATE NONCLUSTERED INDEX [IX_stg_Customer_CustomerID]
     ON [staging].[Customer] ([CustomerID])
     INCLUDE ([CompanyName], [ContactName], [ContactTitle], [Address],

@@ -7,18 +7,6 @@ AS
 BEGIN
     SET NOCOUNT ON;
 
-    -- ---------------------------------------------------------------
-    -- FIX (CRITICAL-02): The original SELECT DISTINCT across the
-    -- EmployeeTerritories bridge table produced N rows per employee
-    -- (one per territory assignment), causing a PRIMARY KEY violation
-    -- on staging.Employee.EmployeeID on the 2nd insert per employee.
-    --
-    -- Fix: Use GROUP BY on all scalar employee columns and aggregate
-    -- multi-valued territory/region fields with MIN() to pick one
-    -- deterministic value per employee.  This matches the SCD1
-    -- denormalised design of DimEmployee (one territory string per row).
-    -- ---------------------------------------------------------------
-
     DECLARE @ProcName      NVARCHAR(200) = OBJECT_NAME(@@PROCID);
     DECLARE @RowsExtracted INT = 0;
 
@@ -40,7 +28,6 @@ BEGIN
         )
         SELECT
             e.[EmployeeID],
-            -- Scalar employee columns: identical across territory rows, safe to take any value
             MAX(e.[LastName])                                       AS [LastName],
             MAX(e.[FirstName])                                      AS [FirstName],
             MAX(e.[Title])                                          AS [Title],

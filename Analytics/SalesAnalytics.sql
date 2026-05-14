@@ -1,12 +1,4 @@
-/*
-================================================================================
- Analytics Query Library — NorthWind BI
- File:    Analytics\SalesAnalytics.sql
- Purpose: Reusable ad-hoc analytical queries over the NorthWind DW
-================================================================================
- All queries target NorthWindDW. Run USE [NorthWindDW] before executing.
-================================================================================
-*/
+
 
 USE [NorthWindDW];
 GO

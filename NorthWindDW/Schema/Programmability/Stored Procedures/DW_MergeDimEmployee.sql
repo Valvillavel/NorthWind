@@ -12,7 +12,6 @@ BEGIN
 	BEGIN TRY
 		BEGIN TRANSACTION;
 
-		-- UPDATE: existing records
 		UPDATE de
 		SET
 			de.[LastName]             = se.[LastName],
@@ -39,7 +38,6 @@ BEGIN
 
 		SET @RowsUpdated = @@ROWCOUNT;
 
-		-- INSERT: new records
 		INSERT INTO [dbo].[DimEmployee] (
 			[EmployeeID], [LastName], [FirstName], [FullName], [Title],
 			[TitleOfCourtesy], [BirthDate], [HireDate], [Address], [City],

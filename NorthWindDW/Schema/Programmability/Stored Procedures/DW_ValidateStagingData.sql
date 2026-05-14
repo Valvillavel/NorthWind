@@ -11,7 +11,7 @@ BEGIN
     DECLARE @WarningCount  INT = 0;
 
     -- ================================================================
-    -- 1. NULL checks on mandatory Customer fields
+    -- NULL checks on mandatory Customer fields
     -- ================================================================
     IF EXISTS (
         SELECT 1 FROM [staging].[Customer]
@@ -31,7 +31,7 @@ BEGIN
     END
 
     -- ================================================================
-    -- 2. Duplicate CustomerID in staging
+    -- Duplicate CustomerID in staging
     -- ================================================================
     IF EXISTS (
         SELECT [CustomerID] FROM [staging].[Customer]
@@ -50,7 +50,7 @@ BEGIN
     END
 
     -- ================================================================
-    -- 3. NULL checks on mandatory Employee fields
+    -- NULL checks on mandatory Employee fields
     -- ================================================================
     IF EXISTS (
         SELECT 1 FROM [staging].[Employee]
@@ -71,7 +71,7 @@ BEGIN
     END
 
     -- ================================================================
-    -- 4. Negative or zero unit prices in staging.Order
+    -- Negative or zero unit prices in staging.Order
     -- ================================================================
     IF EXISTS (
         SELECT 1 FROM [staging].[Order]
@@ -91,18 +91,7 @@ BEGIN
     END
 
     -- ================================================================
-    -- 5. Orders referencing unknown customers (orphan FK)
-    -- ================================================================
-    -- FIX (CRITICAL-03):
-    -- staging.Customer.  On incremental loads, staging.Customer only
-    -- contains CHANGED customers — unchanged customers are absent,
-    -- causing 99%+ of orders to be flagged as orphans and aborting the
-    -- pipeline via @FailOnError = 1.
-    --
-    -- Fix: Validate against DimCustomer instead.  DimCustomer always
-    -- contains every customer that has ever been loaded, independent
-    -- of the current batch scope.  This is the correct referential
-    -- integrity target for the DW fact layer.
+    -- Orders referencing unknown customers (orphan FK)
     -- ================================================================
     IF EXISTS (
         SELECT 1 FROM [staging].[Order] so
@@ -126,10 +115,7 @@ BEGIN
     END
 
     -- ================================================================
-    -- 5b. Orders referencing unknown products (orphan FK)
-    -- ================================================================
-    -- Added: staging.Order.ProductID must exist in DimProduct.
-    -- Missing products would cause silent row drops in DW_MergeFactOrders.
+    -- Orders referencing unknown products (orphan FK)
     -- ================================================================
     IF EXISTS (
         SELECT 1 FROM [staging].[Order] so
@@ -152,10 +138,7 @@ BEGIN
     END
 
     -- ================================================================
-    -- 5c. Orders referencing unknown employees (orphan FK)
-    -- ================================================================
-    -- Added: staging.Order.EmployeeID must exist in DimEmployee.
-    -- Missing employees would cause silent row drops in DW_MergeFactOrders.
+    -- Orders referencing unknown employees (orphan FK)
     -- ================================================================
     IF EXISTS (
         SELECT 1 FROM [staging].[Order] so
@@ -178,7 +161,7 @@ BEGIN
     END
 
     -- ================================================================
-    -- 6. Future OrderDate validation
+    -- Future OrderDate validation
     -- ================================================================
     IF EXISTS (
         SELECT 1 FROM [staging].[Order]
@@ -197,7 +180,7 @@ BEGIN
     END
 
     -- ================================================================
-    -- 7. RequiredDate before OrderDate
+    -- RequiredDate before OrderDate
     -- ================================================================
     IF EXISTS (
         SELECT 1 FROM [staging].[Order]
@@ -218,7 +201,7 @@ BEGIN
     END
 
     -- ================================================================
-    -- 8. Products with NULL CategoryName or SupplierCompanyName
+    -- Products with NULL CategoryName or SupplierCompanyName
     -- ================================================================
     IF EXISTS (
         SELECT 1 FROM [staging].[Product]

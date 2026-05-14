@@ -93,12 +93,14 @@
     <Build Include="Schema\Programmability\Stored Procedures\DW_LoadStagingShippers.sql" />
     <Build Include="Schema\Programmability\Stored Procedures\DW_LoadStagingOrders.sql" />
     <Build Include="Schema\Programmability\Stored Procedures\DW_MergeDimCustomer.sql" />
+    <Build Include="Schema\Programmability\Stored Procedures\DW_ValidateStagingCustomers.sql" />
     <Build Include="Schema\Programmability\Stored Procedures\DW_MergeDimEmployee.sql" />
     <Build Include="Schema\Programmability\Stored Procedures\DW_MergeDimProduct.sql" />
     <Build Include="Schema\Programmability\Stored Procedures\DW_MergeDimShipper.sql" />
     <Build Include="Schema\Programmability\Stored Procedures\DW_MergeFactOrders.sql" />
-    <Build Include="Schema\Programmability\Stored Procedures\GetLastPackageRowVersion.sql" />
-    <Build Include="Schema\Programmability\Stored Procedures\UpdateLastPackageRowVersion.sql" />
+    <Build Include="Schema\Programmability\Stored Procedures\DW_ValidateStagingData.sql" />
+    <Build Include="Schema\Programmability\Stored Procedures\DW_RunFullLoad.sql" />
+    <Build Include="Schema\Programmability\Stored Procedures\DW_RunIncrementalLoad.sql" />
     <Build Include="Schema\Tables\staging\stagingEmployee.sql" />
     <Build Include="Schema\Tables\staging\CrearSchemaStaging.sql" />
     <Build Include="Schema\Tables\dbo\PackageConfig.sql" />

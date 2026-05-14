@@ -21,7 +21,7 @@ BEGIN
     BEGIN TRY
 
         -- ============================================================
-        -- Step 1 — Load Staging: Customers
+        -- Load Staging: Customers
         -- ============================================================
         SET @StepName = 'DW_LoadStagingCustomers';
         INSERT INTO [dbo].[ETLExecutionLog] ([BatchID], [ProcedureName], [Status], [TargetObject])
@@ -33,7 +33,7 @@ BEGIN
             @StartRow = 0, @EndRow = NULL;
 
         -- ============================================================
-        -- Step 2 — Load Staging: Employees
+        -- Load Staging: Employees
         -- ============================================================
         SET @StepName = 'DW_LoadStagingEmployees';
         INSERT INTO [dbo].[ETLExecutionLog] ([BatchID], [ProcedureName], [Status], [TargetObject])
@@ -45,7 +45,7 @@ BEGIN
             @StartRow = 0, @EndRow = NULL;
 
         -- ============================================================
-        -- Step 3 — Load Staging: Products
+        -- Load Staging: Products
         -- ============================================================
         SET @StepName = 'DW_LoadStagingProducts';
         INSERT INTO [dbo].[ETLExecutionLog] ([BatchID], [ProcedureName], [Status], [TargetObject])
@@ -57,7 +57,7 @@ BEGIN
             @StartRow = 0, @EndRow = NULL;
 
         -- ============================================================
-        -- Step 4 — Load Staging: Shippers
+        -- Load Staging: Shippers
         -- ============================================================
         SET @StepName = 'DW_LoadStagingShippers';
         INSERT INTO [dbo].[ETLExecutionLog] ([BatchID], [ProcedureName], [Status], [TargetObject])
@@ -68,7 +68,7 @@ BEGIN
             @BatchID = @BatchID, @ExecutionID = @ExecutionID;
 
         -- ============================================================
-        -- Step 5 — Load Staging: Orders
+        -- Load Staging: Orders
         -- ============================================================
         SET @StepName = 'DW_LoadStagingOrders';
         INSERT INTO [dbo].[ETLExecutionLog] ([BatchID], [ProcedureName], [Status], [TargetObject])
@@ -80,7 +80,7 @@ BEGIN
             @StartRow = 0, @EndRow = NULL;  -- full load: all orders
 
         -- ============================================================
-        -- Step 6 — Validate Staging Data
+        -- Validate Staging Data
         -- ============================================================
         SET @StepName = 'DW_ValidateStagingData';
         INSERT INTO [dbo].[ETLExecutionLog] ([BatchID], [ProcedureName], [Status], [TargetObject])
@@ -95,7 +95,7 @@ BEGIN
         WHERE [ExecutionID] = @ExecutionID;
 
         -- ============================================================
-        -- Step 7 — Merge Dimensions
+        -- Merge Dimensions
         -- ============================================================
         SET @StepName = 'DW_MergeDimCustomer';
         INSERT INTO [dbo].[ETLExecutionLog] ([BatchID], [ProcedureName], [Status], [TargetObject])
@@ -122,7 +122,7 @@ BEGIN
         EXEC [dbo].[DW_MergeDimShipper] @BatchID = @BatchID, @ExecutionID = @ExecutionID;
 
         -- ============================================================
-        -- Step 8 — Merge Fact
+        -- Merge Fact
         -- ============================================================
         SET @StepName = 'DW_MergeFactOrders';
         INSERT INTO [dbo].[ETLExecutionLog] ([BatchID], [ProcedureName], [Status], [TargetObject])
@@ -131,7 +131,7 @@ BEGIN
         EXEC [dbo].[DW_MergeFactOrders] @BatchID = @BatchID, @ExecutionID = @ExecutionID;
 
         -- ============================================================
-        -- Step 9 — Update watermarks
+        -- Update watermarks
         -- ============================================================
         DECLARE @RVCustomer  BIGINT;
         DECLARE @RVEmployee  BIGINT;

@@ -10,26 +10,6 @@ BEGIN
     -- ================================================================
     -- INCREMENTAL LOAD REDESIGN (Hardening)
     -- ================================================================
-    -- Previous implementation: TRUNCATE + full reload of all 2155+
-    -- OrderDetails rows on every ETL run — O(n) full scan regardless
-    -- of how many orders actually changed.
-    --
-    -- New implementation: watermark-based delta extraction.
-    --   @StartRow / @EndRow bound the Orders.rowversion window.
-    --   Only orders whose rowversion falls in (StartRow, EndRow] are
-    --   processed; for each such order ALL its OrderDetails lines are
-    --   reloaded (required for OrderTotal consistency).
-    --   Unchanged orders and their lines are untouched in staging.
-    --
-    -- Full load path: @StartRow=0, @EndRow=NULL (default) — loads
-    --   everything, identical in behaviour to the original truncate+load
-    --   but now also driven through the same code path as incremental.
-    --
-    -- Staging grain:  one row per (OrderID, ProductID)
-    -- PK:             staging.Order (OrderID, ProductID)
-    -- Idempotency:    DELETE changed orders' existing staging rows first,
-    --                 then INSERT fresh rows.  Safe for reruns.
-    -- ================================================================
 
     DECLARE @ProcName      NVARCHAR(200) = OBJECT_NAME(@@PROCID);
     DECLARE @RowsExtracted INT = 0;
@@ -37,28 +17,18 @@ BEGIN
 
     BEGIN TRY
 
-        -- Resolve @EndRow: current max rowversion on Orders
         IF @EndRow IS NULL
             SELECT @EndRow = ISNULL(MAX(CONVERT(BIGINT, [rowversion])), 0)
             FROM [NorthWind].[dbo].[Orders];
 
         BEGIN TRANSACTION;
 
-        -- ============================================================
-        -- Step A — Full load path: TRUNCATE when loading all orders
-        -- ============================================================
-        -- On a full load (@StartRow = 0) we clear the entire staging
-        -- table for a clean deterministic state.
-        -- On incremental loads we surgically remove only the changed
-        -- order's existing staging rows before re-inserting fresh ones.
-        -- ============================================================
         IF @StartRow = 0
         BEGIN
             TRUNCATE TABLE [staging].[Order];
         END
         ELSE
         BEGIN
-            -- Remove only staging rows belonging to orders in the delta window
             DELETE so
             FROM [staging].[Order] so
             WHERE so.[OrderID] IN (
@@ -70,12 +40,6 @@ BEGIN
             SET @RowsDeleted = @@ROWCOUNT;
         END
 
-        -- ============================================================
-        -- Step B — Insert delta: all lines for orders in the window
-        -- ============================================================
-        -- One row per order line (grain: OrderID + ProductID).
-        -- OrderTotal computed as window SUM over the order's lines.
-        -- ============================================================
         INSERT INTO [staging].[Order] (
             [OrderID], [CustomerID], [EmployeeID], [ShipperID], [ProductID],
             [OrderDate], [RequiredDate], [ShippedDate], [Freight],
@@ -94,7 +58,6 @@ BEGIN
             od.[UnitPrice],
             od.[Quantity],
             od.[Discount],
-            -- Single-pass window: correct order total with no cross-join
             SUM(CONVERT(MONEY, od.[UnitPrice]
                     * CAST(od.[Quantity] AS DECIMAL(18,4))
                     * (1.0 - od.[Discount])))
@@ -104,8 +67,6 @@ BEGIN
         INNER JOIN [NorthWind].[dbo].[OrderDetails] od
             ON o.[OrderID] = od.[OrderID]
         WHERE
-            -- Full load: @StartRow=0 passes all rows (rowversion > 0 always true)
-            -- Incremental: only orders modified since last watermark
             CONVERT(BIGINT, o.[rowversion]) > @StartRow
             AND CONVERT(BIGINT, o.[rowversion]) <= @EndRow;
 

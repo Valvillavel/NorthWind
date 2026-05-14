@@ -1,22 +1,22 @@
 ﻿-- PackageConfigInit: inicializa las claves de watermark en PackageConfig si no existen.
--- Compatible con el schema HEAD (ConfigName / ConfigValue / Description).
-IF NOT EXISTS (SELECT 1 FROM [dbo].[PackageConfig] WHERE [ConfigName] = 'Customer_LastRowVersion')
-	INSERT INTO [dbo].[PackageConfig] ([ConfigName], [ConfigValue], [Description])
-	VALUES ('Customer_LastRowVersion', '0', 'Last processed rowversion for Customers incremental load');
+-- Compatible con el schema HEAD (TableName / LastRowVersion).
+IF NOT EXISTS (SELECT 1 FROM [dbo].[PackageConfig] WHERE [TableName] = 'Customer')
+	INSERT INTO [dbo].[PackageConfig] ([TableName], [LastRowVersion])
+	VALUES ('Customer', 0);
 
-IF NOT EXISTS (SELECT 1 FROM [dbo].[PackageConfig] WHERE [ConfigName] = 'Employee_LastRowVersion')
-	INSERT INTO [dbo].[PackageConfig] ([ConfigName], [ConfigValue], [Description])
-	VALUES ('Employee_LastRowVersion', '0', 'Last processed rowversion for Employees incremental load');
+IF NOT EXISTS (SELECT 1 FROM [dbo].[PackageConfig] WHERE [TableName] = 'Employee')
+	INSERT INTO [dbo].[PackageConfig] ([TableName], [LastRowVersion])
+	VALUES ('Employee', 0);
 
-IF NOT EXISTS (SELECT 1 FROM [dbo].[PackageConfig] WHERE [ConfigName] = 'Product_LastRowVersion')
-	INSERT INTO [dbo].[PackageConfig] ([ConfigName], [ConfigValue], [Description])
-	VALUES ('Product_LastRowVersion', '0', 'Last processed rowversion for Products incremental load');
+IF NOT EXISTS (SELECT 1 FROM [dbo].[PackageConfig] WHERE [TableName] = 'Product')
+	INSERT INTO [dbo].[PackageConfig] ([TableName], [LastRowVersion])
+	VALUES ('Product', 0);
 
-IF NOT EXISTS (SELECT 1 FROM [dbo].[PackageConfig] WHERE [ConfigName] = 'Shipper_LastRowVersion')
-	INSERT INTO [dbo].[PackageConfig] ([ConfigName], [ConfigValue], [Description])
-	VALUES ('Shipper_LastRowVersion', '0', 'Last processed rowversion for Shippers incremental load');
+IF NOT EXISTS (SELECT 1 FROM [dbo].[PackageConfig] WHERE [TableName] = 'Shipper')
+	INSERT INTO [dbo].[PackageConfig] ([TableName], [LastRowVersion])
+	VALUES ('Shipper', 0);
 
-IF NOT EXISTS (SELECT 1 FROM [dbo].[PackageConfig] WHERE [ConfigName] = 'Orders_LastRowVersion')
-	INSERT INTO [dbo].[PackageConfig] ([ConfigName], [ConfigValue], [Description])
-	VALUES ('Orders_LastRowVersion', '0', 'Last processed rowversion for Orders incremental load');
+IF NOT EXISTS (SELECT 1 FROM [dbo].[PackageConfig] WHERE [TableName] = 'Orders')
+	INSERT INTO [dbo].[PackageConfig] ([TableName], [LastRowVersion])
+	VALUES ('Orders', 0);
 GO

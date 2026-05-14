@@ -8,7 +8,6 @@ BEGIN
     DECLARE @ProcName    NVARCHAR(200) = OBJECT_NAME(@@PROCID);
     DECLARE @StepName    NVARCHAR(200);
 
-    -- Watermarks from PackageConfig
     DECLARE @CustomerStart BIGINT;
     DECLARE @CustomerEnd   BIGINT;
     DECLARE @EmployeeStart BIGINT;
@@ -33,7 +32,6 @@ BEGIN
         EXEC [dbo].[GetLastPackageRowVersion] 'Product',  @LastRowVersion = @ProductStart  OUTPUT;
         EXEC [dbo].[GetLastPackageRowVersion] 'Orders',   @LastRowVersion = @OrderStart    OUTPUT;
 
-        -- Compute current max rowversion per entity
         SELECT @CustomerEnd = ISNULL(MAX(CONVERT(BIGINT, [rowversion])), 0)
         FROM [NorthWind].[dbo].[Customers];
 
@@ -47,7 +45,7 @@ BEGIN
         FROM [NorthWind].[dbo].[Orders];
 
         -- ============================================================
-        -- Step 1 — Load changed Customers
+        -- Load changed Customers
         -- ============================================================
         IF @CustomerEnd > @CustomerStart
         BEGIN
@@ -73,7 +71,7 @@ BEGIN
         ELSE PRINT 'Customers — No changes detected.';
 
         -- ============================================================
-        -- Step 2 — Load changed Employees
+        -- Load changed Employees
         -- ============================================================
         IF @EmployeeEnd > @EmployeeStart
         BEGIN
@@ -98,7 +96,7 @@ BEGIN
         ELSE PRINT 'Employees — No changes detected.';
 
         -- ============================================================
-        -- Step 3 — Load changed Products
+        -- Load changed Products
         -- ============================================================
         IF @ProductEnd > @ProductStart
         BEGIN
@@ -123,11 +121,7 @@ BEGIN
         ELSE PRINT 'Products — No changes detected.';
 
         -- ============================================================
-        -- Step 4 — Load changed Orders (watermark-driven delta)
-        -- ============================================================
-        -- DW_LoadStagingOrders now accepts @StartRow/@EndRow to filter
-        -- only orders whose rowversion changed since last run.
-        -- If no orders changed, skip staging load entirely.
+        -- Load changed Orders (watermark-driven delta)
         -- ============================================================
         IF @OrderEnd > @OrderStart
         BEGIN

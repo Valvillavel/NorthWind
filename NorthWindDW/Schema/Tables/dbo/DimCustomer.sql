@@ -26,7 +26,6 @@ CREATE NONCLUSTERED INDEX [IX_DimCustomer_CustomerID]
     ON [dbo].[DimCustomer] ([CustomerID]);
 GO
 
--- Composite index for SCD2 lookup: resolve current version by business key
 CREATE NONCLUSTERED INDEX [IX_DimCustomer_CustomerID_IsCurrent]
     ON [dbo].[DimCustomer] ([CustomerID], [IsCurrent])
     INCLUDE ([CustomerKey]);

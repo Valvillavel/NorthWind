@@ -25,7 +25,6 @@ CREATE TABLE [staging].[Employee]
 );
 GO
 
--- Index for DW_MergeDimEmployee join on EmployeeID
 CREATE NONCLUSTERED INDEX [IX_stg_Employee_EmployeeID]
     ON [staging].[Employee] ([EmployeeID])
     INCLUDE ([LastName], [FirstName], [RowVersion]);

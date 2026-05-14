@@ -12,7 +12,6 @@ BEGIN
 	BEGIN TRY
 		BEGIN TRANSACTION;
 
-		-- UPDATE: existing records
 		UPDATE ds
 		SET
 			ds.[CompanyName]  = ss.[CompanyName],
@@ -23,7 +22,6 @@ BEGIN
 
 		SET @RowsUpdated = @@ROWCOUNT;
 
-		-- INSERT: new records
 		INSERT INTO [dbo].[DimShipper] (
 			[ShipperID], [CompanyName], [Phone], [CreatedDate], [ModifiedDate]
 		)
