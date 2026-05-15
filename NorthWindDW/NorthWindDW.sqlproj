@@ -90,7 +90,8 @@
     <Build Include="Schema\Programmability\Stored Procedures\DW_ValidateStagingData.sql" />
     <Build Include="Schema\Tables\dbo\ETLErrorLog.sql" />
     <Build Include="Schema\Tables\dbo\ETLExecutionLog.sql" />
-    <Build Include="Schema\Tables\staging\Customer.sql" />
+    <Build Include="Schema\Tables\staging\stagingCustomer.sql" />
+    <Build Include="Schema\Tables\staging\stagingOrders.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Scripts\DimDate.data.sql" />

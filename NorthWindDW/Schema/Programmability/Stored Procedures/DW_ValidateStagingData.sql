@@ -71,12 +71,13 @@ BEGIN
     END
 
     -- ================================================================
-    -- Negative or zero unit prices in staging.Order
+    -- NULL checks on mandatory Order fields
     -- ================================================================
     IF EXISTS (
         SELECT 1 FROM [staging].[Order]
-        WHERE [UnitPrice] < 0 OR [Quantity] <= 0
-           OR [Discount] < 0 OR [Discount] > 1
+        WHERE [OrderID] IS NULL
+           OR [CustomerID] IS NULL OR LTRIM(RTRIM([CustomerID])) = ''
+           OR [OrderDate] IS NULL
     )
     BEGIN
         SET @ErrorCount += 1;
@@ -85,7 +86,26 @@ BEGIN
         )
         VALUES (
             ISNULL(@BatchID, -1), @ExecutionID, @ProcName,
-            'Invalid UnitPrice (<0), Quantity (<=0), or Discount (outside 0-1) in staging.Order',
+            'NULL or empty mandatory Order fields (OrderID, CustomerID, OrderDate) detected in staging.Order',
+            '[staging].[Order]'
+        );
+    END
+
+    -- ================================================================
+    -- Negative Freight in staging.Order
+    -- ================================================================
+    IF EXISTS (
+        SELECT 1 FROM [staging].[Order]
+        WHERE [Freight] < 0
+    )
+    BEGIN
+        SET @ErrorCount += 1;
+        INSERT INTO [dbo].[ETLErrorLog] (
+            [BatchID], [ExecutionID], [ProcedureName], [ErrorMessage], [AffectedObject]
+        )
+        VALUES (
+            ISNULL(@BatchID, -1), @ExecutionID, @ProcName,
+            'Invalid Freight (<0) in staging.Order',
             '[staging].[Order]'
         );
     END
@@ -119,11 +139,11 @@ BEGIN
     -- ================================================================
     IF EXISTS (
         SELECT 1 FROM [staging].[Order] so
-        WHERE so.[ProductID] IS NOT NULL
-          AND NOT EXISTS (
-              SELECT 1 FROM [dbo].[DimProduct] dp
-              WHERE dp.[ProductID] = so.[ProductID]
-          )
+        INNER JOIN [dbo].[OrderDetails] od ON so.[OrderID] = od.[OrderID]
+        WHERE NOT EXISTS (
+            SELECT 1 FROM [dbo].[DimProduct] dp
+            WHERE dp.[ProductID] = od.[ProductID]
+        )
     )
     BEGIN
         SET @WarningCount += 1;
@@ -132,7 +152,7 @@ BEGIN
         )
         VALUES (
             ISNULL(@BatchID, -1), @ExecutionID, @ProcName,
-            'WARNING: Orders reference ProductIDs not present in DimProduct',
+            'WARNING: Order details reference ProductIDs not present in DimProduct',
             '[staging].[Order]'
         );
     END
@@ -158,6 +178,29 @@ BEGIN
             'WARNING: Orders reference EmployeeIDs not present in DimEmployee',
             '[staging].[Order]'
         );
+    END
+
+    -- ================================================================
+    -- Orders referencing unknown shippers (orphan FK)
+    -- ================================================================
+    IF EXISTS (
+        SELECT 1 FROM [staging].[Order] so
+        WHERE so.[ShipVia] IS NOT NULL
+          AND NOT EXISTS (
+              SELECT 1 FROM [dbo].[DimShipper] ds
+              WHERE ds.[ShipperID] = so.[ShipVia]
+          )
+    )
+    BEGIN
+        SET @WarningCount += 1;
+        INSERT INTO [dbo].[ETLErrorLog] (
+            [BatchID], [ExecutionID], [ProcedureName], [ErrorMessage], [AffectedObject]
+        )
+        VALUES (
+            ISNULL(@BatchID, -1), @ExecutionID, @ProcName,
+            'WARNING: Orders reference ShipperIDs (ShipVia) not present in DimShipper',
+            '[staging].[Order]'
+        );      
     END
 
     -- ================================================================
@@ -216,6 +259,41 @@ BEGIN
             ISNULL(@BatchID, -1), @ExecutionID, @ProcName,
             'WARNING: NULL CategoryName or SupplierCompanyName in staging.Product',
             '[staging].[Product]'
+        );
+    END
+
+    -- ================================================================
+    -- Invalid records marked in staging tables
+    -- ================================================================
+    IF EXISTS (
+        SELECT 1 FROM [staging].[Customer]
+        WHERE [IsValid] = 0
+    )
+    BEGIN
+        SET @ErrorCount += 1;
+        INSERT INTO [dbo].[ETLErrorLog] (
+            [BatchID], [ExecutionID], [ProcedureName], [ErrorMessage], [AffectedObject]
+        )
+        VALUES (
+            ISNULL(@BatchID, -1), @ExecutionID, @ProcName,
+            'Invalid records detected in staging.Customer (IsValid = 0)',
+            '[staging].[Customer]'
+        );
+    END
+
+    IF EXISTS (
+        SELECT 1 FROM [staging].[Order]
+        WHERE [IsValid] = 0
+    )
+    BEGIN
+        SET @ErrorCount += 1;
+        INSERT INTO [dbo].[ETLErrorLog] (
+            [BatchID], [ExecutionID], [ProcedureName], [ErrorMessage], [AffectedObject]
+        )
+        VALUES (
+            ISNULL(@BatchID, -1), @ExecutionID, @ProcName,
+            'Invalid records detected in staging.Order (IsValid = 0)',
+            '[staging].[Order]'
         );
     END
 

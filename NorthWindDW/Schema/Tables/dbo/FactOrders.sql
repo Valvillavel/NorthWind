@@ -2,13 +2,14 @@
 (
     [OrderKey]              BIGINT        IDENTITY (1, 1) NOT NULL,
     [OrderID]               INT           NOT NULL,
+    [ProductID]             INT           NOT NULL,
     [CustomerKey]           INT           NOT NULL,
     [EmployeeKey]           INT           NOT NULL,
     [ProductKey]            INT           NOT NULL,
     [ShipperKey]            INT           NOT NULL,
     [DateKeyOrder]          INT           NOT NULL,
     [DateKeyRequired]       INT           NOT NULL,
-    [DateKeyShipped]        INT           NOT NULL,
+    [DateKeyShipped]        INT           NULL,
 
     [Quantity]              DECIMAL (18,4) NOT NULL,
     [UnitPrice]             MONEY         NOT NULL,

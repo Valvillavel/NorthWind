@@ -26,7 +26,7 @@
           <SSIS:Property SSIS:Name="CreatorComputerName">LAPTOP-MA75E46U</SSIS:Property>
           <SSIS:Property SSIS:Name="Description">
           </SSIS:Property>
-          <SSIS:Property SSIS:Name="PasswordVerifier" SSIS:Sensitive="1">AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAR6sqxbOS7k2wO9DJZaYSgAAAAAACAAAAAAAQZgAAAAEAACAAAAD+NB63/auX+R2apMTy4drDIqWCXYgPNs0kH1SXlM1YPgAAAAAOgAAAAAIAACAAAACseClIaYB8jj140Kg5RfVhsFz44wMk/M9SMVywG/rNEpAAAAAdc8whfiWBnJHxuK59XRtJon8Z9mn15n6KM9P+KFr4IgOvU3EDopnPQKXcYcbruCmf9ArbUqo+tufr1asoauPfe4EC/ZL2A/mARU1R5sGLik0G+c7Gg3fJmMQxFbgeodMrOPiMAzx8LbJeHv3auk7Kn406CieURgSJ5bS/Gh0dbnyTD7o2ecLjJ/99wT54o5JAAAAAiNN+Y5C5g79MyrssghzQ4vrnqXi0+9fZ341COdUTfwp4KYU6Xy/9dq386lE/783rurljEE3vUACg2JQF5sfpOw==</SSIS:Property>
+          <SSIS:Property SSIS:Name="PasswordVerifier" SSIS:Sensitive="1">AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAR6sqxbOS7k2wO9DJZaYSgAAAAAACAAAAAAAQZgAAAAEAACAAAACVEsfzl4m99UJCMRYIuXLoPZU8o/aqRayolCWviMSlmgAAAAAOgAAAAAIAACAAAACjtiHSHwL/5h9UmbZYC/47GI6yizPLBv5/j6iNIzUreZAAAAC7WWFLp0YY7gpMhqTwO2Gy8ShitbFdNWyUSnvwagn9BiXsivT8ZdNn8TOFyQHGtKLIkLcKn2b2VIoMEXdpKIPtx8kluEEGGm6/rSXXb+4n2qV4BvCXBQdD2QMEU5lVcF3RLvft/TjaKjdXxoMOBrSSuewr8D57sl4ABcYUwyry6awZUfsTth1o8AQKnftF8wtAAAAArEbumpc8XwPCSWEiBg6+SdHLR0CY0TnNLxwwzTu3zfOwQVkcPQDGVYc+xaUC0SH+5ABiZCRmhfNUYoFzjmfovQ==</SSIS:Property>
           <SSIS:Property SSIS:Name="FormatVersion">1</SSIS:Property>
         </SSIS:Properties>
         <SSIS:Packages>
@@ -35,6 +35,7 @@
           <SSIS:Package SSIS:Name="Shipper.dtsx" SSIS:EntryPoint="1" />
           <SSIS:Package SSIS:Name="Product.dtsx" SSIS:EntryPoint="1" />
           <SSIS:Package SSIS:Name="Customer.dtsx" SSIS:EntryPoint="1" />
+          <SSIS:Package SSIS:Name="Orders.dtsx" SSIS:EntryPoint="1" />
         </SSIS:Packages>
         <SSIS:ConnectionManagers>
           <SSIS:ConnectionManager SSIS:Name="(local).NorthWind OLTP.conmgr" />
@@ -422,6 +423,23 @@
                 <SSIS:Property SSIS:Name="VersionComments">
                 </SSIS:Property>
                 <SSIS:Property SSIS:Name="VersionGUID">{278BB8A9-2484-4A0F-BDDD-AE3FD2DE72C3}</SSIS:Property>
+                <SSIS:Property SSIS:Name="PackageFormatVersion">8</SSIS:Property>
+                <SSIS:Property SSIS:Name="Description">
+                </SSIS:Property>
+                <SSIS:Property SSIS:Name="ProtectionLevel">1</SSIS:Property>
+              </SSIS:Properties>
+              <SSIS:Parameters />
+            </SSIS:PackageMetaData>
+            <SSIS:PackageMetaData SSIS:Name="Orders.dtsx">
+              <SSIS:Properties>
+                <SSIS:Property SSIS:Name="ID">{0D2F8A6B-F3CF-4284-9623-13FAFF87F1AC}</SSIS:Property>
+                <SSIS:Property SSIS:Name="Name">Orders</SSIS:Property>
+                <SSIS:Property SSIS:Name="VersionMajor">1</SSIS:Property>
+                <SSIS:Property SSIS:Name="VersionMinor">0</SSIS:Property>
+                <SSIS:Property SSIS:Name="VersionBuild">45</SSIS:Property>
+                <SSIS:Property SSIS:Name="VersionComments">
+                </SSIS:Property>
+                <SSIS:Property SSIS:Name="VersionGUID">{CA9053F1-1EB2-4EE9-B15D-AFF9004EE74F}</SSIS:Property>
                 <SSIS:Property SSIS:Name="PackageFormatVersion">8</SSIS:Property>
                 <SSIS:Property SSIS:Name="Description">
                 </SSIS:Property>

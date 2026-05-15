@@ -106,5 +106,6 @@
     <Build Include="dbo\Stored Procedures\SalesByCategory.sql" />
     <Build Include="dbo\Stored Procedures\GetShippersChangesByRowVersion.sql" />
     <Build Include="dbo\Stored Procedures\GetDates.sql" />
+    <Build Include="dbo\Stored Procedures\GetOrderChangesByRowVersion.sql" />
   </ItemGroup>
 </Project>
