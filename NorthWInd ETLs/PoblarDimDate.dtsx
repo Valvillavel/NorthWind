@@ -11,10 +11,36 @@
   DTS:LocaleID="3082"
   DTS:ObjectName="Package"
   DTS:PackageType="5"
-  DTS:VersionBuild="26"
-  DTS:VersionGUID="{E9581C44-B15B-4EF9-8D96-1F4D15383370}">
+  DTS:VersionBuild="27"
+  DTS:VersionGUID="{9F930B3E-AE42-4AF1-91B7-2943B0CA17D3}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
+  <DTS:ConnectionManagers>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[(local).NorthWind DW]"
+      DTS:CreationName="OLEDB"
+      DTS:DTSID="{BDE833BD-FF28-47BE-B022-9C6FA832B44B}"
+      DTS:ObjectName="(local).NorthWind DW">
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectRetryCount="1"
+          DTS:ConnectRetryInterval="5"
+          DTS:ConnectionString="Data Source=(local);User ID=;Initial Catalog=NorthWind DW;Provider=MSOLEDBSQL.1;Persist Security Info=False;Integrated Security=SSPI;Initial File Name=;Trust Server Certificate=True;Server SPN=;Authentication=;Access Token=;Application Name=SSIS-Package-{BDE833BD-FF28-47BE-B022-9C6FA832B44B}(local).NorthWind DW;Auto Translate=False;" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[(local).NorthWind OLTP]"
+      DTS:CreationName="OLEDB"
+      DTS:DTSID="{46B2374A-738C-4881-986F-E080BD5D2D70}"
+      DTS:ObjectName="(local).NorthWind OLTP">
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectRetryCount="1"
+          DTS:ConnectRetryInterval="5"
+          DTS:ConnectionString="Data Source=(local);User ID=;Initial Catalog=NorthWind OLTP;Provider=MSOLEDBSQL.1;Persist Security Info=False;Integrated Security=SSPI;Initial File Name=;Trust Server Certificate=True;Server SPN=;Authentication=;Access Token=;Application Name=SSIS-Package-{46B2374A-738C-4881-986F-E080BD5D2D70}(local).NorthWind OLTP;Auto Translate=False;" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+  </DTS:ConnectionManagers>
   <DTS:Variables />
   <DTS:Executables>
     <DTS:Executable
@@ -539,8 +565,8 @@
               <connections>
                 <connection
                   refId="Package\PoblarDimDate\DW DimDate.Connections[OleDbConnection]"
-                  connectionManagerID="{CFD330A3-C07D-41DF-9AB1-647CA3682C27}:external"
-                  connectionManagerRefId="Project.ConnectionManagers[(local).NorthWind DW]"
+                  connectionManagerID="Package.ConnectionManagers[(local).NorthWind DW]"
+                  connectionManagerRefId="Package.ConnectionManagers[(local).NorthWind DW]"
                   description="La conexión de tiempo de ejecución OLE DB usada para obtener acceso a la base de datos."
                   name="OleDbConnection" />
               </connections>
@@ -938,8 +964,8 @@
               <connections>
                 <connection
                   refId="Package\PoblarDimDate\Insertar a DimDate.Connections[OleDbConnection]"
-                  connectionManagerID="{CFD330A3-C07D-41DF-9AB1-647CA3682C27}:external"
-                  connectionManagerRefId="Project.ConnectionManagers[(local).NorthWind DW]"
+                  connectionManagerID="Package.ConnectionManagers[(local).NorthWind DW]"
+                  connectionManagerRefId="Package.ConnectionManagers[(local).NorthWind DW]"
                   description="La conexión de tiempo de ejecución OLE DB usada para obtener acceso a la base de datos."
                   name="OleDbConnection" />
               </connections>
@@ -1726,7 +1752,7 @@
                 <property
                   dataType="System.String"
                   description="Especifica el nombre del objeto de base de datos usado para abrir un conjunto de filas."
-                  name="OpenRowset"></property>
+                  name="OpenRowset">[dbo].[Orders]</property>
                 <property
                   dataType="System.String"
                   description="Especifica la variable que contiene el nombre del objeto de base de datos usado para abrir un conjunto de filas."
@@ -1761,8 +1787,8 @@
               <connections>
                 <connection
                   refId="Package\PoblarDimDate\Origen de OLE DB.Connections[OleDbConnection]"
-                  connectionManagerID="{3E92AD33-7C25-4428-ADCE-7C074B0B09EB}:external"
-                  connectionManagerRefId="Project.ConnectionManagers[(local).NorthWind OLTP]"
+                  connectionManagerID="Package.ConnectionManagers[(local).NorthWind OLTP]"
+                  connectionManagerRefId="Package.ConnectionManagers[(local).NorthWind OLTP]"
                   description="La conexión de tiempo de ejecución OLE DB usada para obtener acceso a la base de datos."
                   name="OleDbConnection" />
               </connections>
@@ -2142,21 +2168,77 @@
       <GraphLayout
         Capacity="16" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mssgm="clr-namespace:Microsoft.SqlServer.Graph.Model;assembly=Microsoft.SqlServer.Graph">
         <NodeLayout
-          Size="170.4,41.6"
-          Id="Package\PoblarDimDate\División condicional"
-          TopLeft="139.485713571066,330.352940886903" />
+          Size="163.2,41.6"
+          Id="Package\PoblarDimDate\Origen de OLE DB"
+          TopLeft="37.1428572219245,19.1647058816827" />
+        <NodeLayout
+          Size="168.8,41.6"
+          Id="Package\PoblarDimDate\Insertar a DimDate"
+          TopLeft="142.142857445442,422.423529260278" />
         <NodeLayout
           Size="125.6,41.6"
           Id="Package\PoblarDimDate\Ordenar 1"
           TopLeft="54.9428562533486,125.411764595954" />
         <NodeLayout
-          Size="188.8,41.6"
-          Id="Package\PoblarDimDate\Combinación de mezcla"
-          TopLeft="128.057142118167,249.752940966668" />
+          Size="170.4,41.6"
+          Id="Package\PoblarDimDate\División condicional"
+          TopLeft="139.485713571066,330.352940886903" />
         <NodeLayout
           Size="125.6,41.6"
           Id="Package\PoblarDimDate\Ordenar 2"
           TopLeft="283.857142448121,121.317646962301" />
+        <NodeLayout
+          Size="188.8,41.6"
+          Id="Package\PoblarDimDate\Combinación de mezcla"
+          TopLeft="128.057142118167,249.752940966668" />
+        <NodeLayout
+          Size="139.2,41.6"
+          Id="Package\PoblarDimDate\DW DimDate"
+          TopLeft="274.285714869596,17.5882352787009" />
+        <EdgeLayout
+          Id="Package\PoblarDimDate.Paths[Salida de origen de OLE DB1]"
+          TopLeft="118.242856737637,60.7647058816827">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,64.6470587142713"
+              Start="0,0"
+              End="0,57.1470587142713">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,57.1470587142713" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\PoblarDimDate.Paths[Salida de origen de OLE DB]"
+          TopLeft="345.271428658859,59.1882352787009">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,62.1294116836002"
+              Start="0,0"
+              End="0,54.6294116836002">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,54.6294116836002" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
         <EdgeLayout
           Id="Package\PoblarDimDate.Paths[Salida de ordenación1]"
           TopLeft="346.657142448121,162.917646962301">
@@ -2247,36 +2329,6 @@
             <EdgeLabelCollection />
           </EdgeLayout.Labels>
         </EdgeLayout>
-        <NodeLayout
-          Size="139.2,41.6"
-          Id="Package\PoblarDimDate\DW DimDate"
-          TopLeft="274.285714869596,17.5882352787009" />
-        <EdgeLayout
-          Id="Package\PoblarDimDate.Paths[Salida de origen de OLE DB]"
-          TopLeft="345.271428658859,59.1882352787009">
-          <EdgeLayout.Curve>
-            <mssgle:Curve
-              StartConnector="{assembly:Null}"
-              EndConnector="0,62.1294116836002"
-              Start="0,0"
-              End="0,54.6294116836002">
-              <mssgle:Curve.Segments>
-                <mssgle:SegmentCollection
-                  Capacity="5">
-                  <mssgle:LineSegment
-                    End="0,54.6294116836002" />
-                </mssgle:SegmentCollection>
-              </mssgle:Curve.Segments>
-            </mssgle:Curve>
-          </EdgeLayout.Curve>
-          <EdgeLayout.Labels>
-            <EdgeLabelCollection />
-          </EdgeLayout.Labels>
-        </EdgeLayout>
-        <NodeLayout
-          Size="168.8,41.6"
-          Id="Package\PoblarDimDate\Insertar a DimDate"
-          TopLeft="142.142857445442,422.423529260278" />
         <EdgeLayout
           Id="Package\PoblarDimDate.Paths[Nuevo Registro]"
           TopLeft="225.614285508254,371.952940886903">
@@ -2301,37 +2353,11 @@
               RelativePosition="Any" />
           </EdgeLayout.Labels>
         </EdgeLayout>
-        <NodeLayout
-          Size="163.2,41.6"
-          Id="Package\PoblarDimDate\Origen de OLE DB"
-          TopLeft="37.1428572219245,19.1647058816827" />
-        <EdgeLayout
-          Id="Package\PoblarDimDate.Paths[Salida de origen de OLE DB1]"
-          TopLeft="118.242856737637,60.7647058816827">
-          <EdgeLayout.Curve>
-            <mssgle:Curve
-              StartConnector="{assembly:Null}"
-              EndConnector="0,64.6470587142713"
-              Start="0,0"
-              End="0,57.1470587142713">
-              <mssgle:Curve.Segments>
-                <mssgle:SegmentCollection
-                  Capacity="5">
-                  <mssgle:LineSegment
-                    End="0,57.1470587142713" />
-                </mssgle:SegmentCollection>
-              </mssgle:Curve.Segments>
-            </mssgle:Curve>
-          </EdgeLayout.Curve>
-          <EdgeLayout.Labels>
-            <EdgeLabelCollection />
-          </EdgeLayout.Labels>
-        </EdgeLayout>
       </GraphLayout>
     </LayoutInfo>
   </TaskHost>
   <PipelineComponentMetadata
-    design-time-name="Package\PoblarDimDate\DW DimDate">
+    design-time-name="Package\PoblarDimDate\Origen de OLE DB">
     <Properties>
       <Property>
         <Name>DataSourceViewID</Name>
@@ -2357,10 +2383,15 @@
     </Properties>
   </PipelineComponentMetadata>
   <PipelineComponentMetadata
-    design-time-name="Package\PoblarDimDate\Origen de OLE DB">
+    design-time-name="Package\PoblarDimDate\DW DimDate">
     <Properties>
       <Property>
         <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
       </Property>
     </Properties>
   </PipelineComponentMetadata>

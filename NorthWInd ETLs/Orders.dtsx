@@ -11,10 +11,36 @@
   DTS:LocaleID="16394"
   DTS:ObjectName="Orders"
   DTS:PackageType="5"
-  DTS:VersionBuild="77"
-  DTS:VersionGUID="{B84234A0-6966-4F42-99A3-ABA9A7671F5E}">
+  DTS:VersionBuild="79"
+  DTS:VersionGUID="{CF1B1587-D19E-4D60-BD92-310166E84EB1}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
+  <DTS:ConnectionManagers>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[(local).NorthWind DW]"
+      DTS:CreationName="OLEDB"
+      DTS:DTSID="{BFF36AD8-B872-427D-814C-8265E51C3BD3}"
+      DTS:ObjectName="(local).NorthWind DW">
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectRetryCount="1"
+          DTS:ConnectRetryInterval="5"
+          DTS:ConnectionString="Data Source=(local);User ID=;Initial Catalog=NorthWind DW;Provider=MSOLEDBSQL.1;Persist Security Info=False;Integrated Security=SSPI;Initial File Name=;Trust Server Certificate=True;Server SPN=;Authentication=;Access Token=;Application Name=SSIS-Orders-{BFF36AD8-B872-427D-814C-8265E51C3BD3}(local).NorthWind DW;Auto Translate=False;" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[(local).NorthWind OLTP]"
+      DTS:CreationName="OLEDB"
+      DTS:DTSID="{833C9A39-8990-40F4-8502-5A50B7B419C7}"
+      DTS:ObjectName="(local).NorthWind OLTP">
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectRetryCount="1"
+          DTS:ConnectRetryInterval="5"
+          DTS:ConnectionString="Data Source=(local);User ID=;Initial Catalog=NorthWind OLTP;Provider=MSOLEDBSQL.1;Persist Security Info=False;Integrated Security=SSPI;Initial File Name=;Trust Server Certificate=True;Server SPN=;Authentication=;Access Token=;Application Name=SSIS-Orders-{833C9A39-8990-40F4-8502-5A50B7B419C7}(local).NorthWind OLTP;Auto Translate=False;" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+  </DTS:ConnectionManagers>
   <DTS:Variables>
     <DTS:Variable
       DTS:CreationName=""
@@ -39,7 +65,7 @@
     <DTS:Executable
       DTS:refId="Package\Clean-up staging"
       DTS:CreationName="Microsoft.ExecuteSQLTask"
-      DTS:Description="Tarea Ejecutar SQL"
+      DTS:Description="DW"
       DTS:DTSID="{D9E10838-98D1-447F-8628-3155BD933870}"
       DTS:ExecutableType="Microsoft.ExecuteSQLTask"
       DTS:LocaleID="-1"
@@ -49,14 +75,14 @@
       <DTS:Variables />
       <DTS:ObjectData>
         <SQLTask:SqlTaskData
-          SQLTask:Connection="{CFD330A3-C07D-41DF-9AB1-647CA3682C27}"
+          SQLTask:Connection="{BFF36AD8-B872-427D-814C-8265E51C3BD3}"
           SQLTask:SqlStatementSource="TRUNCATE TABLE [staging].[Orders];" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
       </DTS:ObjectData>
     </DTS:Executable>
     <DTS:Executable
       DTS:refId="Package\Get Database Rowversion"
       DTS:CreationName="Microsoft.ExecuteSQLTask"
-      DTS:Description="Tarea Ejecutar SQL"
+      DTS:Description="OLTP"
       DTS:DTSID="{C69174E7-84BE-4A7A-AFBE-7C925090B192}"
       DTS:ExecutableType="Microsoft.ExecuteSQLTask"
       DTS:LocaleID="-1"
@@ -66,7 +92,7 @@
       <DTS:Variables />
       <DTS:ObjectData>
         <SQLTask:SqlTaskData
-          SQLTask:Connection="{3E92AD33-7C25-4428-ADCE-7C074B0B09EB}"
+          SQLTask:Connection="{833C9A39-8990-40F4-8502-5A50B7B419C7}"
           SQLTask:SqlStatementSource="EXECUTE [dbo].[GetDatabaseRowVersion]"
           SQLTask:ResultType="ResultSetType_SingleRow" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
           <SQLTask:ResultBinding
@@ -78,7 +104,7 @@
     <DTS:Executable
       DTS:refId="Package\Get LastRowVersion"
       DTS:CreationName="Microsoft.ExecuteSQLTask"
-      DTS:Description="Tarea Ejecutar SQL"
+      DTS:Description="DW"
       DTS:DTSID="{405C860F-B836-493C-9888-3E477BBA4283}"
       DTS:ExecutableType="Microsoft.ExecuteSQLTask"
       DTS:LocaleID="-1"
@@ -88,7 +114,7 @@
       <DTS:Variables />
       <DTS:ObjectData>
         <SQLTask:SqlTaskData
-          SQLTask:Connection="{CFD330A3-C07D-41DF-9AB1-647CA3682C27}"
+          SQLTask:Connection="{BFF36AD8-B872-427D-814C-8265E51C3BD3}"
           SQLTask:SqlStatementSource="EXECUTE [dbo].[GetLastPackageRowVersion] @PackageName = 'Orders'"
           SQLTask:ResultType="ResultSetType_SingleRow" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
           <SQLTask:ResultBinding
@@ -181,8 +207,8 @@ where [refTable].[CustomerID] = ?</property>
               <connections>
                 <connection
                   refId="Package\Load Orders\Buscar CustomerSK.Connections[OleDbConnection]"
-                  connectionManagerID="{CFD330A3-C07D-41DF-9AB1-647CA3682C27}:external"
-                  connectionManagerRefId="Project.ConnectionManagers[(local).NorthWind DW]"
+                  connectionManagerID="Package.ConnectionManagers[(local).NorthWind DW]"
+                  connectionManagerRefId="Package.ConnectionManagers[(local).NorthWind DW]"
                   description="Administrador de conexiones utilizado para obtener acceso a los datos de búsqueda."
                   name="OleDbConnection" />
               </connections>
@@ -340,8 +366,8 @@ where [refTable].[EmployeeID] = ?</property>
               <connections>
                 <connection
                   refId="Package\Load Orders\Buscar EmployeeSK.Connections[OleDbConnection]"
-                  connectionManagerID="{CFD330A3-C07D-41DF-9AB1-647CA3682C27}:external"
-                  connectionManagerRefId="Project.ConnectionManagers[(local).NorthWind DW]"
+                  connectionManagerID="Package.ConnectionManagers[(local).NorthWind DW]"
+                  connectionManagerRefId="Package.ConnectionManagers[(local).NorthWind DW]"
                   description="Administrador de conexiones utilizado para obtener acceso a los datos de búsqueda."
                   name="OleDbConnection" />
               </connections>
@@ -498,8 +524,8 @@ where [refTable].[ProductID] = ?</property>
               <connections>
                 <connection
                   refId="Package\Load Orders\Buscar ProductSK.Connections[OleDbConnection]"
-                  connectionManagerID="{CFD330A3-C07D-41DF-9AB1-647CA3682C27}:external"
-                  connectionManagerRefId="Project.ConnectionManagers[(local).NorthWind DW]"
+                  connectionManagerID="Package.ConnectionManagers[(local).NorthWind DW]"
+                  connectionManagerRefId="Package.ConnectionManagers[(local).NorthWind DW]"
                   description="Administrador de conexiones utilizado para obtener acceso a los datos de búsqueda."
                   name="OleDbConnection" />
               </connections>
@@ -656,8 +682,8 @@ where [refTable].[ShipperID] = ?</property>
               <connections>
                 <connection
                   refId="Package\Load Orders\Buscar ShipperSK.Connections[OleDbConnection]"
-                  connectionManagerID="{CFD330A3-C07D-41DF-9AB1-647CA3682C27}:external"
-                  connectionManagerRefId="Project.ConnectionManagers[(local).NorthWind DW]"
+                  connectionManagerID="Package.ConnectionManagers[(local).NorthWind DW]"
+                  connectionManagerRefId="Package.ConnectionManagers[(local).NorthWind DW]"
                   description="Administrador de conexiones utilizado para obtener acceso a los datos de búsqueda."
                   name="OleDbConnection" />
               </connections>
@@ -814,8 +840,8 @@ where [refTable].[FullDate] = ?</property>
               <connections>
                 <connection
                   refId="Package\Load Orders\BuscarDateOrderSK.Connections[OleDbConnection]"
-                  connectionManagerID="{CFD330A3-C07D-41DF-9AB1-647CA3682C27}:external"
-                  connectionManagerRefId="Project.ConnectionManagers[(local).NorthWind DW]"
+                  connectionManagerID="Package.ConnectionManagers[(local).NorthWind DW]"
+                  connectionManagerRefId="Package.ConnectionManagers[(local).NorthWind DW]"
                   description="Administrador de conexiones utilizado para obtener acceso a los datos de búsqueda."
                   name="OleDbConnection" />
               </connections>
@@ -972,8 +998,8 @@ where [refTable].[FullDate] = ?</property>
               <connections>
                 <connection
                   refId="Package\Load Orders\BuscarDateRequiredSK.Connections[OleDbConnection]"
-                  connectionManagerID="{CFD330A3-C07D-41DF-9AB1-647CA3682C27}:external"
-                  connectionManagerRefId="Project.ConnectionManagers[(local).NorthWind DW]"
+                  connectionManagerID="Package.ConnectionManagers[(local).NorthWind DW]"
+                  connectionManagerRefId="Package.ConnectionManagers[(local).NorthWind DW]"
                   description="Administrador de conexiones utilizado para obtener acceso a los datos de búsqueda."
                   name="OleDbConnection" />
               </connections>
@@ -1130,8 +1156,8 @@ where [refTable].[FullDate] = ?</property>
               <connections>
                 <connection
                   refId="Package\Load Orders\BuscarDateShippedSK.Connections[OleDbConnection]"
-                  connectionManagerID="{CFD330A3-C07D-41DF-9AB1-647CA3682C27}:external"
-                  connectionManagerRefId="Project.ConnectionManagers[(local).NorthWind DW]"
+                  connectionManagerID="Package.ConnectionManagers[(local).NorthWind DW]"
+                  connectionManagerRefId="Package.ConnectionManagers[(local).NorthWind DW]"
                   description="Administrador de conexiones utilizado para obtener acceso a los datos de búsqueda."
                   name="OleDbConnection" />
               </connections>
@@ -1288,8 +1314,8 @@ where [refTable].[OrderID] = ? and [refTable].[ProductID] = ?</property>
               <connections>
                 <connection
                   refId="Package\Load Orders\Búsqueda.Connections[OleDbConnection]"
-                  connectionManagerID="{CFD330A3-C07D-41DF-9AB1-647CA3682C27}:external"
-                  connectionManagerRefId="Project.ConnectionManagers[(local).NorthWind DW]"
+                  connectionManagerID="Package.ConnectionManagers[(local).NorthWind DW]"
+                  connectionManagerRefId="Package.ConnectionManagers[(local).NorthWind DW]"
                   description="Administrador de conexiones utilizado para obtener acceso a los datos de búsqueda."
                   name="OleDbConnection" />
               </connections>
@@ -1442,8 +1468,8 @@ where [refTable].[OrderID] = ? and [refTable].[ProductID] = ?</property>
               <connections>
                 <connection
                   refId="Package\Load Orders\Get Order.Connections[OleDbConnection]"
-                  connectionManagerID="{3E92AD33-7C25-4428-ADCE-7C074B0B09EB}:external"
-                  connectionManagerRefId="Project.ConnectionManagers[(local).NorthWind OLTP]"
+                  connectionManagerID="Package.ConnectionManagers[(local).NorthWind OLTP]"
+                  connectionManagerRefId="Package.ConnectionManagers[(local).NorthWind OLTP]"
                   description="La conexión de tiempo de ejecución OLE DB usada para obtener acceso a la base de datos."
                   name="OleDbConnection" />
               </connections>
@@ -1922,8 +1948,8 @@ where [refTable].[OrderID] = ? and [refTable].[ProductID] = ?</property>
               <connections>
                 <connection
                   refId="Package\Load Orders\Load Fact.Connections[OleDbConnection]"
-                  connectionManagerID="{CFD330A3-C07D-41DF-9AB1-647CA3682C27}:external"
-                  connectionManagerRefId="Project.ConnectionManagers[(local).NorthWind DW]"
+                  connectionManagerID="Package.ConnectionManagers[(local).NorthWind DW]"
+                  connectionManagerRefId="Package.ConnectionManagers[(local).NorthWind DW]"
                   description="La conexión de tiempo de ejecución OLE DB usada para obtener acceso a la base de datos."
                   name="OleDbConnection" />
               </connections>
@@ -2182,8 +2208,8 @@ where [refTable].[OrderID] = ? and [refTable].[ProductID] = ?</property>
               <connections>
                 <connection
                   refId="Package\Load Orders\Load staging.Connections[OleDbConnection]"
-                  connectionManagerID="{CFD330A3-C07D-41DF-9AB1-647CA3682C27}:external"
-                  connectionManagerRefId="Project.ConnectionManagers[(local).NorthWind DW]"
+                  connectionManagerID="Package.ConnectionManagers[(local).NorthWind DW]"
+                  connectionManagerRefId="Package.ConnectionManagers[(local).NorthWind DW]"
                   description="La conexión de tiempo de ejecución OLE DB usada para obtener acceso a la base de datos."
                   name="OleDbConnection" />
               </connections>
@@ -2517,7 +2543,7 @@ where [refTable].[OrderID] = ? and [refTable].[ProductID] = ?</property>
     <DTS:Executable
       DTS:refId="Package\Syn-Staging"
       DTS:CreationName="Microsoft.ExecuteSQLTask"
-      DTS:Description="Tarea Ejecutar SQL"
+      DTS:Description="DW"
       DTS:DTSID="{81B9CA30-550D-4103-BD58-97CF5A9175E5}"
       DTS:ExecutableType="Microsoft.ExecuteSQLTask"
       DTS:LocaleID="-1"
@@ -2527,14 +2553,14 @@ where [refTable].[OrderID] = ? and [refTable].[ProductID] = ?</property>
       <DTS:Variables />
       <DTS:ObjectData>
         <SQLTask:SqlTaskData
-          SQLTask:Connection="{CFD330A3-C07D-41DF-9AB1-647CA3682C27}"
+          SQLTask:Connection="{BFF36AD8-B872-427D-814C-8265E51C3BD3}"
           SQLTask:SqlStatementSource="EXECUTE [dbo].[DW_MergeFactOrders]" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
       </DTS:ObjectData>
     </DTS:Executable>
     <DTS:Executable
       DTS:refId="Package\Update config"
       DTS:CreationName="Microsoft.ExecuteSQLTask"
-      DTS:Description="Tarea Ejecutar SQL"
+      DTS:Description="DW"
       DTS:DTSID="{01F51DD8-CACE-4026-9496-FFD815FBA6D7}"
       DTS:ExecutableType="Microsoft.ExecuteSQLTask"
       DTS:LocaleID="-1"
@@ -2544,7 +2570,7 @@ where [refTable].[OrderID] = ? and [refTable].[ProductID] = ?</property>
       <DTS:Variables />
       <DTS:ObjectData>
         <SQLTask:SqlTaskData
-          SQLTask:Connection="{CFD330A3-C07D-41DF-9AB1-647CA3682C27}"
+          SQLTask:Connection="{BFF36AD8-B872-427D-814C-8265E51C3BD3}"
           SQLTask:SqlStatementSource="EXECUTE [dbo].[UpdateLastPackageRowVersion] @PackageName = 'Orders',@LastRowVersion = ?" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
           <SQLTask:ParameterBinding
             SQLTask:ParameterName="0"
@@ -3103,7 +3129,7 @@ where [refTable].[OrderID] = ? and [refTable].[ProductID] = ?</property>
       <Property>
         <Name>OverwriteParamsSQLProp</Name>
         <Value
-          type="q2:string">false</Value>
+          type="q2:boolean">false</Value>
       </Property>
       <Property>
         <Name>UsedTableName</Name>
@@ -3113,7 +3139,7 @@ where [refTable].[OrderID] = ? and [refTable].[ProductID] = ?</property>
       <Property>
         <Name>TableInfoObjectType</Name>
         <Value
-          type="q4:string">0</Value>
+          type="q4:int">0</Value>
       </Property>
       <Property>
         <Name>DataSourceViewID</Name>
@@ -3139,7 +3165,7 @@ where [refTable].[OrderID] = ? and [refTable].[ProductID] = ?</property>
       <Property>
         <Name>OverwriteParamsSQLProp</Name>
         <Value
-          type="q2:string">false</Value>
+          type="q2:boolean">false</Value>
       </Property>
       <Property>
         <Name>UsedTableName</Name>
@@ -3149,7 +3175,7 @@ where [refTable].[OrderID] = ? and [refTable].[ProductID] = ?</property>
       <Property>
         <Name>TableInfoObjectType</Name>
         <Value
-          type="q4:string">0</Value>
+          type="q4:int">0</Value>
       </Property>
       <Property>
         <Name>DataSourceViewID</Name>
@@ -3162,7 +3188,7 @@ where [refTable].[OrderID] = ? and [refTable].[ProductID] = ?</property>
       <Property>
         <Name>OverwriteParamsSQLProp</Name>
         <Value
-          type="q2:string">false</Value>
+          type="q2:boolean">false</Value>
       </Property>
       <Property>
         <Name>UsedTableName</Name>
@@ -3172,7 +3198,7 @@ where [refTable].[OrderID] = ? and [refTable].[ProductID] = ?</property>
       <Property>
         <Name>TableInfoObjectType</Name>
         <Value
-          type="q4:string">0</Value>
+          type="q4:int">0</Value>
       </Property>
       <Property>
         <Name>DataSourceViewID</Name>
@@ -3185,7 +3211,7 @@ where [refTable].[OrderID] = ? and [refTable].[ProductID] = ?</property>
       <Property>
         <Name>OverwriteParamsSQLProp</Name>
         <Value
-          type="q2:string">false</Value>
+          type="q2:boolean">false</Value>
       </Property>
       <Property>
         <Name>UsedTableName</Name>
@@ -3195,7 +3221,7 @@ where [refTable].[OrderID] = ? and [refTable].[ProductID] = ?</property>
       <Property>
         <Name>TableInfoObjectType</Name>
         <Value
-          type="q4:string">0</Value>
+          type="q4:int">0</Value>
       </Property>
       <Property>
         <Name>DataSourceViewID</Name>
@@ -3208,7 +3234,7 @@ where [refTable].[OrderID] = ? and [refTable].[ProductID] = ?</property>
       <Property>
         <Name>OverwriteParamsSQLProp</Name>
         <Value
-          type="q2:string">false</Value>
+          type="q2:boolean">false</Value>
       </Property>
       <Property>
         <Name>UsedTableName</Name>
@@ -3218,7 +3244,7 @@ where [refTable].[OrderID] = ? and [refTable].[ProductID] = ?</property>
       <Property>
         <Name>TableInfoObjectType</Name>
         <Value
-          type="q4:string">0</Value>
+          type="q4:int">0</Value>
       </Property>
       <Property>
         <Name>DataSourceViewID</Name>
@@ -3252,7 +3278,7 @@ where [refTable].[OrderID] = ? and [refTable].[ProductID] = ?</property>
       <Property>
         <Name>OverwriteParamsSQLProp</Name>
         <Value
-          type="q2:string">false</Value>
+          type="q2:boolean">false</Value>
       </Property>
       <Property>
         <Name>UsedTableName</Name>
@@ -3262,7 +3288,7 @@ where [refTable].[OrderID] = ? and [refTable].[ProductID] = ?</property>
       <Property>
         <Name>TableInfoObjectType</Name>
         <Value
-          type="q4:string">0</Value>
+          type="q4:int">0</Value>
       </Property>
       <Property>
         <Name>DataSourceViewID</Name>
@@ -3275,7 +3301,7 @@ where [refTable].[OrderID] = ? and [refTable].[ProductID] = ?</property>
       <Property>
         <Name>OverwriteParamsSQLProp</Name>
         <Value
-          type="q2:string">false</Value>
+          type="q2:boolean">false</Value>
       </Property>
       <Property>
         <Name>UsedTableName</Name>
@@ -3285,7 +3311,7 @@ where [refTable].[OrderID] = ? and [refTable].[ProductID] = ?</property>
       <Property>
         <Name>TableInfoObjectType</Name>
         <Value
-          type="q4:string">0</Value>
+          type="q4:int">0</Value>
       </Property>
       <Property>
         <Name>DataSourceViewID</Name>
@@ -3298,7 +3324,7 @@ where [refTable].[OrderID] = ? and [refTable].[ProductID] = ?</property>
       <Property>
         <Name>OverwriteParamsSQLProp</Name>
         <Value
-          type="q2:string">false</Value>
+          type="q2:boolean">false</Value>
       </Property>
       <Property>
         <Name>UsedTableName</Name>
@@ -3308,7 +3334,7 @@ where [refTable].[OrderID] = ? and [refTable].[ProductID] = ?</property>
       <Property>
         <Name>TableInfoObjectType</Name>
         <Value
-          type="q4:string">0</Value>
+          type="q4:int">0</Value>
       </Property>
       <Property>
         <Name>DataSourceViewID</Name>

@@ -11,10 +11,36 @@
   DTS:LocaleID="3082"
   DTS:ObjectName="Employeee"
   DTS:PackageType="5"
-  DTS:VersionBuild="36"
-  DTS:VersionGUID="{92E5D7A8-4303-4CC9-8D9B-906A91398901}">
+  DTS:VersionBuild="41"
+  DTS:VersionGUID="{554D65C3-778C-477D-BB9D-4B12DC70D884}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
+  <DTS:ConnectionManagers>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[(local).NorthWind DW]"
+      DTS:CreationName="OLEDB"
+      DTS:DTSID="{0E084198-4316-4EBC-979B-553D37EC4FC0}"
+      DTS:ObjectName="(local).NorthWind DW">
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectRetryCount="1"
+          DTS:ConnectRetryInterval="5"
+          DTS:ConnectionString="Data Source=LAPTOP-MA75E46U;Initial Catalog=NorthWind DW;Provider=SQLOLEDB.1;Integrated Security=SSPI;Application Name=SSIS-Employeee-{0E084198-4316-4EBC-979B-553D37EC4FC0}(local).NorthWind DW;" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[(local).NorthWind OLTP]"
+      DTS:CreationName="OLEDB"
+      DTS:DTSID="{020A8AE8-FC10-4A8D-A6E0-B56F54DF3740}"
+      DTS:ObjectName="(local).NorthWind OLTP">
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectRetryCount="1"
+          DTS:ConnectRetryInterval="5"
+          DTS:ConnectionString="Data Source=LAPTOP-MA75E46U;Initial Catalog=NorthWind OLTP;Provider=SQLOLEDB.1;Integrated Security=SSPI;Application Name=SSIS-Employeee-{020A8AE8-FC10-4A8D-A6E0-B56F54DF3740}(local).NorthWind OLTP;" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+  </DTS:ConnectionManagers>
   <DTS:Variables>
     <DTS:Variable
       DTS:CreationName=""
@@ -49,7 +75,7 @@
       <DTS:Variables />
       <DTS:ObjectData>
         <SQLTask:SqlTaskData
-          SQLTask:Connection="{3E92AD33-7C25-4428-ADCE-7C074B0B09EB}"
+          SQLTask:Connection="{020A8AE8-FC10-4A8D-A6E0-B56F54DF3740}"
           SQLTask:SqlStatementSource="EXECUTE [dbo].[GetDatabaseRowVersion] "
           SQLTask:ResultType="ResultSetType_SingleRow" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
           <SQLTask:ResultBinding
@@ -71,7 +97,7 @@
       <DTS:Variables />
       <DTS:ObjectData>
         <SQLTask:SqlTaskData
-          SQLTask:Connection="{CFD330A3-C07D-41DF-9AB1-647CA3682C27}"
+          SQLTask:Connection="{0E084198-4316-4EBC-979B-553D37EC4FC0}"
           SQLTask:SqlStatementSource="EXECUTE [dbo].[GetLastPackageRowVersion] &#xA;   @PackageName = 'Employee'"
           SQLTask:ResultType="ResultSetType_SingleRow" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
           <SQLTask:ResultBinding
@@ -93,7 +119,7 @@
       <DTS:Variables />
       <DTS:ObjectData>
         <SQLTask:SqlTaskData
-          SQLTask:Connection="{CFD330A3-C07D-41DF-9AB1-647CA3682C27}"
+          SQLTask:Connection="{0E084198-4316-4EBC-979B-553D37EC4FC0}"
           SQLTask:SqlStatementSource=" TRUNCATE TABLE [staging].[Employee]" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
       </DTS:ObjectData>
     </DTS:Executable>
@@ -181,8 +207,8 @@ where [refTable].[EmployeeID] = ?</property>
               <connections>
                 <connection
                   refId="Package\Load Employees\Búsqueda.Connections[OleDbConnection]"
-                  connectionManagerID="{CFD330A3-C07D-41DF-9AB1-647CA3682C27}:external"
-                  connectionManagerRefId="Project.ConnectionManagers[(local).NorthWind DW]"
+                  connectionManagerID="Package.ConnectionManagers[(local).NorthWind DW]"
+                  connectionManagerRefId="Package.ConnectionManagers[(local).NorthWind DW]"
                   description="Administrador de conexiones utilizado para obtener acceso a los datos de búsqueda."
                   name="OleDbConnection" />
               </connections>
@@ -321,8 +347,8 @@ where [refTable].[EmployeeID] = ?</property>
               <connections>
                 <connection
                   refId="Package\Load Employees\Get Employee from OLTP.Connections[OleDbConnection]"
-                  connectionManagerID="{3E92AD33-7C25-4428-ADCE-7C074B0B09EB}:external"
-                  connectionManagerRefId="Project.ConnectionManagers[(local).NorthWind OLTP]"
+                  connectionManagerID="Package.ConnectionManagers[(local).NorthWind OLTP]"
+                  connectionManagerRefId="Package.ConnectionManagers[(local).NorthWind OLTP]"
                   description="La conexión de tiempo de ejecución OLE DB usada para obtener acceso a la base de datos."
                   name="OleDbConnection" />
               </connections>
@@ -861,8 +887,8 @@ where [refTable].[EmployeeID] = ?</property>
               <connections>
                 <connection
                   refId="Package\Load Employees\To DimEmployee.Connections[OleDbConnection]"
-                  connectionManagerID="{CFD330A3-C07D-41DF-9AB1-647CA3682C27}:external"
-                  connectionManagerRefId="Project.ConnectionManagers[(local).NorthWind DW]"
+                  connectionManagerID="Package.ConnectionManagers[(local).NorthWind DW]"
+                  connectionManagerRefId="Package.ConnectionManagers[(local).NorthWind DW]"
                   description="La conexión de tiempo de ejecución OLE DB usada para obtener acceso a la base de datos."
                   name="OleDbConnection" />
               </connections>
@@ -1196,8 +1222,8 @@ where [refTable].[EmployeeID] = ?</property>
               <connections>
                 <connection
                   refId="Package\Load Employees\To Staging.Connections[OleDbConnection]"
-                  connectionManagerID="{CFD330A3-C07D-41DF-9AB1-647CA3682C27}:external"
-                  connectionManagerRefId="Project.ConnectionManagers[(local).NorthWind DW]"
+                  connectionManagerID="Package.ConnectionManagers[(local).NorthWind DW]"
+                  connectionManagerRefId="Package.ConnectionManagers[(local).NorthWind DW]"
                   description="La conexión de tiempo de ejecución OLE DB usada para obtener acceso a la base de datos."
                   name="OleDbConnection" />
               </connections>
@@ -1482,7 +1508,7 @@ where [refTable].[EmployeeID] = ?</property>
       <DTS:Variables />
       <DTS:ObjectData>
         <SQLTask:SqlTaskData
-          SQLTask:Connection="{CFD330A3-C07D-41DF-9AB1-647CA3682C27}"
+          SQLTask:Connection="{0E084198-4316-4EBC-979B-553D37EC4FC0}"
           SQLTask:SqlStatementSource="EXECUTE [dbo].[DW_MergeDimEmployee] " xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
       </DTS:ObjectData>
     </DTS:Executable>
@@ -1499,7 +1525,7 @@ where [refTable].[EmployeeID] = ?</property>
       <DTS:Variables />
       <DTS:ObjectData>
         <SQLTask:SqlTaskData
-          SQLTask:Connection="{CFD330A3-C07D-41DF-9AB1-647CA3682C27}"
+          SQLTask:Connection="{0E084198-4316-4EBC-979B-553D37EC4FC0}"
           SQLTask:SqlStatementSource="EXECUTE [dbo].[UpdateLastPackageRowVersion] &#xA;   @PackageName = 'Employee', @LastRowVersion = ?" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
           <SQLTask:ParameterBinding
             SQLTask:ParameterName="0"
@@ -1712,10 +1738,6 @@ where [refTable].[EmployeeID] = ?</property>
           Id="Package\Load Employees\Get Employee from OLTP"
           TopLeft="40.7142858009557,25.2352940955274" />
         <NodeLayout
-          Size="124,41.6"
-          Id="Package\Load Employees\Búsqueda"
-          TopLeft="72.1428572964304,120.058823424176" />
-        <NodeLayout
           Size="128.8,41.6"
           Id="Package\Load Employees\To Staging"
           TopLeft="19.2857143267684,268.411764470609" />
@@ -1723,6 +1745,10 @@ where [refTable].[EmployeeID] = ?</property>
           Size="157.6,41.6"
           Id="Package\Load Employees\To DimEmployee"
           TopLeft="290.000000617334,243.87058806571" />
+        <NodeLayout
+          Size="124,41.6"
+          Id="Package\Load Employees\Búsqueda"
+          TopLeft="72.1428572964304,120.058823424176" />
         <EdgeLayout
           Id="Package\Load Employees.Paths[Salida de origen de OLE DB]"
           TopLeft="136.828571548693,66.8352940955274">
@@ -1743,42 +1769,6 @@ where [refTable].[EmployeeID] = ?</property>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
             <EdgeLabelCollection />
-          </EdgeLayout.Labels>
-        </EdgeLayout>
-        <EdgeLayout
-          Id="Package\Load Employees.Paths[Salida de entradas coincidentes de búsqueda]"
-          TopLeft="114.809523963097,161.658823424176">
-          <EdgeLayout.Curve>
-            <mssgle:Curve
-              StartConnector="{assembly:Null}"
-              EndConnector="-31.1238096363287,106.752941046433"
-              Start="0,0"
-              End="-31.1238096363287,99.252941046433">
-              <mssgle:Curve.Segments>
-                <mssgle:SegmentCollection
-                  Capacity="5">
-                  <mssgle:LineSegment
-                    End="0,39.517122464788" />
-                  <mssgle:CubicBezierSegment
-                    Point1="0,39.517122464788"
-                    Point2="0,43.517122464788"
-                    Point3="-4,43.517122464788" />
-                  <mssgle:LineSegment
-                    End="-27.1238096363287,43.517122464788" />
-                  <mssgle:CubicBezierSegment
-                    Point1="-27.1238096363287,43.517122464788"
-                    Point2="-31.1238096363287,43.517122464788"
-                    Point3="-31.1238096363287,47.517122464788" />
-                  <mssgle:LineSegment
-                    End="-31.1238096363287,99.252941046433" />
-                </mssgle:SegmentCollection>
-              </mssgle:Curve.Segments>
-            </mssgle:Curve>
-          </EdgeLayout.Curve>
-          <EdgeLayout.Labels>
-            <mssgm:EdgeLabel
-              BoundingBox="-115.380928255664,48.517122464788,199.638046875,12.1953125"
-              RelativePosition="Any" />
           </EdgeLayout.Labels>
         </EdgeLayout>
         <EdgeLayout
@@ -1814,6 +1804,42 @@ where [refTable].[EmployeeID] = ?</property>
           <EdgeLayout.Labels>
             <mssgm:EdgeLabel
               BoundingBox="0.772881556285157,38.5130760322177,213.778046875,12.1953125"
+              RelativePosition="Any" />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Load Employees.Paths[Salida de entradas coincidentes de búsqueda]"
+          TopLeft="114.809523963097,161.658823424176">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="-31.1238096363287,106.752941046433"
+              Start="0,0"
+              End="-31.1238096363287,99.252941046433">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,39.517122464788" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,39.517122464788"
+                    Point2="0,43.517122464788"
+                    Point3="-4,43.517122464788" />
+                  <mssgle:LineSegment
+                    End="-27.1238096363287,43.517122464788" />
+                  <mssgle:CubicBezierSegment
+                    Point1="-27.1238096363287,43.517122464788"
+                    Point2="-31.1238096363287,43.517122464788"
+                    Point3="-31.1238096363287,47.517122464788" />
+                  <mssgle:LineSegment
+                    End="-31.1238096363287,99.252941046433" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <mssgm:EdgeLabel
+              BoundingBox="-115.380928255664,48.517122464788,199.638046875,12.1953125"
               RelativePosition="Any" />
           </EdgeLayout.Labels>
         </EdgeLayout>
@@ -1865,7 +1891,7 @@ where [refTable].[EmployeeID] = ?</property>
       <Property>
         <Name>OverwriteParamsSQLProp</Name>
         <Value
-          type="q2:string">false</Value>
+          type="q2:boolean">false</Value>
       </Property>
       <Property>
         <Name>UsedTableName</Name>
@@ -1875,7 +1901,7 @@ where [refTable].[EmployeeID] = ?</property>
       <Property>
         <Name>TableInfoObjectType</Name>
         <Value
-          type="q4:string">0</Value>
+          type="q4:int">0</Value>
       </Property>
       <Property>
         <Name>DataSourceViewID</Name>

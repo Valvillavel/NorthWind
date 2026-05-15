@@ -11,10 +11,36 @@
   DTS:LocaleID="3082"
   DTS:ObjectName="Customer"
   DTS:PackageType="5"
-  DTS:VersionBuild="8"
-  DTS:VersionGUID="{E84BE2EE-696C-41C3-9400-FF6164B0C73E}">
+  DTS:VersionBuild="9"
+  DTS:VersionGUID="{0FE3B9F6-AFCB-4892-8ACC-DE83377B93CB}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
+  <DTS:ConnectionManagers>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[(local).NorthWind DW]"
+      DTS:CreationName="OLEDB"
+      DTS:DTSID="{CFD330A3-C07D-41DF-9AB1-647CA3682C27}"
+      DTS:ObjectName="(local).NorthWind DW">
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectRetryCount="1"
+          DTS:ConnectRetryInterval="5"
+          DTS:ConnectionString="Data Source=LAPTOP-MA75E46U;Initial Catalog=NorthWind DW;Provider=SQLOLEDB.1;Integrated Security=SSPI;Application Name=SSIS-{CFD330A3-C07D-41DF-9AB1-647CA3682C27}(local).NorthWind DW;" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[(local).NorthWind OLTP]"
+      DTS:CreationName="OLEDB"
+      DTS:DTSID="{3E92AD33-7C25-4428-ADCE-7C074B0B09EB}"
+      DTS:ObjectName="(local).NorthWind OLTP">
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectRetryCount="1"
+          DTS:ConnectRetryInterval="5"
+          DTS:ConnectionString="Data Source=LAPTOP-MA75E46U;Initial Catalog=NorthWind OLTP;Provider=SQLOLEDB.1;Integrated Security=SSPI;Application Name=SSIS-{3E92AD33-7C25-4428-ADCE-7C074B0B09EB}(local).NorthWind OLTP;" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+  </DTS:ConnectionManagers>
   <DTS:Variables>
     <DTS:Variable
       DTS:CreationName=""
@@ -163,7 +189,7 @@ where [refTable].[CustomerID] = ?</property>
                 <property
                   containsID="true"
                   dataType="System.String"
-                  name="ParameterMap">#{Package\Load Customers\39:invalid};</property>
+                  name="ParameterMap">#{Package\Load Customers\178:invalid};</property>
                 <property
                   dataType="System.Int32"
                   name="DefaultCodePage">1252</property>
@@ -174,8 +200,8 @@ where [refTable].[CustomerID] = ?</property>
               <connections>
                 <connection
                   refId="Package\Load Customers\Búsqueda.Connections[OleDbConnection]"
-                  connectionManagerID="{CFD330A3-C07D-41DF-9AB1-647CA3682C27}:external"
-                  connectionManagerRefId="Project.ConnectionManagers[(local).NorthWind DW]"
+                  connectionManagerID="Package.ConnectionManagers[(local).NorthWind DW]"
+                  connectionManagerRefId="Package.ConnectionManagers[(local).NorthWind DW]"
                   description="Administrador de conexiones utilizado para obtener acceso a los datos de búsqueda."
                   name="OleDbConnection" />
               </connections>
@@ -312,8 +338,8 @@ where [refTable].[CustomerID] = ?</property>
               <connections>
                 <connection
                   refId="Package\Load Customers\Get Employee from OLTP.Connections[OleDbConnection]"
-                  connectionManagerID="{3E92AD33-7C25-4428-ADCE-7C074B0B09EB}:external"
-                  connectionManagerRefId="Project.ConnectionManagers[(local).NorthWind OLTP]"
+                  connectionManagerID="Package.ConnectionManagers[(local).NorthWind OLTP]"
+                  connectionManagerRefId="Package.ConnectionManagers[(local).NorthWind OLTP]"
                   description="La conexión de tiempo de ejecución OLE DB usada para obtener acceso a la base de datos."
                   name="OleDbConnection" />
               </connections>
@@ -667,8 +693,8 @@ where [refTable].[CustomerID] = ?</property>
               <connections>
                 <connection
                   refId="Package\Load Customers\To DimCustomer.Connections[OleDbConnection]"
-                  connectionManagerID="{CFD330A3-C07D-41DF-9AB1-647CA3682C27}:external"
-                  connectionManagerRefId="Project.ConnectionManagers[(local).NorthWind DW]"
+                  connectionManagerID="Package.ConnectionManagers[(local).NorthWind DW]"
+                  connectionManagerRefId="Package.ConnectionManagers[(local).NorthWind DW]"
                   description="La conexión de tiempo de ejecución OLE DB usada para obtener acceso a la base de datos."
                   name="OleDbConnection" />
               </connections>
@@ -925,8 +951,8 @@ where [refTable].[CustomerID] = ?</property>
               <connections>
                 <connection
                   refId="Package\Load Customers\To Staging.Connections[OleDbConnection]"
-                  connectionManagerID="{CFD330A3-C07D-41DF-9AB1-647CA3682C27}:external"
-                  connectionManagerRefId="Project.ConnectionManagers[(local).NorthWind DW]"
+                  connectionManagerID="Package.ConnectionManagers[(local).NorthWind DW]"
+                  connectionManagerRefId="Package.ConnectionManagers[(local).NorthWind DW]"
                   description="La conexión de tiempo de ejecución OLE DB usada para obtener acceso a la base de datos."
                   name="OleDbConnection" />
               </connections>
@@ -1500,20 +1526,15 @@ where [refTable].[CustomerID] = ?</property>
     </LayoutInfo>
   </TaskHost>
   <PipelineComponentMetadata
-    design-time-name="Package\Load Customers\To DimCustomer">
+    design-time-name="Package\Load Customers\Get Employee from OLTP">
     <Properties>
       <Property>
         <Name>DataSourceViewID</Name>
       </Property>
-      <Property>
-        <Name>TableInfoObjectType</Name>
-        <Value
-          type="q2:string">Table</Value>
-      </Property>
     </Properties>
   </PipelineComponentMetadata>
   <PipelineComponentMetadata
-    design-time-name="Package\Load Customers\To Staging">
+    design-time-name="Package\Load Customers\To DimCustomer">
     <Properties>
       <Property>
         <Name>DataSourceViewID</Name>
@@ -1531,7 +1552,7 @@ where [refTable].[CustomerID] = ?</property>
       <Property>
         <Name>OverwriteParamsSQLProp</Name>
         <Value
-          type="q2:boolean">false</Value>
+          type="q2:string">false</Value>
       </Property>
       <Property>
         <Name>UsedTableName</Name>
@@ -1541,7 +1562,7 @@ where [refTable].[CustomerID] = ?</property>
       <Property>
         <Name>TableInfoObjectType</Name>
         <Value
-          type="q4:int">0</Value>
+          type="q4:string">0</Value>
       </Property>
       <Property>
         <Name>DataSourceViewID</Name>
@@ -1549,10 +1570,15 @@ where [refTable].[CustomerID] = ?</property>
     </Properties>
   </PipelineComponentMetadata>
   <PipelineComponentMetadata
-    design-time-name="Package\Load Customers\Get Employee from OLTP">
+    design-time-name="Package\Load Customers\To Staging">
     <Properties>
       <Property>
         <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
       </Property>
     </Properties>
   </PipelineComponentMetadata>
