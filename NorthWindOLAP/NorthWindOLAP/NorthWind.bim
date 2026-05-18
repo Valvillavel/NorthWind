@@ -1,0 +1,969 @@
+{
+  "name": "SemanticModel",
+  "compatibilityLevel": 1200,
+  "model": {
+    "culture": "es-BO",
+    "dataSources": [
+      {
+        "name": "SqlServer DESKTOP-ANJLI2D NorthWindDW",
+        "connectionString": "Provider=SQLOLEDB;Data Source=DESKTOP-ANJLI2D;Persist Security Info=false;Integrated Security=SSPI;Initial Catalog=NorthWindDW",
+        "impersonationMode": "impersonateAccount",
+        "account": "DESKTOP-ANJLI2D\\DELL",
+        "annotations": [
+          {
+            "name": "ConnectionEditUISource",
+            "value": "SqlServer"
+          }
+        ]
+      }
+    ],
+    "tables": [
+      {
+        "name": "Customer",
+        "columns": [
+          {
+            "name": "CustomerKey",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "CustomerKey",
+            "sourceProviderType": "Integer"
+          },
+          {
+            "name": "CustomerID",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "CustomerID",
+            "sourceProviderType": "WChar"
+          },
+          {
+            "name": "CompanyName",
+            "dataType": "string",
+            "sourceColumn": "CompanyName",
+            "sourceProviderType": "WChar"
+          },
+          {
+            "name": "ContactName",
+            "dataType": "string",
+            "sourceColumn": "ContactName",
+            "sourceProviderType": "WChar"
+          },
+          {
+            "name": "ContactTitle",
+            "dataType": "string",
+            "sourceColumn": "ContactTitle",
+            "sourceProviderType": "WChar"
+          },
+          {
+            "name": "Address",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "Address",
+            "sourceProviderType": "WChar"
+          },
+          {
+            "name": "City",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "City",
+            "sourceProviderType": "WChar"
+          },
+          {
+            "name": "Region",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "Region",
+            "sourceProviderType": "WChar"
+          },
+          {
+            "name": "PostalCode",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "PostalCode",
+            "sourceProviderType": "WChar"
+          },
+          {
+            "name": "Country",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "Country",
+            "sourceProviderType": "WChar"
+          },
+          {
+            "name": "Phone",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "Phone",
+            "sourceProviderType": "WChar"
+          },
+          {
+            "name": "Fax",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "Fax",
+            "sourceProviderType": "WChar"
+          },
+          {
+            "name": "CustomerDesc",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "CustomerDesc",
+            "sourceProviderType": "WChar"
+          },
+          {
+            "name": "ValidFrom",
+            "dataType": "dateTime",
+            "isHidden": true,
+            "sourceColumn": "ValidFrom",
+            "formatString": "General Date",
+            "sourceProviderType": "DBTimeStamp"
+          },
+          {
+            "name": "ValidTo",
+            "dataType": "dateTime",
+            "isHidden": true,
+            "sourceColumn": "ValidTo",
+            "formatString": "General Date",
+            "sourceProviderType": "DBTimeStamp"
+          },
+          {
+            "name": "IsCurrent",
+            "dataType": "boolean",
+            "isHidden": true,
+            "sourceColumn": "IsCurrent",
+            "formatString": "\"TRUE\";\"TRUE\";\"FALSE\"",
+            "sourceProviderType": "Boolean"
+          },
+          {
+            "name": "CreatedDate",
+            "dataType": "dateTime",
+            "isHidden": true,
+            "sourceColumn": "CreatedDate",
+            "formatString": "General Date",
+            "sourceProviderType": "DBTimeStamp"
+          },
+          {
+            "name": "ModifiedDate",
+            "dataType": "dateTime",
+            "isHidden": true,
+            "sourceColumn": "ModifiedDate",
+            "formatString": "General Date",
+            "sourceProviderType": "DBTimeStamp"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "DimCustomer",
+            "dataView": "full",
+            "source": {
+              "type": "query",
+              "query": " \t\t\t\tSELECT [dbo].[DimCustomer].*   FROM [dbo].[DimCustomer] ",
+              "dataSource": "SqlServer DESKTOP-ANJLI2D NorthWindDW"
+            }
+          }
+        ],
+        "annotations": [
+          {
+            "name": "_TM_ExtProp_QueryDefinition",
+            "value": " \t\t\t\tSELECT [dbo].[DimCustomer].*   FROM [dbo].[DimCustomer] "
+          },
+          {
+            "name": "_TM_ExtProp_DbTableName",
+            "value": "DimCustomer"
+          },
+          {
+            "name": "_TM_ExtProp_DbSchemaName",
+            "value": "dbo"
+          }
+        ]
+      },
+      {
+        "name": "Date",
+        "columns": [
+          {
+            "name": "DateKey",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "DateKey",
+            "sourceProviderType": "Integer"
+          },
+          {
+            "name": "FullDate",
+            "dataType": "string",
+            "sourceColumn": "FullDate",
+            "sourceProviderType": "WChar"
+          },
+          {
+            "name": "Year",
+            "dataType": "int64",
+            "sourceColumn": "Year",
+            "sourceProviderType": "Integer"
+          },
+          {
+            "name": "Quarter",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "Quarter",
+            "sourceProviderType": "Integer"
+          },
+          {
+            "name": "Month",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "Month",
+            "sourceProviderType": "Integer"
+          },
+          {
+            "name": "Day",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "Day",
+            "sourceProviderType": "Integer"
+          },
+          {
+            "name": "MonthName",
+            "dataType": "string",
+            "sourceColumn": "MonthName",
+            "sourceProviderType": "WChar"
+          },
+          {
+            "name": "QuarterName",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "QuarterName",
+            "sourceProviderType": "WChar"
+          },
+          {
+            "name": "DayOfWeek",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "DayOfWeek",
+            "sourceProviderType": "Integer"
+          },
+          {
+            "name": "DayName",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "DayName",
+            "sourceProviderType": "WChar"
+          },
+          {
+            "name": "IsWeekend",
+            "dataType": "boolean",
+            "isHidden": true,
+            "sourceColumn": "IsWeekend",
+            "formatString": "\"TRUE\";\"TRUE\";\"FALSE\"",
+            "sourceProviderType": "Boolean"
+          },
+          {
+            "name": "WeekOfYear",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "WeekOfYear",
+            "sourceProviderType": "Integer"
+          },
+          {
+            "name": "Semester",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "Semester",
+            "sourceProviderType": "Integer"
+          },
+          {
+            "name": "SemesterName",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "SemesterName",
+            "sourceProviderType": "WChar"
+          },
+          {
+            "name": "IsHoliday",
+            "dataType": "boolean",
+            "isHidden": true,
+            "sourceColumn": "IsHoliday",
+            "formatString": "\"TRUE\";\"TRUE\";\"FALSE\"",
+            "sourceProviderType": "Boolean"
+          },
+          {
+            "name": "HolidayName",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "HolidayName",
+            "sourceProviderType": "WChar"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "DimDate",
+            "dataView": "full",
+            "source": {
+              "type": "query",
+              "query": " \t\t\t\tSELECT [dbo].[DimDate].*   FROM [dbo].[DimDate] ",
+              "dataSource": "SqlServer DESKTOP-ANJLI2D NorthWindDW"
+            }
+          }
+        ],
+        "annotations": [
+          {
+            "name": "_TM_ExtProp_QueryDefinition",
+            "value": " \t\t\t\tSELECT [dbo].[DimDate].*   FROM [dbo].[DimDate] "
+          },
+          {
+            "name": "_TM_ExtProp_DbTableName",
+            "value": "DimDate"
+          },
+          {
+            "name": "_TM_ExtProp_DbSchemaName",
+            "value": "dbo"
+          }
+        ]
+      },
+      {
+        "name": "Employee",
+        "columns": [
+          {
+            "name": "EmployeeKey",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "EmployeeKey",
+            "sourceProviderType": "Integer"
+          },
+          {
+            "name": "EmployeeID",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "EmployeeID",
+            "sourceProviderType": "Integer"
+          },
+          {
+            "name": "LastName",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "LastName",
+            "sourceProviderType": "WChar"
+          },
+          {
+            "name": "FirstName",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "FirstName",
+            "sourceProviderType": "WChar"
+          },
+          {
+            "name": "FullName",
+            "dataType": "string",
+            "sourceColumn": "FullName",
+            "sourceProviderType": "WChar"
+          },
+          {
+            "name": "Title",
+            "dataType": "string",
+            "sourceColumn": "Title",
+            "sourceProviderType": "WChar"
+          },
+          {
+            "name": "TitleOfCourtesy",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "TitleOfCourtesy",
+            "sourceProviderType": "WChar"
+          },
+          {
+            "name": "BirthDate",
+            "dataType": "dateTime",
+            "isHidden": true,
+            "sourceColumn": "BirthDate",
+            "formatString": "General Date",
+            "sourceProviderType": "DBTimeStamp"
+          },
+          {
+            "name": "HireDate",
+            "dataType": "dateTime",
+            "isHidden": true,
+            "sourceColumn": "HireDate",
+            "formatString": "General Date",
+            "sourceProviderType": "DBTimeStamp"
+          },
+          {
+            "name": "Address",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "Address",
+            "sourceProviderType": "WChar"
+          },
+          {
+            "name": "City",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "City",
+            "sourceProviderType": "WChar"
+          },
+          {
+            "name": "Region",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "Region",
+            "sourceProviderType": "WChar"
+          },
+          {
+            "name": "PostalCode",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "PostalCode",
+            "sourceProviderType": "WChar"
+          },
+          {
+            "name": "Country",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "Country",
+            "sourceProviderType": "WChar"
+          },
+          {
+            "name": "HomePhone",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "HomePhone",
+            "sourceProviderType": "WChar"
+          },
+          {
+            "name": "Extension",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "Extension",
+            "sourceProviderType": "WChar"
+          },
+          {
+            "name": "ReportsTo",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "ReportsTo",
+            "sourceProviderType": "Integer"
+          },
+          {
+            "name": "ManagerName",
+            "dataType": "string",
+            "sourceColumn": "ManagerName",
+            "sourceProviderType": "WChar"
+          },
+          {
+            "name": "TerritoryDescription",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "TerritoryDescription",
+            "sourceProviderType": "WChar"
+          },
+          {
+            "name": "RegionDescription",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "RegionDescription",
+            "sourceProviderType": "WChar"
+          },
+          {
+            "name": "CreatedDate",
+            "dataType": "dateTime",
+            "isHidden": true,
+            "sourceColumn": "CreatedDate",
+            "formatString": "General Date",
+            "sourceProviderType": "DBTimeStamp"
+          },
+          {
+            "name": "ModifiedDate",
+            "dataType": "dateTime",
+            "isHidden": true,
+            "sourceColumn": "ModifiedDate",
+            "formatString": "General Date",
+            "sourceProviderType": "DBTimeStamp"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "DimEmployee",
+            "dataView": "full",
+            "source": {
+              "type": "query",
+              "query": " \t\t\t\tSELECT [dbo].[DimEmployee].*   FROM [dbo].[DimEmployee] ",
+              "dataSource": "SqlServer DESKTOP-ANJLI2D NorthWindDW"
+            }
+          }
+        ],
+        "annotations": [
+          {
+            "name": "_TM_ExtProp_QueryDefinition",
+            "value": " \t\t\t\tSELECT [dbo].[DimEmployee].*   FROM [dbo].[DimEmployee] "
+          },
+          {
+            "name": "_TM_ExtProp_DbTableName",
+            "value": "DimEmployee"
+          },
+          {
+            "name": "_TM_ExtProp_DbSchemaName",
+            "value": "dbo"
+          }
+        ]
+      },
+      {
+        "name": "Product",
+        "columns": [
+          {
+            "name": "ProductKey",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "ProductKey",
+            "sourceProviderType": "Integer"
+          },
+          {
+            "name": "ProductID",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "ProductID",
+            "sourceProviderType": "Integer"
+          },
+          {
+            "name": "ProductName",
+            "dataType": "string",
+            "sourceColumn": "ProductName",
+            "sourceProviderType": "WChar"
+          },
+          {
+            "name": "CategoryName",
+            "dataType": "string",
+            "sourceColumn": "CategoryName",
+            "sourceProviderType": "WChar"
+          },
+          {
+            "name": "SupplierCompanyName",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "SupplierCompanyName",
+            "sourceProviderType": "WChar"
+          },
+          {
+            "name": "QuantityPerUnit",
+            "dataType": "string",
+            "sourceColumn": "QuantityPerUnit",
+            "sourceProviderType": "WChar"
+          },
+          {
+            "name": "UnitPrice",
+            "dataType": "decimal",
+            "sourceColumn": "UnitPrice",
+            "formatString": "\"Bs\"#,0.00;-\"Bs\"#,0.00;\"Bs\"#,0.00",
+            "sourceProviderType": "Currency",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\" ThousandSeparator=\"True\"><Currency LCID=\"16394\" DisplayName=\"Bs Español (Bolivia)\" Symbol=\"Bs\" PositivePattern=\"0\" NegativePattern=\"1\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "UnitsInStock",
+            "dataType": "int64",
+            "sourceColumn": "UnitsInStock",
+            "sourceProviderType": "SmallInt"
+          },
+          {
+            "name": "UnitsOnOrder",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "UnitsOnOrder",
+            "sourceProviderType": "SmallInt"
+          },
+          {
+            "name": "ReorderLevel",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "ReorderLevel",
+            "sourceProviderType": "SmallInt"
+          },
+          {
+            "name": "Discontinued",
+            "dataType": "boolean",
+            "isHidden": true,
+            "sourceColumn": "Discontinued",
+            "formatString": "\"TRUE\";\"TRUE\";\"FALSE\"",
+            "sourceProviderType": "Boolean"
+          },
+          {
+            "name": "CreatedDate",
+            "dataType": "dateTime",
+            "isHidden": true,
+            "sourceColumn": "CreatedDate",
+            "formatString": "General Date",
+            "sourceProviderType": "DBTimeStamp"
+          },
+          {
+            "name": "ModifiedDate",
+            "dataType": "dateTime",
+            "isHidden": true,
+            "sourceColumn": "ModifiedDate",
+            "formatString": "General Date",
+            "sourceProviderType": "DBTimeStamp"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "DimProduct",
+            "dataView": "full",
+            "source": {
+              "type": "query",
+              "query": " \t\t\t\tSELECT [dbo].[DimProduct].*   FROM [dbo].[DimProduct] ",
+              "dataSource": "SqlServer DESKTOP-ANJLI2D NorthWindDW"
+            }
+          }
+        ],
+        "annotations": [
+          {
+            "name": "_TM_ExtProp_QueryDefinition",
+            "value": " \t\t\t\tSELECT [dbo].[DimProduct].*   FROM [dbo].[DimProduct] "
+          },
+          {
+            "name": "_TM_ExtProp_DbTableName",
+            "value": "DimProduct"
+          },
+          {
+            "name": "_TM_ExtProp_DbSchemaName",
+            "value": "dbo"
+          }
+        ]
+      },
+      {
+        "name": "Shipper",
+        "columns": [
+          {
+            "name": "ShipperKey",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "ShipperKey",
+            "sourceProviderType": "Integer"
+          },
+          {
+            "name": "ShipperID",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "ShipperID",
+            "sourceProviderType": "Integer"
+          },
+          {
+            "name": "CompanyName",
+            "dataType": "string",
+            "sourceColumn": "CompanyName",
+            "sourceProviderType": "WChar"
+          },
+          {
+            "name": "Phone",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "Phone",
+            "sourceProviderType": "WChar"
+          },
+          {
+            "name": "CreatedDate",
+            "dataType": "dateTime",
+            "isHidden": true,
+            "sourceColumn": "CreatedDate",
+            "formatString": "General Date",
+            "sourceProviderType": "DBTimeStamp"
+          },
+          {
+            "name": "ModifiedDate",
+            "dataType": "dateTime",
+            "isHidden": true,
+            "sourceColumn": "ModifiedDate",
+            "formatString": "General Date",
+            "sourceProviderType": "DBTimeStamp"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "DimShipper",
+            "dataView": "full",
+            "source": {
+              "type": "query",
+              "query": " \t\t\t\tSELECT [dbo].[DimShipper].*   FROM [dbo].[DimShipper] ",
+              "dataSource": "SqlServer DESKTOP-ANJLI2D NorthWindDW"
+            }
+          }
+        ],
+        "annotations": [
+          {
+            "name": "_TM_ExtProp_QueryDefinition",
+            "value": " \t\t\t\tSELECT [dbo].[DimShipper].*   FROM [dbo].[DimShipper] "
+          },
+          {
+            "name": "_TM_ExtProp_DbTableName",
+            "value": "DimShipper"
+          },
+          {
+            "name": "_TM_ExtProp_DbSchemaName",
+            "value": "dbo"
+          }
+        ]
+      },
+      {
+        "name": "Orders",
+        "columns": [
+          {
+            "name": "OrderKey",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "OrderKey",
+            "sourceProviderType": "BigInt"
+          },
+          {
+            "name": "OrderID",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "OrderID",
+            "sourceProviderType": "Integer"
+          },
+          {
+            "name": "CustomerKey",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "CustomerKey",
+            "sourceProviderType": "Integer"
+          },
+          {
+            "name": "EmployeeKey",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "EmployeeKey",
+            "sourceProviderType": "Integer"
+          },
+          {
+            "name": "ProductKey",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "ProductKey",
+            "sourceProviderType": "Integer"
+          },
+          {
+            "name": "ShipperKey",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "ShipperKey",
+            "sourceProviderType": "Integer"
+          },
+          {
+            "name": "DateKeyOrder",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "DateKeyOrder",
+            "sourceProviderType": "Integer"
+          },
+          {
+            "name": "DateKeyRequired",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "DateKeyRequired",
+            "sourceProviderType": "Integer"
+          },
+          {
+            "name": "DateKeyShipped",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "DateKeyShipped",
+            "sourceProviderType": "Integer"
+          },
+          {
+            "name": "Quantity",
+            "dataType": "double",
+            "isHidden": true,
+            "sourceColumn": "Quantity",
+            "sourceProviderType": "Numeric"
+          },
+          {
+            "name": "UnitPrice",
+            "dataType": "decimal",
+            "isHidden": true,
+            "sourceColumn": "UnitPrice",
+            "formatString": "\"Bs\"#,0.00;-\"Bs\"#,0.00;\"Bs\"#,0.00",
+            "sourceProviderType": "Currency",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\" ThousandSeparator=\"True\"><Currency LCID=\"16394\" DisplayName=\"Bs Español (Bolivia)\" Symbol=\"Bs\" PositivePattern=\"0\" NegativePattern=\"1\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Discount",
+            "dataType": "double",
+            "isHidden": true,
+            "sourceColumn": "Discount",
+            "sourceProviderType": "Single"
+          },
+          {
+            "name": "Freight",
+            "dataType": "decimal",
+            "isHidden": true,
+            "sourceColumn": "Freight",
+            "formatString": "\"Bs\"#,0.00;-\"Bs\"#,0.00;\"Bs\"#,0.00",
+            "sourceProviderType": "Currency",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\" ThousandSeparator=\"True\"><Currency LCID=\"16394\" DisplayName=\"Bs Español (Bolivia)\" Symbol=\"Bs\" PositivePattern=\"0\" NegativePattern=\"1\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "LineTotal",
+            "dataType": "decimal",
+            "isHidden": true,
+            "sourceColumn": "LineTotal",
+            "formatString": "\"Bs\"#,0.00;-\"Bs\"#,0.00;\"Bs\"#,0.00",
+            "sourceProviderType": "Currency",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\" ThousandSeparator=\"True\"><Currency LCID=\"16394\" DisplayName=\"Bs Español (Bolivia)\" Symbol=\"Bs\" PositivePattern=\"0\" NegativePattern=\"1\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "OrderTotal",
+            "dataType": "decimal",
+            "isHidden": true,
+            "sourceColumn": "OrderTotal",
+            "formatString": "\"Bs\"#,0.00;-\"Bs\"#,0.00;\"Bs\"#,0.00",
+            "sourceProviderType": "Currency",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\" ThousandSeparator=\"True\"><Currency LCID=\"16394\" DisplayName=\"Bs Español (Bolivia)\" Symbol=\"Bs\" PositivePattern=\"0\" NegativePattern=\"1\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "CreatedDate",
+            "dataType": "dateTime",
+            "isHidden": true,
+            "sourceColumn": "CreatedDate",
+            "formatString": "General Date",
+            "sourceProviderType": "DBTimeStamp"
+          },
+          {
+            "name": "ETLBatchID",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "ETLBatchID",
+            "sourceProviderType": "Integer"
+          },
+          {
+            "name": "SourceSystem",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "SourceSystem",
+            "sourceProviderType": "WChar"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "FactOrders",
+            "dataView": "full",
+            "source": {
+              "type": "query",
+              "query": " \t\t\t\tSELECT [dbo].[FactOrders].*   FROM [dbo].[FactOrders] ",
+              "dataSource": "SqlServer DESKTOP-ANJLI2D NorthWindDW"
+            }
+          }
+        ],
+        "measures": [
+          {
+            "name": "Total Ventas",
+            "expression": " SUM(Orders[LineTotal])"
+          },
+          {
+            "name": "Total Units Sold",
+            "expression": " SUM(Orders[Quantity])"
+          },
+          {
+            "name": "Total Discount",
+            "expression": " SUM(Orders[Discount])"
+          },
+          {
+            "name": "Total Orders Sale",
+            "expression": " SUM(Orders[OrderTotal])"
+          }
+        ],
+        "annotations": [
+          {
+            "name": "_TM_ExtProp_QueryDefinition",
+            "value": " \t\t\t\tSELECT [dbo].[FactOrders].*   FROM [dbo].[FactOrders] "
+          },
+          {
+            "name": "_TM_ExtProp_DbTableName",
+            "value": "FactOrders"
+          },
+          {
+            "name": "_TM_ExtProp_DbSchemaName",
+            "value": "dbo"
+          }
+        ]
+      }
+    ],
+    "relationships": [
+      {
+        "name": "38d8b7a2-f626-4df0-9825-fa7cf23f66ad",
+        "fromTable": "Orders",
+        "fromColumn": "DateKeyRequired",
+        "toTable": "Date",
+        "toColumn": "DateKey",
+        "isActive": false
+      },
+      {
+        "name": "3afa4767-cd50-432d-9a67-decd2cfc1d08",
+        "fromTable": "Orders",
+        "fromColumn": "DateKeyShipped",
+        "toTable": "Date",
+        "toColumn": "DateKey",
+        "isActive": false
+      },
+      {
+        "name": "94f66153-7549-4727-b75c-fab4ad62f714",
+        "fromTable": "Orders",
+        "fromColumn": "CustomerKey",
+        "toTable": "Customer",
+        "toColumn": "CustomerKey"
+      },
+      {
+        "name": "eba126da-db58-45c9-a9db-d817ea794391",
+        "fromTable": "Orders",
+        "fromColumn": "DateKeyOrder",
+        "toTable": "Date",
+        "toColumn": "DateKey"
+      },
+      {
+        "name": "9121fac8-920a-4517-8e3c-e1348eba4625",
+        "fromTable": "Orders",
+        "fromColumn": "EmployeeKey",
+        "toTable": "Employee",
+        "toColumn": "EmployeeKey"
+      },
+      {
+        "name": "5051c532-ec91-46f5-b1c7-aa52145a46f0",
+        "fromTable": "Orders",
+        "fromColumn": "ProductKey",
+        "toTable": "Product",
+        "toColumn": "ProductKey"
+      },
+      {
+        "name": "c8c55f02-23a8-4164-9d7a-54642f76b17f",
+        "fromTable": "Orders",
+        "fromColumn": "ShipperKey",
+        "toTable": "Shipper",
+        "toColumn": "ShipperKey"
+      }
+    ],
+    "annotations": [
+      {
+        "name": "ClientCompatibilityLevel",
+        "value": "400"
+      }
+    ]
+  },
+  "id": "SemanticModel"
+}
